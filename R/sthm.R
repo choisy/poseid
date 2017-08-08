@@ -33,9 +33,11 @@ draw_heatmap <- function(df,
   provinces_names <- select_if(df,is.character) %>%
     unlist %>% as.vector %>%
     unique
-  values <- sapply(provinces_names,
-                   function(x) filter(df, province == x) %>%
-                     select_if(is.numeric))
+  values <- sapply(provinces_names, function(x){
+    sel <-  names(select_if(df, is.character))
+    subset(df, df[, sel] == x) %>%
+                     select_if(is.numeric)
+    })
   values <- f(as.matrix(as.data.frame(values)))
 
   # Options and graphical parameters:
