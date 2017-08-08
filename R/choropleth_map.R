@@ -35,7 +35,7 @@ choropleth_v1 <- function (df, col = heat.colors(1), col_na = "grey",
   classint <- na.omit(unique(value))
 
   # draw a choropleth map
-  plot(df, col = pal2)
+  sp::plot(df, col = pal2)
 
   # print a legend
   legend <- rep(classint,2) %>% round(n_round)
@@ -95,8 +95,8 @@ choropleth_vm <- function (df, col = heat.colors(6), n = 6,
   }
 
   # plot the result
-  classint_colors <- findColours(classint, pal) %>%
-    replace(is.na(.), col_na)
+  classint_colors <- findColours(classint, pal)
+  classint_colors <- replace(classint_colors, is.na(classint_colors), col_na)
 
   # if ask, plot the quantile distribution (bottom right)
   if (distrib == TRUE){
@@ -106,9 +106,9 @@ choropleth_vm <- function (df, col = heat.colors(6), n = 6,
     m <- layout(matrix(c(2, 2, 2, 1), 2, 2, byrow = TRUE), heights=c(1, 2),
                 widths = c(3, 1))
     # plots
-    plot(classint, pal = pal, main = "")
+    graphics::plot(classint, pal = pal, main = "")
     par(mar = c(2,2,2,2), bg = "transparent")
-    plot(df, col = classint_colors)
+    sp::plot(df, col = classint_colors)
     par(mar = omar, bg = "white")
 
   } else {
@@ -117,7 +117,7 @@ choropleth_vm <- function (df, col = heat.colors(6), n = 6,
     ousr <- par("usr")
     par(fig = ofig, usr = ousr)
     # plot
-    plot(df, col = classint_colors)
+    sp::plot(df, col = classint_colors)
   }
 
   # Print the legend if needed :
@@ -164,7 +164,7 @@ choropleth_fix <- function (df, col = heat.colors(6), col_na = "grey",
   df$col <- replace(df$col, is.na(df$col), col_na)
 
   #return(provinces)
-  plot(df, col = df$col)
+  sp::plot(df, col = df$col)
 
   # print the breaks for a legend
   legend <- fixedBreaks
