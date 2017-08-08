@@ -17,5 +17,6 @@ Imports:
 Suggests:
       gdpm,
       RColorBrewer,
-      gadmVN
+      gadmVN,
+    testthat
 RoxygenNote: 6.0.1
