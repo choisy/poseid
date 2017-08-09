@@ -231,7 +231,7 @@ choropleth_fix <- function (df, col = heat.colors(6), col_na = "grey",
 #' # only the 'province' and 'incidence_dengue' column as the 'choropleth_map'
 #' # function accept only dataframe of the two columns in entry.
 #' # The second step is to print the map.
-#' # The last step is to print a legend, here we use legend2 of the 'marc'
+#' # The last step is to print a legend, here we use legend2 of the 'poseid'
 #' # package but other function can be used.
 #' library(dplyr)
 #' dengue_0993  <- filter(dengue, year == 1993, month == "September")
