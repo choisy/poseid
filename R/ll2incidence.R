@@ -4,22 +4,22 @@
 #' population incidences by a specified time step.
 #'
 #' The \code{date} variable of the output is defined with a regular time step as
-#' defined by the \code{unit} argument. Each date is the beginning of the time
-#' period that corresponds to the incidence value. In absence of cases between
-#' two steps, a zero incidence is explicitly displayed.
+#' defined by the \code{unit} argument. In absence of cases between two steps, a
+#' zero incidence is explicitly displayed.
 #'
 #' @param \code{x} either a vector or a 1-column data frame of dates of \code{"Date"}
 #' or \code{"POSIXct"} class.
 #'
-#' @param \code{unit} a character string (one of \code{"day"}, \code{"week"}
+#' @param \code{unit} a character string (one of \code{"day"}, \code{"week"},
 #' \code{"month"}, \code{"quarter"} or \code{"year"}) specifying the temporal
 #' aggregation wished for the incidence calculation. Value set to "day" by default.
 #'
-#' @param \code{POSIX} a boolean indicating whether the format of the date of the
-#' output should be \code{"POSIXct"} (default) or simple \code{"Date"}.
-#'
-#' @return \code{ll2incidence} returns a 2-variable data frame of incidences
-#' values with \code{date} and \code{incidence} variables.
+#' @return \code{ll2incidence} returns a data frame of 4 variables: \code{start},
+#' \code{middle}, \code{end} and \code{incidence}. The first 3 variables are
+#' respectively the dates of the beginning, the middle and the end of the time
+#' period over which the incidence is defined and are of class \code{POSIXct} with
+#' time zone UTC. The HH:MM:SS of the \code{start} and \code{end} variables are
+#' 00:00:00.
 #'
 #' @author Marc Choisy
 #'
@@ -54,16 +54,23 @@
 #' # Showing the results:
 #' for(i in 1:5) print(head(incidences[[c(i, 1)]]))
 #'
+#' # Checking that the number of cases is the same whatever the data type:
+#' any(!as.vector(sapply(1:4,
+#'                       function(x) sapply(1:5,
+#'                                          function(y) sum(incidences[[c(y, x)]]$incidence)))) == length(infections_dates))
+#'
 #' @importFrom magrittr %>%
 #' @importFrom magrittr %<>%
+#' @importFrom lubridate as_datetime
 #' @importFrom lubridate floor_date
-#' @importFrom lubridate as_date
+#' @importFrom lubridate ceiling_date
+#' @importFrom dplyr select
 #' @importFrom dplyr mutate
 #' @importFrom dplyr mutate_all
 #' @importFrom dplyr right_join
 #' @export
 #'
-ll2incidence <- function(x, unit = c("day", "week", "month", "quarter", "year"), POSIX = TRUE) {
+ll2incidence <- function(x, unit = c("day", "week", "month", "quarter", "year")) {
 
   clnames <- c("Date", "POSIXct")
   mess_class <- "Dates in x should be of class Date or POSIXct"
@@ -86,18 +93,16 @@ ll2incidence <- function(x, unit = c("day", "week", "month", "quarter", "year"),
   }
 
 # doing the transformations:
-  x %<>%
+  x %>%
     floor_date(unit) %>%
     table %>%
     data.frame %>%
-    setNames(c("date", "incidence")) %>%
-    mutate(date = as_date(date)) %>%
-    right_join(data.frame(date = seq(min(.$date), max(.$date), unit)), by = "date") %>%
-    mutate(incidence = ifelse(is.na(incidence), 0, incidence))
-  if(POSIX) {
-    x$date <- as.POSIXct(x$date)
-    attr(x$date, "tzone") <- "UTC"
-  }
-  x
+    setNames(c("start", "incidence")) %>%
+    mutate(start = as_datetime(start)) %>%
+    right_join(data.frame(start = seq(min(.$start), max(.$start), unit)), by = "start") %>%
+    mutate(incidence = as.integer(ifelse(is.na(incidence), 0, incidence)),
+           end = ceiling_date(start + 1, unit),
+           middle = start + (end - start) / 2) %>%
+    select(start, middle, end, incidence)
 }
 

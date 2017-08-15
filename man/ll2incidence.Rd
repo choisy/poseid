@@ -4,23 +4,23 @@
 \alias{ll2incidence}
 \title{Computing Incidence From Line Listing}
 \usage{
-ll2incidence(x, unit = c("day", "week", "month", "quarter", "year"),
-  POSIX = TRUE)
+ll2incidence(x, unit = c("day", "week", "month", "quarter", "year"))
 }
 \arguments{
 \item{\code{x}}{either a vector or a 1-column data frame of dates of \code{"Date"}
 or \code{"POSIXct"} class.}
 
-\item{\code{unit}}{a character string (one of \code{"day"}, \code{"week"}
+\item{\code{unit}}{a character string (one of \code{"day"}, \code{"week"},
 \code{"month"}, \code{"quarter"} or \code{"year"}) specifying the temporal
 aggregation wished for the incidence calculation. Value set to "day" by default.}
-
-\item{\code{POSIX}}{a boolean indicating whether the format of the date of the
-output should be \code{"POSIXct"} (default) or simple \code{"Date"}.}
 }
 \value{
-\code{ll2incidence} returns a 2-variable data frame of incidences
-values with \code{date} and \code{incidence} variables.
+\code{ll2incidence} returns a data frame of 4 variables: \code{start},
+\code{middle}, \code{end} and \code{incidence}. The first 3 variables are
+respectively the dates of the beginning, the middle and the end of the time
+period over which the incidence is defined and are of class \code{POSIXct} with
+time zone UTC. The HH:MM:SS of the \code{start} and \code{end} variables are
+00:00:00.
 }
 \description{
 \code{ll2incidence} takes individual dates of infections and returns
@@ -28,9 +28,8 @@ population incidences by a specified time step.
 }
 \details{
 The \code{date} variable of the output is defined with a regular time step as
-defined by the \code{unit} argument. Each date is the beginning of the time
-period that corresponds to the incidence value. In absence of cases between
-two steps, a zero incidence is explicitly displayed.
+defined by the \code{unit} argument. In absence of cases between two steps, a
+zero incidence is explicitly displayed.
 }
 \examples{
 # Four different data sets of infections dates:
@@ -62,6 +61,11 @@ any(!unlist(lapply(1:n,
 
 # Showing the results:
 for(i in 1:5) print(head(incidences[[c(i, 1)]]))
+
+# Checking that the number of cases is the same whatever the data type:
+any(!as.vector(sapply(1:4,
+                      function(x) sapply(1:5,
+                                         function(y) sum(incidences[[c(y, x)]]$incidence)))) == length(infections_dates))
 
 }
 \author{
