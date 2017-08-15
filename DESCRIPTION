@@ -2,7 +2,7 @@ Package: poseid
 Type: Package
 Title: Population-based Observational Studies of the Epidemiology of Infectious Diseases
 Version: 0.1.0
-Author: Lucie Contamin
+Author: Lucie Contamin, Marc Choisy
 Maintainer: Marc Choisy <marc.choisy@ird.fr>
 Description: Functions of visualizing and analysing population-based observational
   data in epidemiology.
@@ -20,3 +20,6 @@ Suggests:
       gadmVN,
     testthat
 RoxygenNote: 6.0.1
+Imports: magrittr,
+  dplyr,
+  lubridate
