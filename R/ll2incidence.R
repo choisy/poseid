@@ -5,8 +5,8 @@
 #'
 #' The \code{date} variable of the output is defined with a regular time step as
 #' defined by the \code{unit} argument. Each date is the beginning of the time
-#' period over which the In absence of cases between two steps,
-#' a zero incidence is explicitly displayed.
+#' period that corresponds to the incidence value. In absence of cases between
+#' two steps, a zero incidence is explicitly displayed.
 #'
 #' @param \code{x} either a vector or a 1-column data frame of dates of \code{"Date"}
 #' or \code{"POSIXct"} class.
