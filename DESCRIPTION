@@ -10,16 +10,14 @@ License: MIT
 Encoding: UTF-8
 LazyData: true
 Imports:
-      dplyr,
-      magrittr,
-      sp,
-      classInt
-Suggests:
-      gdpm,
-      RColorBrewer,
-      gadmVN,
-    testthat
-RoxygenNote: 6.0.1
-Imports: magrittr,
+  classInt,
   dplyr,
-  lubridate
+  lubridate,
+  magrittr,
+  sp
+Suggests:
+  gdpm,
+  RColorBrewer,
+  gadmVN,
+  testthat
+RoxygenNote: 6.0.1
