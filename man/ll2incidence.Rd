@@ -11,21 +11,22 @@ ll2incidence(x, unit = c("day", "week", "month", "quarter", "year"))
 or \code{"POSIXct"} class.}
 
 \item{\code{unit}}{a character string (one of \code{"day"}, \code{"week"}
-\code{"month"}, \code{"quarter"} or \code{year}) specifying the temporal
+\code{"month"}, \code{"quarter"} or \code{"year"}) specifying the temporal
 aggregation wished for the incidence calculation. Value set to "day" by default.}
 }
 \value{
 \code{ll2incidence} returns a 2-variable data frame of incidences
-values with \code{time} and \code{incidence} variables.
+values with \code{date} and \code{incidence} variables.
 }
 \description{
-\code{ll2incidence} takes individual dates of infections and returns incidences
-by a specified time step.
+\code{ll2incidence} takes individual dates of infections and returns
+population incidences by a specified time step.
 }
 \details{
-The \code{time} variable of the output is defined at regular time step as
-defined by the \code{unit} argument. In absence of cases between two steps,
-a zero incidence is explicitly displayed.
+The \code{date} variable of the output is defined with a regular time step as
+defined by the \code{unit} argument. Each date is the beginning of the time
+period that corresponds to the incidence value. In absence of cases between
+two steps, a zero incidence is explicitly displayed.
 }
 \examples{
 # Four different data sets of infections dates:
