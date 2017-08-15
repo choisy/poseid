@@ -4,7 +4,8 @@
 \alias{ll2incidence}
 \title{Computing Incidence From Line Listing}
 \usage{
-ll2incidence(x, unit = c("day", "week", "month", "quarter", "year"))
+ll2incidence(x, unit = c("day", "week", "month", "quarter", "year"),
+  POSIX = TRUE)
 }
 \arguments{
 \item{\code{x}}{either a vector or a 1-column data frame of dates of \code{"Date"}
@@ -13,6 +14,9 @@ or \code{"POSIXct"} class.}
 \item{\code{unit}}{a character string (one of \code{"day"}, \code{"week"}
 \code{"month"}, \code{"quarter"} or \code{"year"}) specifying the temporal
 aggregation wished for the incidence calculation. Value set to "day" by default.}
+
+\item{\code{POSIX}}{a boolean indicating whether the format of the date of the
+output should be \code{"POSIXct"} (default) or simple \code{"Date"}.}
 }
 \value{
 \code{ll2incidence} returns a 2-variable data frame of incidences

@@ -15,6 +15,9 @@
 #' \code{"month"}, \code{"quarter"} or \code{"year"}) specifying the temporal
 #' aggregation wished for the incidence calculation. Value set to "day" by default.
 #'
+#' @param \code{POSIX} a boolean indicating whether the format of the date of the
+#' output should be \code{"POSIXct"} (default) or simple \code{"Date"}.
+#'
 #' @return \code{ll2incidence} returns a 2-variable data frame of incidences
 #' values with \code{date} and \code{incidence} variables.
 #'
@@ -60,7 +63,7 @@
 #' @importFrom dplyr right_join
 #' @export
 #'
-ll2incidence <- function(x, unit = c("day", "week", "month", "quarter", "year")) {
+ll2incidence <- function(x, unit = c("day", "week", "month", "quarter", "year"), POSIX = TRUE) {
 
   clnames <- c("Date", "POSIXct")
   mess_class <- "Dates in x should be of class Date or POSIXct"
@@ -83,7 +86,7 @@ ll2incidence <- function(x, unit = c("day", "week", "month", "quarter", "year"))
   }
 
 # doing the transformations:
-  x %>%
+  x %<>%
     floor_date(unit) %>%
     table %>%
     data.frame %>%
@@ -91,5 +94,10 @@ ll2incidence <- function(x, unit = c("day", "week", "month", "quarter", "year"))
     mutate(date = as_date(date)) %>%
     right_join(data.frame(date = seq(min(.$date), max(.$date), unit)), by = "date") %>%
     mutate(incidence = ifelse(is.na(incidence), 0, incidence))
+  if(POSIX) {
+    x$date <- as.POSIXct(x$date)
+    attr(x$date, "tzone") <- "UTC"
+  }
+  x
 }
 
