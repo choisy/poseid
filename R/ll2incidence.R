@@ -55,6 +55,9 @@
 #' @importFrom magrittr %<>%
 #' @importFrom lubridate floor_date
 #' @importFrom lubridate as_date
+#' @importFrom dplyr mutate
+#' @importFrom dplyr mutate_all
+#' @importFrom dplyr right_join
 #' @export
 #'
 ll2incidence <- function(x, unit = c("day", "week", "month", "quarter", "year")) {
