@@ -1,21 +1,24 @@
 #' Computing Incidence From Line Listing
 #'
-#' \code{ll2incidence} takes individual dates of infections and returns incidences
-#' by a specified time step.
+#' \code{ll2incidence} takes individual dates of infections and returns
+#' population incidences by a specified time step.
 #'
-#' The \code{time} variable of the output is defined at regular time step as
-#' defined by the \code{unit} argument. In absence of cases between two steps,
+#' The \code{date} variable of the output is defined with a regular time step as
+#' defined by the \code{unit} argument. Each date is the beginning of the time
+#' period over which the In absence of cases between two steps,
 #' a zero incidence is explicitly displayed.
 #'
 #' @param \code{x} either a vector or a 1-column data frame of dates of \code{"Date"}
 #' or \code{"POSIXct"} class.
 #'
 #' @param \code{unit} a character string (one of \code{"day"}, \code{"week"}
-#' \code{"month"}, \code{"quarter"} or \code{year}) specifying the temporal
+#' \code{"month"}, \code{"quarter"} or \code{"year"}) specifying the temporal
 #' aggregation wished for the incidence calculation. Value set to "day" by default.
 #'
 #' @return \code{ll2incidence} returns a 2-variable data frame of incidences
-#' values with \code{time} and \code{incidence} variables.
+#' values with \code{date} and \code{incidence} variables.
+#'
+#' @author Marc Choisy
 #'
 #' @examples
 #' # Four different data sets of infections dates:
@@ -53,8 +56,6 @@
 #' @importFrom lubridate floor_date
 #' @importFrom lubridate as_date
 #' @export
-#'
-#' @author Marc Choisy
 #'
 ll2incidence <- function(x, unit = c("day", "week", "month", "quarter", "year")) {
 
