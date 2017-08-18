@@ -220,10 +220,9 @@ choropleth_fix <- function (df, col = heat.colors(6), col_na = "grey",
 #' library(gadmVN)
 #'
 #' # dengue data
-#' dengue <- getid(dengue, from = 1992, to = 2010)
+#' dengue <- getid(dengue, from = 1990, to = 2010)
 #' # geographic data
-#' map <- gadmVN::gadm(date = 1992, merge_hanoi = TRUE)
-#' map[which(map$province == "Ha Son Binh"),] <- "Ha Noi"
+#' map <- gadmVN::gadm(date = 1990, merge_hanoi = TRUE)
 #'
 #' # A choroplet map of the dengue data:
 #' # The first step is to select only the month and the year that we want to
