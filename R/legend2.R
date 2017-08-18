@@ -160,55 +160,55 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
 #' dengue_0993  <- filter(dengue, year == 1993, month == "September")
 #' dengue_0993 <- select(dengue_0993, province, contains("incidence"))
 #'
-#' a <- choropleth_map(dengue_0993, map)
-#' # By default, col = heat.colors(6) in choropleth_map function
+#' a <- choromap(dengue_0993, map)
+#' # By default, col = heat.colors(6) in choromap function
 #' legend2(97, 22.5 ,a ,col = heat.colors(6))
 #'
 #' # By default, the legend is on the top left of the figure if x and y are not
 #' # filled, but the position can be easily change by using the parameters pos:
 #' # top left
-#' a <- choropleth_map(dengue_0993, map)
+#' a <- choromap(dengue_0993, map)
 #' legend2(legend = a, col = heat.colors(6))
 #' # top right
-#' a <- choropleth_map(dengue_0993, map)
+#' a <- choromap(dengue_0993, map)
 #' legend2(legend = a, col = heat.colors(6), pos = "top-right")
 #' # bottom left
-#' a <- choropleth_map(dengue_0993, map)
+#' a <- choromap(dengue_0993, map)
 #' legend2(legend = a, col = heat.colors(6), pos = "bottom-left")
 #' # bottom right
-#' a <- choropleth_map(dengue_0993, map)
+#' a <- choromap(dengue_0993, map)
 #' legend2(legend = a, col = heat.colors(6), pos = "bottom-right")
 #'
 #' # By default, the legend text is on the left of the scale, but the
 #' # position can be easily change by using the parameters postext:
-#' a <- choropleth_map(dengue_0993, map)
+#' a <- choromap(dengue_0993, map)
 #' legend2(legend = a, col = heat.colors(6), pos = "bottom-right",
 #'          postext = "right")
 #'
 #' # Printing the color of the missing values:
-#' a <- choropleth_map(dengue_0993, map)
+#' a <- choromap(dengue_0993, map)
 #' legend2(legend = a, col = heat.colors(6), col_na = "grey")
 #'
 #' # Changing the number of decimal:
-#' a <- choropleth_map(dengue_0993, map,
+#' a <- choromap(dengue_0993, map,
 #'                fixedBreaks = c(0, 0.5, 5, 50, 150, 550, 1300))
 #' legend2(legend = a, col = heat.colors(6), col_na = "grey", n_round = 1)
 #'
 #' # Changing the text parameters:
-#' a <- choropleth_map(dengue_0993, map,
+#' a <- choromap(dengue_0993, map,
 #'                fixedBreaks = c(0, 0.5, 5, 50, 150, 550, 1300))
 #' legend2(legend = a, col = heat.colors(6), col_na = "grey", n_round = 2,
 #'          cex = 0.8)
 #'
 #' # Changing the parameters of the scale:
-#' a <- choropleth_map(dengue_0993, map,
+#' a <- choromap(dengue_0993, map,
 #'                fixedBreaks = c(0, 0.5, 5, 50, 150, 550, 1300))
 #' legend2(legend = a, col = heat.colors(6), col_na = "grey",
 #'          h = 0.5, w = 0.4, cex = 0.6)
 #'
 #' # Using the locator to choose where to print the legend
 #'\dontrun{
-#' choropleth_map(dengue_0993, map)
+#' choromap(dengue_0993, map)
 #' legend2(legend = a, col = heat.colors(6), locate = TRUE)
 #'}
 #'
