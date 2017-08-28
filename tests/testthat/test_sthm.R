@@ -68,7 +68,7 @@ test_that("`sthm` returns the province in the good order", {
     dplyr::arrange(time)
 
   provinces <- gadm(date = 1980)
-  coord <- coordinates(provinces)
+  coord <- sp::coordinates(provinces)
   row.names(coord) <- unique(provinces@data$province)
   order <- rownames(coord[order(coord[, 2]), ])
   order <- data.frame(province = order, order = seq_along(order))

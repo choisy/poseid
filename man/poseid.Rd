@@ -6,6 +6,6 @@
 \alias{poseid-package}
 \title{poseid: Population-based Observational Studies of the Epidemiology of Infectious Diseases}
 \description{
-The marc package provide functions of visualizing and analysing
+The poseid package provide functions of visualizing and analysing
 population-based observational data in epidemiology.
 }

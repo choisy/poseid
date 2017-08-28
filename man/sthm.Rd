@@ -106,7 +106,7 @@ legend2(.925, 1, legend =  a, col = col, postext = "right", n_round = 2,
 library(gadmVN)
 library(dplyr)
 provinces <- gadm()
-coord <- coordinates(provinces)
+coord <- sp::coordinates(provinces)
 row.names(coord) <- unique(provinces@data$province)
 order <- rownames(coord[order(coord[, 2]), ])
 order <- data.frame(province = order, order = seq_along(order))
