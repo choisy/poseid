@@ -3,10 +3,10 @@ library(gadmVN) # for  'gadm'
 library(dplyr) # for ' %>% '
 library(magrittr) # for 'select', 'filter', 'mutate'
 
-context("`choropleth_map` returns error when the input are not in a correct
+context("`choromap` returns error when the input are not in a correct
         format")
 
-test_that("`choropleth_map` returns the correct error message", {
+test_that("`choromap` returns the correct error message", {
 
 dengue <- getid(dengue, from = 1992)
 col <- rev(heat.colors(9))
@@ -19,7 +19,7 @@ expect_error(
     dplyr::filter(year == 2004, month == "April") %>%
     dplyr::select(province, contains("incidence")) %>%
     mutate(province = incidence_dengue) %>%
-    choropleth_map(map = map, n = 9, col = col, style = "fisher",
+    choromap(map = map, n = 9, col = col, style = "fisher",
                    distrib = FALSE) %>%
     legend2(legend = ., col = attr(., "colors")),
   "Invalid 'df', one of the column needs to be of class 'character' and
@@ -28,7 +28,7 @@ expect_error(
 expect_error(
   dengue  %>%
     dplyr::filter(year == 2004, month == "April") %>%
-    choropleth_map(map = map, n = 9, col = col, style = "fisher",
+    choromap(map = map, n = 9, col = col, style = "fisher",
                    distrib = FALSE) %>%
     legend2(legend = ., col = attr(., "colors")),
   "Invalid number of column, 'df' should only have two columns")
@@ -37,7 +37,7 @@ expect_error(
   dengue  %>%
     dplyr::filter(year == 2004, month == "April") %>%
     dplyr::select(province, contains("incidence")) %>%
-    choropleth_map(map = dengue, n = 9, col = col, style = "fisher",
+    choromap(map = dengue, n = 9, col = col, style = "fisher",
                    distrib = FALSE) %>%
     legend2(legend = ., col = attr(., "colors")),
   "Invalid 'map' format, should be 'SpatialPolygonsDataFrame'")
@@ -46,7 +46,7 @@ expect_error(
   dengue  %>%
     dplyr::filter(year == 2004, month == "April") %>%
     dplyr::select(province, contains("incidence")) %>%
-    choropleth_map(map = map, n = 9, col = col, style = "bla") %>%
+    choromap(map = map, n = 9, col = col, style = "bla") %>%
     legend2(legend = ., col = attr(., "colors"), col_na = "grey"),
   "The parameters 'style' can only contain: one of 'fixed', 'sd',
          'equal', 'pretty', 'quantile', 'kmeans', 'hclust', 'blust', 'fisher' or 'jenks'.
