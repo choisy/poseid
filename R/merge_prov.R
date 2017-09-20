@@ -35,9 +35,12 @@ select_date <- function(df, from, to) {
 #' @keywords internal
 #' @noRd
 select_events <- function(splits_lst, from, to) {
+  sel0 <- purrr::map(splits_lst, 3) %>% unlist %>%
+    sort(decreasing = F) %>% names()
+  splits_lst <- splits_lst[sel0]
   sel <- purrr::map(splits_lst, 3) > as.Date(from) &
     purrr::map(splits_lst, 3) <= as.Date(to)
-  lst <- splits_lst[sel] %>% purrr::sort_by(3)
+  lst <- splits_lst[sel]
 }
 
 ################################################################################
@@ -303,7 +306,7 @@ merge_province <- function(df, FUN, from, to, splits_lst,
 #' @importFrom lazyeval interp
 #' @importFrom stats setNames
 #' @importFrom lubridate year
-#' @importFrom purrr reduce map sort_by
+#' @importFrom purrr reduce map
 #'
 #' @examples
 #'
