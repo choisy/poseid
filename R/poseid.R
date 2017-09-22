@@ -11,6 +11,8 @@
 #' @importFrom graphics box image layout locator par rect segments strwidth text
 #' @importFrom stats na.omit
 #' @importFrom utils tail
+#' @importFrom graphics plot
+#' @importFrom stats end start
 #'
 #' @docType package
 #' @name poseid
