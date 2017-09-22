@@ -4,9 +4,7 @@
 \alias{choromap}
 \title{Draws a choropleth map}
 \usage{
-choromap(df, map, n = 6, col = heat.colors(6), style = "quantile",
-  col_na = "grey", pos_brks = TRUE, fixedBreaks = NULL, distrib = FALSE,
-  n_round = 0)
+choromap(df, map, fixedBreaks, col = heat.colors(6), col_na = "grey")
 }
 \arguments{
 \item{df}{a data frame containing at two colums, one of class "character" and
@@ -15,32 +13,13 @@ one of class "numeric".}
 \item{map}{an object of class "SpatialPolygonsDataFrame" containing at least
 the varible \code{province}}
 
-\item{n}{a numeric indicating the number of intervals to represent the data
-(by default, \code{n = 6})}
+\item{fixedBreaks}{a vector of value used to specife the class intervals.}
 
 \item{col}{a vector of colors to use for the map (by default,
-\code{col = heat.colors(6)}).The colors from the package RColorBrewer can
-also be used.}
-
-\item{style}{a character value issued from the \code{classint} package, and
-used to select a method for the different way of calculating the intervals
-(by default \code{style = "quantile"})}
+\code{col = heat.colors(6)})}
 
 \item{col_na}{the color with which to represent the missing values
 (by default \code{col_na = "grey"})}
-
-\item{pos_brks}{if TRUE, the breaks values will all be positive, the first
-break will be superior or equal to zero, by default (\code{TRUE}). If false,
-allows negative value for breaks}
-
-\item{fixedBreaks}{By default \code{NULL} but if a vector of value is
-inputed, it will be used to specifen the breaks.}
-
-\item{distrib}{if TRUE, print on the map, the distribution of the values by
-intervals. Only available when the represented variable has at least two
-differents value and if the breaks are not specified via fixedBreaks.}
-
-\item{n_round}{integer indicating the number of significant digits to be used}
 }
 \value{
 A numeric vector with attributes corresponding of the breaks value
@@ -50,19 +29,7 @@ the breaks value, returned invisibly.
 \description{
 Draws a choropleth map
 }
-\details{
-The \code{n} parameter can be overuled by the number of breaks
-obtain by certain style. By default, the number of intervall will be decide
-by the \code{n} parameter but for certain \code{style} like "pretty", this
-value can be overruled. Please for more information, look at the
-documentation of the classint package. \cr
-\cr
-If the \code{fixedBreaks} parameter is filled, the \code{n} and \code{style}
-parameters will be automatically overuled as \code{style = "fixed"} and
-\code{n} will be equal to the length of the fixedBreaks vector - 1.
-}
 \examples{
-library(poseid)
 library(gdpm)
 library(magrittr)
 library(gadmVN)
@@ -83,49 +50,30 @@ map <- gadmVN::gadm(date = 1990, merge_hanoi = TRUE)
 library(dplyr)
 dengue_0993  <- filter(dengue, year == 1993, month == "September")
 dengue_0993 <- select(dengue_0993, province, contains("incidence"))
-a <- choromap(dengue_0993, map)
+a <- choromap(dengue_0993, map, fixedBreaks = c(0,10,50,100,500,1000,2000))
 # return invisibly the information for the legend
 legend2(legend = a, col = attr(a, "colors"), col_na = "grey")
 
 # You can also use the '\%>\%' operator:
 dengue_0993 \%>\%
-  choromap(map) \%>\%
+  choromap(map, fixedBreaks = c(0,10,50,100,500,1000,2000)) \%>\%
   legend2(legend = ., col = attr(., "colors"), col_na = "grey")
 
-# A choroplet map of the dengue data with some data transformations in order
-# to reflect better the contrasts:
-dengue_0993 \%>\%
- choromap(map, n = 9, style = "jenks", col = heat.colors(9)) \%>\%
- legend2(legend = ., col = attr(., "colors"), col_na = "grey")
-
 # Using some other color palettes, for examples the ones from the
-# RColorBrewer package or the one in the color Palettes of R :
+# RColorBrewer package or the one in the color Palettes of R, be careful
+# to have a color vector of length n-1 compare to the lenght of fixedBreakss:
 library(RColorBrewer)
 # to see the available color palettes:
 display.brewer.all()
 dengue_0993 \%>\%
- choromap(map, n = 9, style = "jenks",
-      col = brewer.pal(9, "YlOrRd")) \%>\%
+ choromap(map, fixedBreaks = c(0,10,50,100,500,1000,2000),
+           col = brewer.pal(6, "YlOrRd")) \%>\%
  legend2(legend = ., col = attr(., "colors"), col_na = "grey")
 
 # changing the color of the missing values:
 dengue_0993 \%>\%
- choromap(map, n = 9, style = "jenks",
-      col = brewer.pal(9, "YlOrRd"), col_na = "blue") \%>\%
- legend2(legend = ., col = attr(., "colors"), col_na = "blue")
-
-
-# Print the distribution of the value by intervals:
-dengue_0993 \%>\%
- choromap(map, n = 9, style = "jenks",
-      col = brewer.pal(9, "YlOrRd"), col_na = "blue",
-      distrib = TRUE) \%>\%
- legend2(legend = ., col = attr(., "colors"), col_na = "blue")
-
-# Use the fixedBreaks parameters to define your own intervals of value:
-dengue_0993 \%>\%
- choromap(map, fixedBreaks = c(0, 20, 100, 200, 400, 800, 1200, 1500),
-      col = brewer.pal(7, "YlOrRd"), col_na = "blue") \%>\%
+ choromap(map, fixedBreaks = c(0,10,50,100,500,1000,2000),
+           col = brewer.pal(6, "YlOrRd"), col_na = "blue") \%>\%
  legend2(legend = ., col = attr(., "colors"), col_na = "blue")
 
 }

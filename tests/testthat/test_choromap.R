@@ -13,14 +13,12 @@ col <- rev(heat.colors(9))
 map <- map <- gadmVN::gadm(date = 1992, merge_hanoi = TRUE)
 map[which(map$province == "Ha Son Binh"),] <- "Ha Noi"
 
-
 expect_error(
   dengue  %>%
     dplyr::filter(year == 2004, month == "April") %>%
     dplyr::select(province, contains("incidence")) %>%
     mutate(province = incidence_dengue) %>%
-    choromap(map = map, n = 9, col = col, style = "fisher",
-                   distrib = FALSE) %>%
+    choromap(map = map, fixedBreaks = c(0,10,50,100,500,1000,2000)) %>%
     legend2(legend = ., col = attr(., "colors")),
   "Invalid 'df', one of the column needs to be of class 'character' and
          the other of class 'numeric'")
@@ -28,8 +26,7 @@ expect_error(
 expect_error(
   dengue  %>%
     dplyr::filter(year == 2004, month == "April") %>%
-    choromap(map = map, n = 9, col = col, style = "fisher",
-                   distrib = FALSE) %>%
+    choromap(map = map, fixedBreaks = c(0,10,50,100,500,1000,2000)) %>%
     legend2(legend = ., col = attr(., "colors")),
   "Invalid number of column, 'df' should only have two columns")
 
@@ -37,8 +34,7 @@ expect_error(
   dengue  %>%
     dplyr::filter(year == 2004, month == "April") %>%
     dplyr::select(province, contains("incidence")) %>%
-    choromap(map = dengue, n = 9, col = col, style = "fisher",
-                   distrib = FALSE) %>%
+    choromap(map = dengue, fixedBreaks = c(0,10,50,100,500,1000,2000)) %>%
     legend2(legend = ., col = attr(., "colors")),
   "Invalid 'map' format, should be 'SpatialPolygonsDataFrame'")
 
@@ -46,10 +42,8 @@ expect_error(
   dengue  %>%
     dplyr::filter(year == 2004, month == "April") %>%
     dplyr::select(province, contains("incidence")) %>%
-    choromap(map = map, n = 9, col = col, style = "bla") %>%
-    legend2(legend = ., col = attr(., "colors"), col_na = "grey"),
-  "The parameters 'style' can only contain: one of 'fixed', 'sd',
-         'equal', 'pretty', 'quantile', 'kmeans', 'hclust', 'blust', 'fisher' or 'jenks'.
-         For more information, please look at the package 'classInt'")
-})
+    choromap(map = map, fixedBreaks = c(0,10,50,100,500,1000,2000),
+             col = heat.colors(9)) %>%
+    legend2(legend = ., col = attr(., "colors")), regexp = NULL)
 
+})
