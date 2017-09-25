@@ -46,18 +46,30 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
   }
   xright <- xleft + w
 
+
   # define the y for rectangle legend
   col %<>% rev
-  y1 <- y - (0:length(col)) * h
+  y1 <- y - (0:(length(legend) - 1)) * h
 
   # built the legend rectangles
-  for(i in seq_along(col))
+
+  if(length(legend) > 12){
+    y1 <- seq(y, tail(y1, 1), length.out = length(col))
+  }
+
+  for(i in seq_len(length(legend) - 1))
     rect(xleft, y1[i + 1], xright, y1[i], col = col[i], border = NA)
-  rect(xleft, tail(y1, 1), xright, y1[1])
+    rect(xleft, tail(y1, 1), xright, y1[1])
 
   # If want NA, add a rectangle of the color NA
   if(length(col_na) != 0) {
     rect(xleft, tail(y1, 1) - h , xright, tail(y1, 1) - h - h, col = col_na)
+  }
+
+  # legend text and tick
+  if(length(col) > 12){
+    legend %<>% pretty(n = 13)
+    y1 <- seq(y, tail(y1, 1), length.out = length(legend))
   }
 
   # Define if segments should be on the left or the right
@@ -68,12 +80,12 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
     segments(xright, y1, xright + tl, y1)
   }
 
-  # legend text
+  # print legend text
+  y2 <- seq(y, tail(y1, 1), length.out = length(legend))
+
   if (length(col_na) > 0){
     # define the y  with NA for the text
-    ntcol <- length(col) + 2
-    y2 <- y - (0: ntcol) * h
-    y2[length(y2)] <- y2[length(y2)] + 0.5 * h
+    y2[length(y2)] <- y2[length(y2)] + 1 * h
 
     # legend with NA on the left or right side
     if (postext == "left") {
@@ -88,7 +100,6 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
     }
 
   } else {
-    y2 <- y - (0: length(col)) * h
     if (postext == "left") {
       text(x + size_legend, y2,
            format(round(rev(legend),n_round), nsmall = n_round),
@@ -123,7 +134,7 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
 #' used, by default \code{0}.
 #' @param col_na the color with which to represent the missing values
 #' (by default \code{col_na = NULL}). If specified, a NA value will be add to
-#' the lefend with the color corresponding.
+#' the legend with the color corresponding.
 #' @param postext A character defining the side of the legend text, by default
 #' \code{left} but can be \code{right}
 #' @param h A numeric expressing the height of one rectangle
@@ -145,7 +156,6 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
 #' arguments.
 #'
 #' @examples
-#' library(poseid)
 #' library(gdpm)
 #' library(magrittr)
 #' library(gadmVN)
@@ -154,55 +164,54 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
 #' dengue <- getid(dengue, from = 1992, to = 2010)
 #' # geographic data
 #' map <- gadmVN::gadm(date = 1992, merge_hanoi = TRUE)
-#' map[which(map$province == "Ha Son Binh"),] <- "Ha Noi"
 #' # preparation of the data
 #' library(dplyr)
 #' dengue_0993  <- filter(dengue, year == 1993, month == "September")
 #' dengue_0993 <- select(dengue_0993, province, contains("incidence"))
 #'
-#' a <- choromap(dengue_0993, map)
+#' a <- choromap(dengue_0993, map, fixedBreaks = c(0,10,50,100,500,1000,2000))
 #' # By default, col = heat.colors(6) in choromap function
 #' legend2(97, 22.5 ,a ,col = heat.colors(6))
 #'
 #' # By default, the legend is on the top left of the figure if x and y are not
 #' # filled, but the position can be easily change by using the parameters pos:
 #' # top left
-#' a <- choromap(dengue_0993, map)
+#' a <- choromap(dengue_0993, map, fixedBreaks = c(0,10,50,100,500,1000,2000))
 #' legend2(legend = a, col = heat.colors(6))
 #' # top right
-#' a <- choromap(dengue_0993, map)
+#' a <- choromap(dengue_0993, map, fixedBreaks = c(0,10,50,100,500,1000,2000))
 #' legend2(legend = a, col = heat.colors(6), pos = "top-right")
 #' # bottom left
-#' a <- choromap(dengue_0993, map)
+#' a <- choromap(dengue_0993, map, fixedBreaks = c(0,10,50,100,500,1000,2000))
 #' legend2(legend = a, col = heat.colors(6), pos = "bottom-left")
 #' # bottom right
-#' a <- choromap(dengue_0993, map)
+#' a <- choromap(dengue_0993, map, fixedBreaks = c(0,10,50,100,500,1000,2000))
 #' legend2(legend = a, col = heat.colors(6), pos = "bottom-right")
 #'
 #' # By default, the legend text is on the left of the scale, but the
 #' # position can be easily change by using the parameters postext:
-#' a <- choromap(dengue_0993, map)
+#' a <- choromap(dengue_0993, map, fixedBreaks = c(0,10,50,100,500,1000,2000))
 #' legend2(legend = a, col = heat.colors(6), pos = "bottom-right",
 #'          postext = "right")
 #'
 #' # Printing the color of the missing values:
-#' a <- choromap(dengue_0993, map)
+#' a <- choromap(dengue_0993, map, fixedBreaks = c(0,10,50,100,500,1000,2000))
 #' legend2(legend = a, col = heat.colors(6), col_na = "grey")
 #'
 #' # Changing the number of decimal:
 #' a <- choromap(dengue_0993, map,
-#'                fixedBreaks = c(0, 0.5, 5, 50, 150, 550, 1300))
+#'                fixedBreaks = c(0, 0.5, 5, 50, 150, 1000, 2000))
 #' legend2(legend = a, col = heat.colors(6), col_na = "grey", n_round = 1)
 #'
 #' # Changing the text parameters:
 #' a <- choromap(dengue_0993, map,
-#'                fixedBreaks = c(0, 0.5, 5, 50, 150, 550, 1300))
+#'                fixedBreaks = c(0, 0.5, 5, 50, 150, 1000, 2000))
 #' legend2(legend = a, col = heat.colors(6), col_na = "grey", n_round = 2,
 #'          cex = 0.8)
 #'
 #' # Changing the parameters of the scale:
 #' a <- choromap(dengue_0993, map,
-#'                fixedBreaks = c(0, 0.5, 5, 50, 150, 550, 1300))
+#'                fixedBreaks = c(0, 0.5, 5, 50, 150, 1000, 2000))
 #' legend2(legend = a, col = heat.colors(6), col_na = "grey",
 #'          h = 0.5, w = 0.4, cex = 0.6)
 #'

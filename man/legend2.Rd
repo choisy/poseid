@@ -32,7 +32,7 @@ used, by default \code{0}.}
 
 \item{col_na}{the color with which to represent the missing values
 (by default \code{col_na = NULL}). If specified, a NA value will be add to
-the lefend with the color corresponding.}
+the legend with the color corresponding.}
 
 \item{postext}{A character defining the side of the legend text, by default
 \code{left} but can be \code{right}}
@@ -64,7 +64,6 @@ the parameter \code{locate} to TRUE in place of the \code{x} and \code{y}
 arguments.
 }
 \examples{
-library(poseid)
 library(gdpm)
 library(magrittr)
 library(gadmVN)
@@ -73,55 +72,54 @@ library(gadmVN)
 dengue <- getid(dengue, from = 1992, to = 2010)
 # geographic data
 map <- gadmVN::gadm(date = 1992, merge_hanoi = TRUE)
-map[which(map$province == "Ha Son Binh"),] <- "Ha Noi"
 # preparation of the data
 library(dplyr)
 dengue_0993  <- filter(dengue, year == 1993, month == "September")
 dengue_0993 <- select(dengue_0993, province, contains("incidence"))
 
-a <- choromap(dengue_0993, map)
+a <- choromap(dengue_0993, map, fixedBreaks = c(0,10,50,100,500,1000,2000))
 # By default, col = heat.colors(6) in choromap function
 legend2(97, 22.5 ,a ,col = heat.colors(6))
 
 # By default, the legend is on the top left of the figure if x and y are not
 # filled, but the position can be easily change by using the parameters pos:
 # top left
-a <- choromap(dengue_0993, map)
+a <- choromap(dengue_0993, map, fixedBreaks = c(0,10,50,100,500,1000,2000))
 legend2(legend = a, col = heat.colors(6))
 # top right
-a <- choromap(dengue_0993, map)
+a <- choromap(dengue_0993, map, fixedBreaks = c(0,10,50,100,500,1000,2000))
 legend2(legend = a, col = heat.colors(6), pos = "top-right")
 # bottom left
-a <- choromap(dengue_0993, map)
+a <- choromap(dengue_0993, map, fixedBreaks = c(0,10,50,100,500,1000,2000))
 legend2(legend = a, col = heat.colors(6), pos = "bottom-left")
 # bottom right
-a <- choromap(dengue_0993, map)
+a <- choromap(dengue_0993, map, fixedBreaks = c(0,10,50,100,500,1000,2000))
 legend2(legend = a, col = heat.colors(6), pos = "bottom-right")
 
 # By default, the legend text is on the left of the scale, but the
 # position can be easily change by using the parameters postext:
-a <- choromap(dengue_0993, map)
+a <- choromap(dengue_0993, map, fixedBreaks = c(0,10,50,100,500,1000,2000))
 legend2(legend = a, col = heat.colors(6), pos = "bottom-right",
          postext = "right")
 
 # Printing the color of the missing values:
-a <- choromap(dengue_0993, map)
+a <- choromap(dengue_0993, map, fixedBreaks = c(0,10,50,100,500,1000,2000))
 legend2(legend = a, col = heat.colors(6), col_na = "grey")
 
 # Changing the number of decimal:
 a <- choromap(dengue_0993, map,
-               fixedBreaks = c(0, 0.5, 5, 50, 150, 550, 1300))
+               fixedBreaks = c(0, 0.5, 5, 50, 150, 1000, 2000))
 legend2(legend = a, col = heat.colors(6), col_na = "grey", n_round = 1)
 
 # Changing the text parameters:
 a <- choromap(dengue_0993, map,
-               fixedBreaks = c(0, 0.5, 5, 50, 150, 550, 1300))
+               fixedBreaks = c(0, 0.5, 5, 50, 150, 1000, 2000))
 legend2(legend = a, col = heat.colors(6), col_na = "grey", n_round = 2,
          cex = 0.8)
 
 # Changing the parameters of the scale:
 a <- choromap(dengue_0993, map,
-               fixedBreaks = c(0, 0.5, 5, 50, 150, 550, 1300))
+               fixedBreaks = c(0, 0.5, 5, 50, 150, 1000, 2000))
 legend2(legend = a, col = heat.colors(6), col_na = "grey",
          h = 0.5, w = 0.4, cex = 0.6)
 
