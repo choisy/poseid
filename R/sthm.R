@@ -48,7 +48,7 @@ draw_heatmap <- function(df,
   plt <- par("plt")
   options(warn = -1)
 
-  # The heatmap:
+  # Heatmap:
   plt[2] <- x[1]
   par(plt = plt)
   image(time_vec, seq_len(ncol(values)), values, ann = FALSE)
@@ -57,10 +57,11 @@ draw_heatmap <- function(df,
   image(time_vec, seq_len(ncol(values)), values, col = col, add = TRUE)
   box(bty = "o")
 
-  # The legend:
-  labels <- levels(cut(seq(min(values, na.rm = TRUE), max(values, na.rm = TRUE),
-                           le = 512), length(col)))
-  legend <- c(0, as.numeric( sub("[^,]*,([^]]*)\\]", "\\1", labels)))
+  # Legend:
+  labels <- levels(cut(seq(min(values, na.rm = TRUE),
+                           max(values, na.rm = TRUE), le = 512),
+                      length(col)))
+  legend <- c(0, as.numeric(sub("[^,]*,([^]]*)\\]", "\\1", labels)))
 
   # Print the legend if needed :
   if (show_legend) return(list(legend = legend, prov = provinces_names)) else
@@ -92,33 +93,43 @@ draw_heatmap <- function(df,
 #' name of the province in the order of the figure.
 #'
 #' @examples
-#' library(poseid)
 #' library(gdpm)
 #' library(dplyr)
 #' library(magrittr)
 #' # A heatmap of the ILI data:
 #' ili <- getid(ili, from = 2004) %>%
 #'   dplyr::mutate(time = as.Date(
-#'     paste0(year, "-", as.numeric(month), "-", 15))) %>%
-#'   dplyr:: select(matches("province"), matches("time"),
-#'     contains("incidence")) %>%
+#'                 paste0(year, "-", as.numeric(month), "-", 15))) %>%
+#'   dplyr::select(province, time, contains("incidence")) %>%
 #'   dplyr::arrange(time)
 #' sthm(ili)
 #'
 #' # With a legend by using legend2 function:
-#' col <- rev(heat.colors(9))
-#' a <- sthm(ili, col = col)
-#' legend2(.925, 1, legend =  a, col = col, postext = "right", n_round = 2,
-#'         h = 1/length(col), w = 0.04, tl = 0.01, s = 0.005)
+#' col <- rev(heat.colors(10))
+#' a <- sthm(ili, col = col, col_na = "blue")
+#' legend2(.925, 1, legend =  a, col = col, postext = "right", col_na = "blue",
+#'         h = 1/(length(a)-1), w = 0.04, tl = 0.01, s = 0.005)
+#'
+#' # A large number of color can be used to
+#' col <- rev(heat.colors(100)
+#' a <- sthm(ili, col = col, col_na = "blue")
+#' legend2(.925, 1, legend =  a, col = col, postext = "right", col_na = "blue",
+#'         h = 1/(length(a)-1), w = 0.04, tl = 0.01, s = 0.005)
+#'
+#' # With a legend by using legend2 function:
+#' col <- rev(heat.colors(400))
+#' a <- sthm(ili, col = col, col_na = "blue")
+#' legend2(.925, 1, legend =  a, col = col, postext = "right", col_na = "blue",
+#'         h = 1/(length(a)-1), w = 0.04, tl = 0.01, s = 0.005)
 #'
 #' # with some data transformations in order to reflect better the contrasts:
 #' a <- sthm(ili, f = sqrt, col = col)
-#' legend2(.925, 1, legend =  a, col = col, postext = "right", n_round = 1,
-#'         h = 1/length(col), w = 0.035, tl = 0.01, s = 0.005, cex = 0.8)
+#' legend2(.925, 1, legend =  a, col = col, postext = "right",
+#'         h = 1/(length(a)-1), w = 0.035, tl = 0.01, s = 0.005, cex = 0.8)
 #'
 #' a <- sthm(ili, f = function(x) x^.3, col = col)
-#' legend2(.925, 1, legend =  a, col = col, postext = "right", n_round = 2,
-#'         h = 1/length(col), w = 0.04, tl = 0.01, s = 0.005, cex = 0.8)
+#' legend2(.925, 1, legend =  a, col = col, postext = "right",
+#'         h = 1/(length(a)-1), w = 0.04, tl = 0.01, s = 0.005, cex = 0.8)
 #'
 #' # using some other color palettes, for examples the ones fromt the
 #' # RColorBrewer package:
@@ -127,7 +138,7 @@ draw_heatmap <- function(df,
 #' a <- sthm(ili, f = function(x) x^.3, col = brewer.pal(11, "RdYlGn"))
 #' legend2(.925, 1, legend =  a, col = brewer.pal(11, "RdYlGn"),
 #'         postext = "right", n_round = 2,
-#'         h = 1/length(brewer.pal(11, "RdYlGn")), w = 0.04, tl = 0.01,
+#'         h = 1/(length(a)-1), w = 0.04, tl = 0.01,
 #'         s = 0.005)
 #'
 #' a <- sthm(ili, f = function(x) x^.3, col = brewer.pal(11, "RdYlBu"))
@@ -135,18 +146,14 @@ draw_heatmap <- function(df,
 #'         postext = "right", n_round = 2, h = 1/(length(a) - 1), w = 0.04,
 #'         tl = 0.01,  s = 0.005)
 #'
-#' sthm(ili, f = function(x) x^.3, col = brewer.pal(11, "PRGn"))
-#' sthm(ili, f = function(x) x^.3, col = brewer.pal(9, "YlOrRd"))
-#' sthm(ili, f = function(x) x^.3, col = brewer.pal(9, "YlOrBr"))
-#'
 #' # changing the color of the missing values:
 #' rubella <- getid(rubella)  %>%
 #'   mutate(time = as.Date(paste0(year, "-", as.numeric(month), "-", 15))) %>%
-#'   select(matches("province"), matches("time"), contains("incidence")) %>%
+#'   select(province, time, contains("incidence")) %>%
 #'   arrange(time)
 #'
 #' a <- sthm(rubella, f = sqrt, col = col)
-#' legend2(.925, 1, legend =  a, col = col, postext = "right", n_round = 2,
+#' legend2(.925, 1, legend =  a, col = col, postext = "right",
 #'         col_na = "grey", h = 1/(length(a) - 1), w = 0.04, tl = 0.01,
 #'           s = 0.005)
 #'
@@ -169,14 +176,14 @@ draw_heatmap <- function(df,
 #' a <- sthm(rubella_order, f = sqrt, col = brewer.pal(9, "YlOrRd"),
 #'          col_na = "blue")
 #' legend2(.925, 1, legend =  a, col = col, postext = "right", n_round = 2,
-#'         col_na = "blue", h = 1/length(col), w = 0.04, tl = 0.01,
+#'         col_na = "blue", h = 1/(length(a)-1), w = 0.04, tl = 0.01,
 #'           s = 0.005)
 #'
 #' # to print the province in the order of the figure:
 #' a <- sthm(rubella_order, f = sqrt, col = brewer.pal(9, "YlOrRd"),
 #'           col_na = "blue", show_legend = TRUE)
 #' legend2(.925, 1, legend =  a$legend, col = col, postext = "right",
-#'         n_round = 2, col_na = "blue", h = 1/length(col), w = 0.04, tl = 0.01,
+#'         n_round = 2, col_na = "blue", h = 1/(length(a)-1), w = 0.04, tl = 0.01,
 #'           s = 0.005)
 #'a
 #'# list containing the legend vector and the province vector which correspond

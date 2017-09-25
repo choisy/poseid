@@ -39,33 +39,31 @@ name of the province in the order of the figure.
 Makes a spatio-temporal heatmap of a disease
 }
 \examples{
-library(poseid)
 library(gdpm)
 library(dplyr)
 library(magrittr)
 # A heatmap of the ILI data:
 ili <- getid(ili, from = 2004) \%>\%
   dplyr::mutate(time = as.Date(
-    paste0(year, "-", as.numeric(month), "-", 15))) \%>\%
-  dplyr:: select(matches("province"), matches("time"),
-    contains("incidence")) \%>\%
+                paste0(year, "-", as.numeric(month), "-", 15))) \%>\%
+  dplyr::select(province, time, contains("incidence")) \%>\%
   dplyr::arrange(time)
 sthm(ili)
 
 # With a legend by using legend2 function:
-col <- rev(heat.colors(9))
+col <- rev(heat.colors(100))
 a <- sthm(ili, col = col)
 legend2(.925, 1, legend =  a, col = col, postext = "right", n_round = 2,
-        h = 1/length(col), w = 0.04, tl = 0.01, s = 0.005)
+        h = 1/(length(a)-1), w = 0.04, tl = 0.01, s = 0.005)
 
 # with some data transformations in order to reflect better the contrasts:
 a <- sthm(ili, f = sqrt, col = col)
 legend2(.925, 1, legend =  a, col = col, postext = "right", n_round = 1,
-        h = 1/length(col), w = 0.035, tl = 0.01, s = 0.005, cex = 0.8)
+        h = 1/(length(a)-1), w = 0.035, tl = 0.01, s = 0.005, cex = 0.8)
 
 a <- sthm(ili, f = function(x) x^.3, col = col)
 legend2(.925, 1, legend =  a, col = col, postext = "right", n_round = 2,
-        h = 1/length(col), w = 0.04, tl = 0.01, s = 0.005, cex = 0.8)
+        h = 1/(length(a)-1), w = 0.04, tl = 0.01, s = 0.005, cex = 0.8)
 
 # using some other color palettes, for examples the ones fromt the
 # RColorBrewer package:
@@ -74,7 +72,7 @@ library(RColorBrewer)
 a <- sthm(ili, f = function(x) x^.3, col = brewer.pal(11, "RdYlGn"))
 legend2(.925, 1, legend =  a, col = brewer.pal(11, "RdYlGn"),
         postext = "right", n_round = 2,
-        h = 1/length(brewer.pal(11, "RdYlGn")), w = 0.04, tl = 0.01,
+        h = 1/(length(a)-1), w = 0.04, tl = 0.01,
         s = 0.005)
 
 a <- sthm(ili, f = function(x) x^.3, col = brewer.pal(11, "RdYlBu"))
@@ -116,14 +114,14 @@ rubella_order <- select(rubella_order, -order)
 a <- sthm(rubella_order, f = sqrt, col = brewer.pal(9, "YlOrRd"),
          col_na = "blue")
 legend2(.925, 1, legend =  a, col = col, postext = "right", n_round = 2,
-        col_na = "blue", h = 1/length(col), w = 0.04, tl = 0.01,
+        col_na = "blue", h = 1/(length(a)-1), w = 0.04, tl = 0.01,
           s = 0.005)
 
 # to print the province in the order of the figure:
 a <- sthm(rubella_order, f = sqrt, col = brewer.pal(9, "YlOrRd"),
           col_na = "blue", show_legend = TRUE)
 legend2(.925, 1, legend =  a$legend, col = col, postext = "right",
-        n_round = 2, col_na = "blue", h = 1/length(col), w = 0.04, tl = 0.01,
+        n_round = 2, col_na = "blue", h = 1/(length(a)-1), w = 0.04, tl = 0.01,
           s = 0.005)
 a
 # list containing the legend vector and the province vector which correspond
