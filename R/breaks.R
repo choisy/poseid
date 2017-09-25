@@ -15,8 +15,8 @@
 #' @param fixedBreaks By default \code{NULL} but if a vector of value is
 #' inputed, it will be used to specifen the breaks, need to used with the
 #' parameter \code{style = "fixed"}
-#' @param distribution if TRUE, print on the map, the distribution of the values by
-#' intervals
+#' @param distribution if TRUE, print on the map, the distribution of the values
+#' by intervals
 #'
 #' @return A data frame with attributes \code{breaks} corresponding to the
 #'  breaks value, returned invisibly.
@@ -69,7 +69,8 @@ breaks <- function(df, col_name, n = 6, style = "quantile", pal = NULL,
 
   if(is.null(fixedBreaks) == FALSE & is.null(pal) == FALSE &
      length(fixedBreaks) != length(pal) + 1){
-    stop("The parameter 'fixedBreaks' should be equal to the length of 'pal' + 1 ")
+    stop("The parameter 'fixedBreaks' should be equal to the length of
+         'pal' + 1 ")
   }
 
   value <- df %>%

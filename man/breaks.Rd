@@ -26,8 +26,8 @@ used to select a method for the different way of calculating the intervals
 inputed, it will be used to specifen the breaks, need to used with the
 parameter \code{style = "fixed"}}
 
-\item{distribution}{if TRUE, print on the map, the distribution of the values by
-intervals}
+\item{distribution}{if TRUE, print on the map, the distribution of the values
+by intervals}
 }
 \value{
 A data frame with attributes \code{breaks} corresponding to the
