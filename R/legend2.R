@@ -52,7 +52,6 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
   y1 <- y - (0:(length(legend) - 1)) * h
 
   # built the legend rectangles
-
   if(length(legend) > 12){
     y1 <- seq(y, tail(y1, 1), length.out = length(col))
   }
@@ -60,11 +59,6 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
   for(i in seq_len(length(legend) - 1))
     rect(xleft, y1[i + 1], xright, y1[i], col = col[i], border = NA)
     rect(xleft, tail(y1, 1), xright, y1[1])
-
-  # If want NA, add a rectangle of the color NA
-  if(length(col_na) != 0) {
-    rect(xleft, tail(y1, 1) - h , xright, tail(y1, 1) - h - h, col = col_na)
-  }
 
   # legend text and tick
   if(length(col) > 12){
@@ -83,9 +77,16 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
   # print legend text
   y2 <- seq(y, tail(y1, 1), length.out = length(legend))
 
+  # If want NA, add a rectangle of the color NA
+  if(length(col_na) != 0) {
+    h <- y1[1] - y1[2]
+    rect(xleft, tail(y1, 1) - h , xright, tail(y1, 1) - 2 * h, col = col_na)
+  }
+
   if (length(col_na) > 0){
     # define the y  with NA for the text
-    y2[length(y2)] <- y2[length(y2)] + 1 * h
+    #y2[length(y2)] <- y2[length(y2)] + 1 * h
+    y2 <- c(y2, y2[length(y2)] - h, y2[length(y2)] - 1.5 * h)
 
     # legend with NA on the left or right side
     if (postext == "left") {
