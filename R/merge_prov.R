@@ -306,7 +306,7 @@ merge_province <- function(df, FUN, from, to, splits_lst,
 #' @importFrom lazyeval interp
 #' @importFrom stats setNames
 #' @importFrom lubridate year
-#' @importFrom purrr reduce map
+#' @importFrom purrr reduce map sort_by
 #'
 #' @examples
 #'
