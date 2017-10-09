@@ -51,18 +51,30 @@ ili <- getid(ili, from = 2004) \%>\%
 sthm(ili)
 
 # With a legend by using legend2 function:
-col <- rev(heat.colors(100))
+col <- rev(heat.colors(10))
 a <- sthm(ili, col = col)
-legend2(.925, 1, legend =  a, col = col, postext = "right", n_round = 2,
+legend2(.925, 1, legend =  a, col = col, postext = "right",
+        h = 1/(length(a)-1), w = 0.04, tl = 0.01, s = 0.005)
+
+# A large number of color can be used to
+col <- rev(heat.colors(100))
+a <- sthm(ili, col = col, col_na = "blue")
+legend2(.925, 1, legend =  a, col = col, postext = "right", col_na = "blue",
+        h = 1/(length(a)-1), w = 0.04, tl = 0.01, s = 0.005)
+
+# With a legend by using legend2 function:
+col <- rev(heat.colors(400))
+a <- sthm(ili, col = col, col_na = "blue")
+legend2(.925, 1, legend =  a, col = col, postext = "right", col_na = "blue",
         h = 1/(length(a)-1), w = 0.04, tl = 0.01, s = 0.005)
 
 # with some data transformations in order to reflect better the contrasts:
 a <- sthm(ili, f = sqrt, col = col)
-legend2(.925, 1, legend =  a, col = col, postext = "right", n_round = 1,
+legend2(.925, 1, legend =  a, col = col, postext = "right",
         h = 1/(length(a)-1), w = 0.035, tl = 0.01, s = 0.005, cex = 0.8)
 
 a <- sthm(ili, f = function(x) x^.3, col = col)
-legend2(.925, 1, legend =  a, col = col, postext = "right", n_round = 2,
+legend2(.925, 1, legend =  a, col = col, postext = "right",
         h = 1/(length(a)-1), w = 0.04, tl = 0.01, s = 0.005, cex = 0.8)
 
 # using some other color palettes, for examples the ones fromt the
@@ -80,18 +92,14 @@ legend2(.925, 1, legend =  a, col = brewer.pal(11, "RdYlBu"),
         postext = "right", n_round = 2, h = 1/(length(a) - 1), w = 0.04,
         tl = 0.01,  s = 0.005)
 
-sthm(ili, f = function(x) x^.3, col = brewer.pal(11, "PRGn"))
-sthm(ili, f = function(x) x^.3, col = brewer.pal(9, "YlOrRd"))
-sthm(ili, f = function(x) x^.3, col = brewer.pal(9, "YlOrBr"))
-
 # changing the color of the missing values:
 rubella <- getid(rubella)  \%>\%
   mutate(time = as.Date(paste0(year, "-", as.numeric(month), "-", 15))) \%>\%
-  select(matches("province"), matches("time"), contains("incidence")) \%>\%
+  select(province, time, contains("incidence")) \%>\%
   arrange(time)
 
 a <- sthm(rubella, f = sqrt, col = col)
-legend2(.925, 1, legend =  a, col = col, postext = "right", n_round = 2,
+legend2(.925, 1, legend =  a, col = col, postext = "right",
         col_na = "grey", h = 1/(length(a) - 1), w = 0.04, tl = 0.01,
           s = 0.005)
 

@@ -106,12 +106,12 @@ draw_heatmap <- function(df,
 #'
 #' # With a legend by using legend2 function:
 #' col <- rev(heat.colors(10))
-#' a <- sthm(ili, col = col, col_na = "blue")
-#' legend2(.925, 1, legend =  a, col = col, postext = "right", col_na = "blue",
+#' a <- sthm(ili, col = col)
+#' legend2(.925, 1, legend =  a, col = col, postext = "right",
 #'         h = 1/(length(a)-1), w = 0.04, tl = 0.01, s = 0.005)
 #'
 #' # A large number of color can be used to
-#' col <- rev(heat.colors(100)
+#' col <- rev(heat.colors(100))
 #' a <- sthm(ili, col = col, col_na = "blue")
 #' legend2(.925, 1, legend =  a, col = col, postext = "right", col_na = "blue",
 #'         h = 1/(length(a)-1), w = 0.04, tl = 0.01, s = 0.005)
