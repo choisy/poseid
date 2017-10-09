@@ -62,7 +62,8 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
 
   # legend text and tick
   if(length(col) > 12){
-    legend %<>% pretty(n = 13)
+    cblegend %<>% pretty(n = 12)
+    #legend <- labeling::thayer(min(legend), max(legend), m = 12)
     y1 <- seq(y, tail(y1, 1), length.out = length(legend))
   }
 
@@ -85,7 +86,6 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
 
   if (length(col_na) > 0){
     # define the y  with NA for the text
-    #y2[length(y2)] <- y2[length(y2)] + 1 * h
     y2 <- c(y2, y2[length(y2)] - h, y2[length(y2)] - 1.5 * h)
 
     # legend with NA on the left or right side
@@ -148,13 +148,16 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
 #'
 #' @details The number of rectangle in the scale legend is calculate with the
 #' number of color in the vector \code{col}.\cr
-#' \cr If arguments \code{x,y}, the location may also be specified by
-#' setting the parameter \code{pos} to a keyword form the list: \code{top-left},
-#'  \code{"top-right"}, \code{"bottom-left"} or \code{"bottom-right"}. This
-#'  places the legend on the inside of the plot frame at the giver location.
-#' Note that a call to the function \code{locator(1)} can be used via setting
-#' the parameter \code{locate} to TRUE in place of the \code{x} and \code{y}
-#' arguments.
+#' \cr If arguments \code{x,y} are not filled, the location may also be
+#' specified by setting the parameter \code{pos} to a keyword form the list:
+#' \code{top-left}, \code{"top-right"}, \code{"bottom-left"} or
+#' \code{"bottom-right"}. This places the legend on the inside of the plot
+#' frame at the giver location. \cr
+#' \cr Note that a call to the function \code{locator(1)} can be used via
+#' setting the parameter \code{locate} to TRUE in place of the \code{x} and
+#' \code{y} arguments. \cr
+#' \cr If the length of the vector \code{legend} is higher than 12, the axis
+#' legend will be calculate with the R break algorithm as implemented in pretty.
 #'
 #' @examples
 #' library(gdpm)

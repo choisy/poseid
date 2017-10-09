@@ -55,13 +55,16 @@ Draws a scale legend
 \details{
 The number of rectangle in the scale legend is calculate with the
 number of color in the vector \code{col}.\cr
-\cr If arguments \code{x,y}, the location may also be specified by
-setting the parameter \code{pos} to a keyword form the list: \code{top-left},
- \code{"top-right"}, \code{"bottom-left"} or \code{"bottom-right"}. This
- places the legend on the inside of the plot frame at the giver location.
-Note that a call to the function \code{locator(1)} can be used via setting
-the parameter \code{locate} to TRUE in place of the \code{x} and \code{y}
-arguments.
+\cr If arguments \code{x,y} are not filled, the location may also be
+specified by setting the parameter \code{pos} to a keyword form the list:
+\code{top-left}, \code{"top-right"}, \code{"bottom-left"} or
+\code{"bottom-right"}. This places the legend on the inside of the plot
+frame at the giver location. \cr
+\cr Note that a call to the function \code{locator(1)} can be used via
+setting the parameter \code{locate} to TRUE in place of the \code{x} and
+\code{y} arguments. \cr
+\cr If the length of the vector \code{legend} is higher than 12, the axis
+legend will be calculate with the R break algorithm as implemented in pretty.
 }
 \examples{
 library(gdpm)
