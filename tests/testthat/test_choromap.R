@@ -43,7 +43,7 @@ expect_error(
     dplyr::filter(year == 2004, month == "April") %>%
     dplyr::select(province, contains("incidence")) %>%
     choromap(map = map, fixedBreaks = c(0,10,50,100,500,1000,2000),
-             col = heat.colors(9)) %>%
+             col = heat.colors(3)) %>%
     legend2(legend = ., col = attr(., "colors")), regexp = NULL)
 
 })
