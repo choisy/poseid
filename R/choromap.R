@@ -18,11 +18,11 @@
 #'
 #' @keywords internal
 #' @noRd
-choropleth_v1 <- function (df, col = heat.colors(1), col_na = "grey"){
+choropleth_v1 <- function (df, col_names, col = heat.colors(1), col_na = "grey"){
 
   # value
   value <- df@data %>%
-    select_if(is.numeric) %>%
+    select_(col_names) %>%
     unlist %>%  as.vector
 
   # define the color and the class intervals
@@ -62,13 +62,14 @@ choropleth_v1 <- function (df, col = heat.colors(1), col_na = "grey"){
 #'
 #' @keywords internal
 #' @noRd
-choropleth_fix <- function (df, col = heat.colors(6), col_na = "grey",
+choropleth_fix <- function (df, col_names ,col = heat.colors(6), col_na = "grey",
                             fixedBreaks = NULL){
 
   # value
   value <- df@data %>%
-    select_if(is.numeric) %>%
+    select_(col_names) %>%
     unlist %>%  as.vector
+
 
   # choose class interval and colors
   pal <-  col[1:(length(fixedBreaks) - 1)]
@@ -176,31 +177,38 @@ choromap <- function(df, map, fixedBreaks,
          the other of class 'numeric'")
   }
   if (class(map) != "SpatialPolygonsDataFrame"){
-    stop ("Invalid 'map' format, should be 'SpatialPolygonsDataFrame'")
+    stop("Invalid 'map' format, should be 'SpatialPolygonsDataFrame'")
   }
   # length
-  if (length(fixedBreaks) != (length(col) + 1)) {
+  if (length(fixedBreaks) < (length(col) + 1)) {
+    col <- col[c(1:(length(fixedBreaks) - 1))]
+  }
+  if (length(fixedBreaks) > (length(col) + 1)) {
     stop("The length of 'fixedBreaks' should be equal to length of the parameter
-         'col' + 1")
+            'col' + 1")
   }
 
   # implement the data in the shape file data
   provinces <- sp::merge(map, df)
 
   # value
-  value <- provinces@data %>%
+  val_name <- df %>%
     select_if(is.numeric) %>%
+    names()
+
+  value <- provinces@data %>%
+    select_(val_name) %>%
     unlist %>%  as.vector
 
   # draw a choropleth map when all the data contain one single data and no fixed
   # breaks
   if(length(unique(fixedBreaks)) == 1)
   {
-    choropleth_v1(provinces, col = col, col_na = col_na)
+    choropleth_v1(provinces, val_name, col = col, col_na = col_na)
 
   } else
   {
-    choropleth_fix(provinces, col = col, col_na = col_na,
+    choropleth_fix(provinces, val_name, col = col, col_na = col_na,
                    fixedBreaks = fixedBreaks)
   }
 }
