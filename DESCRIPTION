@@ -6,7 +6,7 @@ Author: Lucie Contamin, Marc Choisy
 Maintainer: Marc Choisy <marc.choisy@ird.fr>
 Description: Functions of visualizing and analysing population-based observational
   data in epidemiology.
-License: MIT
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends:
