@@ -7,11 +7,12 @@
 #' @param legend A numeric vector to appear in the legend.
 #' @param col A vector of colors, if there are too few elements to fill the
 #' legend, the elements in \code{col} are recycled.
-#' @param locate A logical, if TRUE, call the function \code{locator} to
+#' @param locate A boolean, if TRUE, call the function \code{locator} to
 #' indicate the top-left point of the legend
 #' @param pos A character, by default \code{top-left}, but can be
-#' \code{"top-right"}, \code{"bottom-left"} or \code{"bottom-right"} can be
-#' used to indicate the position of the data if \code{x, y} are not indicated
+#' \code{"top-right"}, \code{"bottom-left"} or \code{"bottom-right"},
+#' used to indicate the position of the scale legend if \code{x, y} are not
+#' indicated
 #' @param n_round An integer indicating the number of significant digits to be
 #' used, by default \code{0}.
 #' @param col_na the color with which to represent the missing values
@@ -62,8 +63,7 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
 
   # legend text and tick
   if(length(col) > 12){
-    cblegend %<>% pretty(n = 12)
-    #legend <- labeling::thayer(min(legend), max(legend), m = 12)
+    legend %<>% pretty()
     y1 <- seq(y, tail(y1, 1), length.out = length(legend))
   }
 
@@ -80,7 +80,11 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
 
   # If want NA, add a rectangle of the color NA
   if(length(col_na) != 0) {
-    h <- y1[1] - y1[2]
+    if(length(col) > 12){
+      h <- (max(y1) - min(y1)) * 0.075
+    } else {
+      h <- y1[1] - y1[2]
+    }
     rect(xleft, tail(y1, 1) - h , xright, tail(y1, 1) - 2 * h, col = col_na)
   }
 
@@ -126,11 +130,12 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
 #' @param legend A character or expression vector to appear in the legend.
 #' @param col A vector of colors, if there are too few elements to fill the
 #' legend, the elements in \code{col} are recycled.
-#' @param locate A logical, if TRUE, call the function \code{locator} to
+#' @param locate A boolean, if TRUE, call the function \code{locator} to
 #' indicate the top-left point of the legend
 #' @param pos A character, by default \code{top-left}, but can be
-#' \code{"top-right"}, \code{"bottom-left"} or \code{"bottom-right"} can be
-#' used to indicate the position of the data if \code{x, y} are not indicated
+#' \code{"top-right"}, \code{"bottom-left"} or \code{"bottom-right"},
+#' used to indicate the position of the scale legend if \code{x, y} are not
+#' indicated
 #' @param n_round An integer indicating the number of significant digits to be
 #' used, by default \code{0}.
 #' @param col_na the color with which to represent the missing values
@@ -150,7 +155,7 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
 #' number of color in the vector \code{col}.\cr
 #' \cr If arguments \code{x,y} are not filled, the location may also be
 #' specified by setting the parameter \code{pos} to a keyword form the list:
-#' \code{top-left}, \code{"top-right"}, \code{"bottom-left"} or
+#' \code{"top-left"}, \code{"top-right"}, \code{"bottom-left"} or
 #' \code{"bottom-right"}. This places the legend on the inside of the plot
 #' frame at the giver location. \cr
 #' \cr Note that a call to the function \code{locator(1)} can be used via
