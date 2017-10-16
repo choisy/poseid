@@ -13,6 +13,7 @@
 #' @param col_na the color with which to represent the missing values
 #' (by default \code{col_na = "grey"})
 #' @param n_round integer indicating the number of significant digits to be used
+#' @param ...  arguments to be passed to plot
 #'
 #' @return A numeric with attributes corresponding of the breaks value and the
 #' attributes \code{colors} corresponding to the color associated with the
@@ -20,7 +21,8 @@
 #'
 #' @keywords internal
 #' @noRd
-choropleth_v1 <- function (df, col_name, col = heat.colors(1), col_na = "grey"){
+choropleth_v1 <- function (df, col_name, col = heat.colors(1), col_na = "grey",
+                           ...){
 
   # value
   value <- df@data %>%
@@ -36,7 +38,7 @@ choropleth_v1 <- function (df, col_name, col = heat.colors(1), col_na = "grey"){
   classint <- na.omit(unique(value))
 
   # draw a choropleth map
-  sp::plot(df, col = pal2)
+  sp::plot(df, col = pal2, ...)
 
   # print a legend
   legend <- rep(classint,2)
@@ -59,6 +61,7 @@ choropleth_v1 <- function (df, col_name, col = heat.colors(1), col_na = "grey"){
 #' @param fixedBreaks issued from the \code{classint} package. By default
 #' \code{NULL} but if a vector value is inputed, it will be used to specifen the
 #'  breaks
+#' @param ...  arguments to be passed to plot
 #'
 #' @return A numeric with attributes corresponding of the breaks value and the
 #' attributes \code{colors} corresponding to the color associated with the
@@ -67,7 +70,7 @@ choropleth_v1 <- function (df, col_name, col = heat.colors(1), col_na = "grey"){
 #' @keywords internal
 #' @noRd
 choropleth_fix <- function (df, col_name, col = heat.colors(6), col_na = "grey",
-                            fixedBreaks = NULL){
+                            fixedBreaks = NULL, ...){
 
   # value
   value <- df@data %>%
@@ -84,7 +87,7 @@ choropleth_fix <- function (df, col_name, col = heat.colors(6), col_na = "grey",
   df$col <- replace(df$col, is.na(df$col), col_na)
 
   #return(provinces)
-  sp::plot(df, col = df$col)
+  sp::plot(df, col = df$col, ...)
 
   # print the breaks for a legend
   legend <- fixedBreaks
@@ -105,6 +108,7 @@ choropleth_fix <- function (df, col_name, col = heat.colors(6), col_na = "grey",
 #' \code{col = heat.colors(6)})
 #' @param col_na the color with which to represent the missing values
 #' (by default \code{col_na = "grey"})
+#' @param ...  arguments to be passed to plot
 #'
 #' @return A numeric vector with attributes corresponding of the breaks value
 #' and the attributes \code{colors} corresponding to the color associated with
@@ -161,8 +165,8 @@ choropleth_fix <- function (df, col_name, col = heat.colors(6), col_na = "grey",
 #'  legend2(legend = ., col = attr(., "colors"), col_na = "blue")
 #'
 #' @export
-choromap <- function(df, map, fixedBreaks,
-                     col = heat.colors(6), col_na = "grey") {
+choromap <- function(df, map, fixedBreaks, col = heat.colors(6),
+                     col_na = "grey", ...) {
 
   # graph parameters
   ofig <- par("fig")
@@ -209,11 +213,11 @@ choromap <- function(df, map, fixedBreaks,
   # breaks
   if(length(unique(fixedBreaks)) == 1)
   {
-    choropleth_v1(provinces, val_name, col = col, col_na = col_na)
+    choropleth_v1(provinces, val_name, col = col, col_na = col_na, ...)
 
   } else
   {
     choropleth_fix(provinces, val_name, col = col, col_na = col_na,
-                   fixedBreaks = fixedBreaks)
+                   fixedBreaks = fixedBreaks, ...)
   }
 }

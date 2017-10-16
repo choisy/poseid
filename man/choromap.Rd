@@ -4,7 +4,7 @@
 \alias{choromap}
 \title{Draws a choropleth map}
 \usage{
-choromap(df, map, fixedBreaks, col = heat.colors(6), col_na = "grey")
+choromap(df, map, fixedBreaks, col = heat.colors(6), col_na = "grey", ...)
 }
 \arguments{
 \item{df}{a data frame containing at two colums, one of class "character" and
@@ -21,6 +21,8 @@ of the dataframe \code{df}}
 
 \item{col_na}{the color with which to represent the missing values
 (by default \code{col_na = "grey"})}
+
+\item{...}{arguments to be passed to plot}
 }
 \value{
 A numeric vector with attributes corresponding of the breaks value
