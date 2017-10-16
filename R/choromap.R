@@ -5,6 +5,8 @@
 #'
 #' @param df an object of class "SpatialPolygonsDataFrame" containing also
 #' the value to represent
+#' @param col_name character, name of the column containing the data represented
+#' in the choromap
 #' @param col a vector of colors to use for the map (by default,
 #' \code{col = heat.colors(6)}).The colors from the package RColorBrewer can
 #' also be used.
@@ -18,11 +20,11 @@
 #'
 #' @keywords internal
 #' @noRd
-choropleth_v1 <- function (df, col_names, col = heat.colors(1), col_na = "grey"){
+choropleth_v1 <- function (df, col_name, col = heat.colors(1), col_na = "grey"){
 
   # value
   value <- df@data %>%
-    select_(col_names) %>%
+    select_(col_name) %>%
     unlist %>%  as.vector
 
   # define the color and the class intervals
@@ -47,6 +49,8 @@ choropleth_v1 <- function (df, col_names, col = heat.colors(1), col_na = "grey")
 #'
 #' @param df a data frame containing two columns : one containing the province
 #' name and another containing the value to represent
+#' @param col_name character, name of the column containing the data represented
+#' in the choromap
 #' @param col a vector of colors to use for the map (by default,
 #' \code{col = heat.colors(6)}).The colors from the package RColorBrewer can
 #' also be used.
@@ -62,12 +66,12 @@ choropleth_v1 <- function (df, col_names, col = heat.colors(1), col_na = "grey")
 #'
 #' @keywords internal
 #' @noRd
-choropleth_fix <- function (df, col_names ,col = heat.colors(6), col_na = "grey",
+choropleth_fix <- function (df, col_name, col = heat.colors(6), col_na = "grey",
                             fixedBreaks = NULL){
 
   # value
   value <- df@data %>%
-    select_(col_names) %>%
+    select_(col_name) %>%
     unlist %>%  as.vector
 
 
@@ -94,7 +98,8 @@ choropleth_fix <- function (df, col_names ,col = heat.colors(6), col_na = "grey"
 #' @param df a data frame containing at two colums, one of class "character" and
 #' one of class "numeric".
 #' @param map an object of class "SpatialPolygonsDataFrame" containing at least
-#' the varible \code{province}
+#' one column containing the same observations and name as the character column
+#' of the dataframe \code{df}
 #' @param fixedBreaks a vector of value used to specife the class intervals.
 #' @param col a vector of colors to use for the map (by default,
 #' \code{col = heat.colors(6)})
@@ -104,6 +109,9 @@ choropleth_fix <- function (df, col_names ,col = heat.colors(6), col_na = "grey"
 #' @return A numeric vector with attributes corresponding of the breaks value
 #' and the attributes \code{colors} corresponding to the color associated with
 #' the breaks value, returned invisibly.
+#'
+#' @details It's important that the parameters \code{df} and \code{map} has one
+#' columns in commun, to be able to link them easily.
 #'
 #' @examples
 #' library(gdpm)
@@ -189,16 +197,13 @@ choromap <- function(df, map, fixedBreaks,
   }
 
   # implement the data in the shape file data
-  provinces <- sp::merge(map, df)
+  provinces <- sp::merge(map, df, duplicateGeoms = TRUE)
+  provinces@data %<>% dplyr::filter(duplicated(.) == FALSE)
 
   # value
   val_name <- df %>%
     select_if(is.numeric) %>%
     names()
-
-  value <- provinces@data %>%
-    select_(val_name) %>%
-    unlist %>%  as.vector
 
   # draw a choropleth map when all the data contain one single data and no fixed
   # breaks

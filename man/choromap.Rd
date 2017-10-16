@@ -11,7 +11,8 @@ choromap(df, map, fixedBreaks, col = heat.colors(6), col_na = "grey")
 one of class "numeric".}
 
 \item{map}{an object of class "SpatialPolygonsDataFrame" containing at least
-the varible \code{province}}
+one column containing the same observations and name as the character column
+of the dataframe \code{df}}
 
 \item{fixedBreaks}{a vector of value used to specife the class intervals.}
 
@@ -28,6 +29,10 @@ the breaks value, returned invisibly.
 }
 \description{
 Draws a choropleth map
+}
+\details{
+It's important that the parameters \code{df} and \code{map} has one
+columns in commun, to be able to link them easily.
 }
 \examples{
 library(gdpm)
