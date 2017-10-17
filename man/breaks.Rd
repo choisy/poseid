@@ -30,8 +30,8 @@ parameter \code{style = "fixed"}}
 by intervals}
 }
 \value{
-A data frame with attributes \code{breaks} corresponding to the
- breaks value, returned invisibly.
+The data frame inputed with attributes \code{breaks} corresponding to
+ the breaks value, returned invisibly.
 }
 \description{
 This function selects the class intervals for the numeric column in a

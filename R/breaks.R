@@ -1,7 +1,7 @@
 #' Selects the breaks
 #'
-#' This function selects the class intervals for the numeric column in a
-#' data frame.
+#' This function selects the class intervals for a numeric column in a data
+#' frame.
 #'
 #' @param df a data frame containing at least one numeric column
 #' @param col_name name of the column containing the value on which the class
@@ -18,8 +18,8 @@
 #' @param distribution if TRUE, print on the map, the distribution of the values
 #' by intervals
 #'
-#' @return A data frame with attributes \code{breaks} corresponding to the
-#'  breaks value, returned invisibly.
+#' @return The data frame inputed with attributes \code{breaks} corresponding to
+#'  the breaks value, returned invisibly.
 #'
 #' @examples
 #'
