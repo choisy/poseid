@@ -1,21 +1,19 @@
 #' Draws a choropleth map with one unique value
 #'
-#' This function draws a choropleth map when all the provinces or regions have
+#' This function draws a choropleth map when all the geographic units have
 #' the same value.
 #'
-#' @param df an object of class "SpatialPolygonsDataFrame" containing also
-#' the value to represent
+#' @param df an object of class "SpatialPolygonsDataFrame" containing the value
+#' to represent
 #' @param col_name character, name of the column containing the data represented
 #' in the choromap
 #' @param col a vector of colors to use for the map (by default,
-#' \code{col = heat.colors(6)}).The colors from the package RColorBrewer can
-#' also be used.
-#' @param col_na the color with which to represent the missing values
-#' (by default \code{col_na = "grey"})
-#' @param n_round integer indicating the number of significant digits to be used
-#' @param ...  arguments to be passed to plot
+#' \code{col = heat.colors(1)}).
+#' @param col_na the color to represent the missing values (by default
+#' \code{col_na = "grey"})
+#' @param ...  arguments to be passed to sp::plot
 #'
-#' @return A numeric with attributes corresponding of the breaks value and the
+#' @return A numeric vector containing the breaks value and the
 #' attributes \code{colors} corresponding to the color associated with the
 #' breaks value, returned invisibly.
 #'
@@ -29,7 +27,7 @@ choropleth_v1 <- function (df, col_name, col = heat.colors(1), col_na = "grey",
     select_(col_name) %>%
     unlist %>%  as.vector
 
-  # define the color and the class intervals
+  # define the color and the class interval
   pal <-  col
   pal <- pal[1]
 
@@ -49,28 +47,25 @@ choropleth_v1 <- function (df, col_name, col = heat.colors(1), col_na = "grey",
 ################################################################################
 #' Draws a choropleth map with fixed breaks
 #'
-#' @param df a data frame containing two columns : one containing the province
-#' name and another containing the value to represent
+#' @param df an object of class "SpatialPolygonsDataFrame" containing the value
+#' to represent
 #' @param col_name character, name of the column containing the data represented
 #' in the choromap
+#' @param fixedBreaks  A vector of numeric value used to specify the breaks
 #' @param col a vector of colors to use for the map (by default,
-#' \code{col = heat.colors(6)}).The colors from the package RColorBrewer can
-#' also be used.
-#' @param col_na the color with which to represent the missing values
-#' (by default \code{col_na = "grey"})
-#' @param fixedBreaks issued from the \code{classint} package. By default
-#' \code{NULL} but if a vector value is inputed, it will be used to specifen the
-#'  breaks
-#' @param ...  arguments to be passed to plot
+#' \code{col = heat.colors(6)}).
+#' @param col_na the color to represent the missing values (by default
+#' \code{col_na = "grey"})
+#' @param ...  arguments to be passed to sp::plot
 #'
-#' @return A numeric with attributes corresponding of the breaks value and the
+#' @return A numeric vector containing the breaks value and with the
 #' attributes \code{colors} corresponding to the color associated with the
 #' breaks value, returned invisibly.
 #'
 #' @keywords internal
 #' @noRd
-choropleth_fix <- function (df, col_name, col = heat.colors(6), col_na = "grey",
-                            fixedBreaks = NULL, ...){
+choropleth_fix <- function (df, col_name, fixedBreaks, col = heat.colors(6),
+                            col_na = "grey", ...){
 
   # value
   value <- df@data %>%
@@ -86,7 +81,7 @@ choropleth_fix <- function (df, col_name, col = heat.colors(6), col_na = "grey",
                                               include.lowest = TRUE)]
   df$col <- replace(df$col, is.na(df$col), col_na)
 
-  #return(provinces)
+  # draw a choromap
   sp::plot(df, col = df$col, ...)
 
   # print the breaks for a legend
@@ -110,12 +105,12 @@ choropleth_fix <- function (df, col_name, col = heat.colors(6), col_na = "grey",
 #' (by default \code{col_na = "grey"})
 #' @param ...  arguments to be passed to plot
 #'
-#' @return A numeric vector with attributes corresponding of the breaks value
-#' and the attributes \code{colors} corresponding to the color associated with
-#' the breaks value, returned invisibly.
+#' @return A numeric vector containing the breaks value and the attributes
+#' \code{colors} corresponding to the color associated with the breaks value,
+#' returned invisibly.
 #'
 #' @details It's important that the parameters \code{df} and \code{map} has one
-#' columns in commun, to be able to link them easily.
+#' columns in commun, to be able to link them.
 #'
 #' @examples
 #' library(gdpm)
@@ -164,6 +159,13 @@ choropleth_fix <- function (df, col_name, col = heat.colors(6), col_na = "grey",
 #'            col = brewer.pal(6, "YlOrRd"), col_na = "blue") %>%
 #'  legend2(legend = ., col = attr(., "colors"), col_na = "blue")
 #'
+#' # drawing a map without border:
+#' dengue_0993 %>%
+#'  choromap(map, fixedBreaks = c(0,10,50,100,500,1000,2000),
+#'            col = brewer.pal(6, "YlOrRd"), col_na = "blue",
+#'            border = NA) %>%
+#'  legend2(legend = ., col = attr(., "colors"), col_na = "blue")
+#'
 #' @export
 choromap <- function(df, map, fixedBreaks, col = heat.colors(6),
                      col_na = "grey", ...) {
@@ -201,16 +203,14 @@ choromap <- function(df, map, fixedBreaks, col = heat.colors(6),
   }
 
   # implement the data in the shape file data
-  provinces <- sp::merge(map, df, duplicateGeoms = TRUE)
-  provinces@data %<>% dplyr::filter(duplicated(.) == FALSE)
+  provinces <- sp::merge(map, df)
 
   # value
   val_name <- df %>%
     select_if(is.numeric) %>%
     names()
 
-  # draw a choropleth map when all the data contain one single data and no fixed
-  # breaks
+  # draw a choropleth map
   if(length(unique(fixedBreaks)) == 1)
   {
     choropleth_v1(provinces, val_name, col = col, col_na = col_na, ...)

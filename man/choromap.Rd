@@ -25,16 +25,16 @@ of the dataframe \code{df}}
 \item{...}{arguments to be passed to plot}
 }
 \value{
-A numeric vector with attributes corresponding of the breaks value
-and the attributes \code{colors} corresponding to the color associated with
-the breaks value, returned invisibly.
+A numeric vector containing the breaks value and the attributes
+\code{colors} corresponding to the color associated with the breaks value,
+returned invisibly.
 }
 \description{
 Draws a choropleth map
 }
 \details{
 It's important that the parameters \code{df} and \code{map} has one
-columns in commun, to be able to link them easily.
+columns in commun, to be able to link them.
 }
 \examples{
 library(gdpm)
@@ -81,6 +81,13 @@ dengue_0993 \%>\%
 dengue_0993 \%>\%
  choromap(map, fixedBreaks = c(0,10,50,100,500,1000,2000),
            col = brewer.pal(6, "YlOrRd"), col_na = "blue") \%>\%
+ legend2(legend = ., col = attr(., "colors"), col_na = "blue")
+
+# drawing a map without border:
+dengue_0993 \%>\%
+ choromap(map, fixedBreaks = c(0,10,50,100,500,1000,2000),
+           col = brewer.pal(6, "YlOrRd"), col_na = "blue",
+           border = NA) \%>\%
  legend2(legend = ., col = attr(., "colors"), col_na = "blue")
 
 }
