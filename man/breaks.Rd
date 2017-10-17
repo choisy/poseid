@@ -34,8 +34,8 @@ The data frame inputed with attributes \code{breaks} corresponding to
  the breaks value, returned invisibly.
 }
 \description{
-This function selects the class intervals for the numeric column in a
-data frame.
+This function selects the class intervals for a numeric column in a data
+frame.
 }
 \examples{
 
