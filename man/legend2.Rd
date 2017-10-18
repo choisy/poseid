@@ -5,8 +5,8 @@
 \title{Draws a legend}
 \usage{
 legend2(x, y, legend, col, locate = FALSE, pos = "top-left", n_round = 0,
-  col_na = NULL, postext = "left", h = 0.75, w = 0.75, tl = 0.2,
-  s = 0.2, ...)
+  col_na = NULL, size_na = 0.075, postext = "left", h = 0.75,
+  w = 0.75, tl = 0.2, s = 0.2, ...)
 }
 \arguments{
 \item{x}{A numeric value for the x coordinate of the top-left part of the
@@ -34,6 +34,10 @@ used, by default \code{0}.}
 \item{col_na}{the color with which to represent the missing values
 (by default \code{col_na = NULL}). If specified, a NA value will be add to
 the legend with the color corresponding.}
+
+\item{size_na}{A numeric value expressing the size of the rectangle for the
+missing value, expressed in a proportion of the scale legend (between 0 and
+1, by default \code{size_na = 0.075})}
 
 \item{postext}{A character defining the side of the legend text, by default
 \code{left} but can be \code{right}}

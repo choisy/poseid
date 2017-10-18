@@ -4,9 +4,9 @@
 #' legend
 #' @param y A numeric value for the y coordinate of the top-left part of the
 #' legend
-#' @param legend A numeric vector to appear in the legend.
+#' @param legend A numeric vector to appear in the legend
 #' @param col A vector of colors, if there are too few elements to fill the
-#' legend, the elements in \code{col} are recycled.
+#' legend, the elements in \code{col} are recycled
 #' @param locate A boolean, if TRUE, call the function \code{locator} to
 #' indicate the top-left point of the legend
 #' @param pos A character, by default \code{top-left}, but can be
@@ -14,12 +14,16 @@
 #' used to indicate the position of the scale legend if \code{x, y} are not
 #' indicated
 #' @param n_round An integer indicating the number of significant digits to be
-#' used, by default \code{0}.
+#' used, by default \code{0}
 #' @param col_na the color with which to represent the missing values
 #' (by default \code{col_na = NULL}). If specified, a NA value will be add to
-#' the lefend with the color corresponding.
+#' the lefend with the color corresponding
 #' @param postext A character defining the side of the legend text, by default
 #' \code{left} but can be \code{right}
+#' @param size_na A numeric value expressing the size of the rectangle for the
+#' missing value, expressed in a proportion of the scale legend (between 0 and
+#' 1, by default \code{size_na = 0.075}). Use only when the \code{col} parameter
+#' has a larger length than 12
 #' @param h A numeric expressing the height of one rectangle
 #' in the legend
 #' @param w A numeric expressing the width of the legend
@@ -31,7 +35,7 @@
 #' @keywords internal
 #' @noRd
 square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
-                          postext = "left",
+                          size_na = 0.075, postext = "left",
                           h = 0.75, w = 0.75, tl = .2, s = .2, ...) {
 
   # size of the top character (width height)
@@ -81,7 +85,7 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
   # If want NA, add a rectangle of the color NA
   if(length(col_na) != 0) {
     if(length(col) > 12){
-      h <- (max(y1) - min(y1)) * 0.075
+      h <- (max(y1) - min(y1)) * size_na
     } else {
       h <- y1[1] - y1[2]
     }
@@ -141,6 +145,9 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
 #' @param col_na the color with which to represent the missing values
 #' (by default \code{col_na = NULL}). If specified, a NA value will be add to
 #' the legend with the color corresponding.
+#' @param size_na A numeric value expressing the size of the rectangle for the
+#' missing value, expressed in a proportion of the scale legend (between 0 and
+#' 1, by default \code{size_na = 0.075})
 #' @param postext A character defining the side of the legend text, by default
 #' \code{left} but can be \code{right}
 #' @param h A numeric expressing the height of one rectangle
@@ -233,8 +240,8 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
 #'
 #' @export
 legend2 <- function(x, y, legend, col, locate = FALSE, pos = "top-left",
-                    n_round = 0, col_na = NULL, postext = "left", h = 0.75,
-                    w = 0.75, tl = .2, s = .2, ...){
+                    n_round = 0, col_na = NULL, size_na = 0.075,
+                    postext = "left", h = 0.75, w = 0.75, tl = .2, s = .2, ...){
 
   # Tests
   pos_text <- c("left", "right")
@@ -296,6 +303,6 @@ legend2 <- function(x, y, legend, col, locate = FALSE, pos = "top-left",
   }
 
   square_legend(x, y, legend = legend, col = col, n_round = n_round,
-                col_na = col_na, postext = postext, h = h, w = w, tl = tl,
-                s = s, ...)
+                col_na = col_na, size_na = size_na, postext = postext,
+                h = h, w = w, tl = tl, s = s, ...)
 }
