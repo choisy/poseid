@@ -5,7 +5,7 @@
 \title{Makes a spatio-temporal heatmap of a disease}
 \usage{
 sthm(df, f = function(x) x, col = heat.colors(12), col_na = "grey",
-  x = 0.85, show_legend = FALSE)
+  x = 0.85, show_legend = FALSE, map = NULL, xm = 0.2)
 }
 \arguments{
 \item{df}{A  data frame. Should contains three variables: one of class
@@ -18,14 +18,19 @@ containing the value to represent.}
 
 \item{col_na}{the color with which to represent the missing values.}
 
-\item{x}{a numeric value between 0 and 1. In proportion of the
-figure's range, these numbers express the location of the right end of the
-heatmap, and the beginning and end of the color scale that stands on the
-right of the heatmap.}
+\item{x}{a numeric values between 0 and 1. In proportion of the
+figure's range, this number express the location of the right end of the
+heatmap, and  can be used for the beginning of a legend point}
 
 \item{show_legend}{logical value saying whether the names of the
 provinces and the value breaks should be returned as an output of the
-function call or not. By default FALSE.}
+function call or not. By default \code{FALSE}.}
+
+\item{map}{object of class Spatial (see \code{Details})}
+
+\item{xm}{a numeric value between 0 and 1. In proportion of the
+figure's range, this number express the location of the right end of the
+\code{map}, print at the left of the heatmap.}
 }
 \value{
 A numeric vector corresponding to the value of the legend, returned
@@ -33,15 +38,24 @@ invisibly. \cr
 If \code{show_legend = TRUE}, return a list
 containing a numeric vector called \code{legend} corresponding to the value
 of the legend, and a character vector called \code{province} containing the
-name of the province in the order of the figure.
+name of the province in the order of the figure. \cr
+\cr
+A map of the province can be print on the left of the heatmap with
+the parameters \code{map} and \code{xm}. The map need to have the same
+spatial definitions as the data frame (\code{df}), so that each line of the
+heatmap can be link with the map.
 }
 \description{
 Makes a spatio-temporal heatmap of a disease
 }
 \examples{
+# Packages and parameters
 library(gdpm)
 library(dplyr)
 library(magrittr)
+par(xpd = TRUE)
+
+
 # A heatmap of the ILI data:
 ili <- getid(ili, from = 2004) \%>\%
   dplyr::mutate(time = as.Date(
@@ -53,84 +67,71 @@ sthm(ili)
 # With a legend by using legend2 function:
 col <- rev(heat.colors(10))
 a <- sthm(ili, col = col)
-legend2(.925, 1, legend =  a, col = col, postext = "right",
+legend2(0.925, 1, legend =  a, col = col, postext = "right",
         h = 1/(length(a)-1), w = 0.04, tl = 0.01, s = 0.005)
 
 # A large number of color can be used to
 col <- rev(heat.colors(100))
 a <- sthm(ili, col = col, col_na = "blue")
-legend2(.925, 1, legend =  a, col = col, postext = "right", col_na = "blue",
+legend2(0.925, 1, legend =  a, col = col, postext = "right", col_na = "blue",
         h = 1/(length(a)-1), w = 0.04, tl = 0.01, s = 0.005)
 
-# With a legend by using legend2 function:
 col <- rev(heat.colors(400))
 a <- sthm(ili, col = col, col_na = "blue")
-legend2(.925, 1, legend =  a, col = col, postext = "right", col_na = "blue",
+legend2(0.925, 1, legend =  a, col = col, postext = "right", col_na = "blue",
         h = 1/(length(a)-1), w = 0.04, tl = 0.01, s = 0.005)
 
 # with some data transformations in order to reflect better the contrasts:
 a <- sthm(ili, f = sqrt, col = col)
-legend2(.925, 1, legend =  a, col = col, postext = "right",
+legend2(0.925, 1, legend =  a, col = col, postext = "right",
         h = 1/(length(a)-1), w = 0.035, tl = 0.01, s = 0.005, cex = 0.8)
 
 a <- sthm(ili, f = function(x) x^.3, col = col)
-legend2(.925, 1, legend =  a, col = col, postext = "right",
+legend2(0.925, 1, legend =  a, col = col, postext = "right",
         h = 1/(length(a)-1), w = 0.04, tl = 0.01, s = 0.005, cex = 0.8)
 
-# using some other color palettes, for examples the ones fromt the
-# RColorBrewer package:
-library(RColorBrewer)
-
-a <- sthm(ili, f = function(x) x^.3, col = brewer.pal(11, "RdYlGn"))
-legend2(.925, 1, legend =  a, col = brewer.pal(11, "RdYlGn"),
-        postext = "right", n_round = 2,
-        h = 1/(length(a)-1), w = 0.04, tl = 0.01,
-        s = 0.005)
-
-a <- sthm(ili, f = function(x) x^.3, col = brewer.pal(11, "RdYlBu"))
-legend2(.925, 1, legend =  a, col = brewer.pal(11, "RdYlBu"),
-        postext = "right", n_round = 2, h = 1/(length(a) - 1), w = 0.04,
-        tl = 0.01,  s = 0.005)
-
 # changing the color of the missing values:
-rubella <- getid(rubella)  \%>\%
+dengue <- getid(dengue)  \%>\%
   mutate(time = as.Date(paste0(year, "-", as.numeric(month), "-", 15))) \%>\%
   select(province, time, contains("incidence")) \%>\%
   arrange(time)
+col <- rev(heat.colors(400))
 
-a <- sthm(rubella, f = sqrt, col = col)
-legend2(.925, 1, legend =  a, col = col, postext = "right",
+a <- sthm(dengue, f = sqrt, col = col)
+legend2(0.925, 1, legend =  a, col = col, postext = "right",
         col_na = "grey", h = 1/(length(a) - 1), w = 0.04, tl = 0.01,
           s = 0.005)
 
-a <- sthm(rubella, f = sqrt, col = brewer.pal(9, "YlOrRd"), col_na = "blue")
-legend2(.925, 1, legend =  a, col = col, postext = "right", n_round = 2,
+a <- sthm(dengue, f = sqrt, col = col, col_na = "blue")
+legend2(0.925, 1, legend =  a, col = col, postext = "right", n_round = 2,
         col_na = "blue", h = 1/(length(a) - 1), w = 0.04, tl = 0.01,
           s = 0.005)
 
 # to order the provinces by latitude:
 library(gadmVN)
-library(dplyr)
-provinces <- gadm()
-coord <- sp::coordinates(provinces)
-row.names(coord) <- unique(provinces@data$province)
-order <- rownames(coord[order(coord[, 2]), ])
-order <- data.frame(province = order, order = seq_along(order))
-rubella_order <- left_join(rubella, order, by = "province")
-rubella_order <- arrange(rubella_order, order)
-rubella_order <- select(rubella_order, -order)
-a <- sthm(rubella_order, f = sqrt, col = brewer.pal(9, "YlOrRd"),
-         col_na = "blue")
-legend2(.925, 1, legend =  a, col = col, postext = "right", n_round = 2,
-        col_na = "blue", h = 1/(length(a)-1), w = 0.04, tl = 0.01,
-          s = 0.005)
+map <- gadmVN::gadm("1980-01-01", merge_hanoi = TRUE)
+coord <- sp::coordinates(map) \%>\% as.data.frame()
+coord$province <- unique(map@data$province)
+coord <- coord[order(coord$V2),]
+coord$order <- seq(1, dim(coord)[1], 1)
+dengue_order <- left_join(dengue, coord, by = "province") \%>\%
+      arrange(order) \%>\%
+      select(-order, -V1, -V2)
+a <- sthm(dengue_order, f = function(x) x^.3, col = col)
+legend2(0.925, 1, legend =  a, col = col, postext = "right",
+      h = 1/(length(a)-1), w = 0.04, tl = 0.01, s = 0.005)
 
-# to print the province in the order of the figure:
-a <- sthm(rubella_order, f = sqrt, col = brewer.pal(9, "YlOrRd"),
-          col_na = "blue", show_legend = TRUE)
-legend2(.925, 1, legend =  a$legend, col = col, postext = "right",
-        n_round = 2, col_na = "blue", h = 1/(length(a)-1), w = 0.04, tl = 0.01,
-          s = 0.005)
+
+# to print the map of the province in the order of the figure:
+a <- sthm(dengue_order, f = function(x) x^.3, col = col, map = map)
+legend2(0.925, 1, legend =  a, col = col, postext = "right",
+      h = 1/(length(a)-1), w = 0.04, tl = 0.01, s = 0.005)
+
+# to print the map of the province and the legend in the order of the figure:
+a <- sthm(dengue_order, f = function(x) x^.3, col = col, map = map,
+      show_legend = TRUE)
+legend2(0.925, 1, legend =  a$legend, col = col, postext = "right",
+      h = 1/(length(col)), w = 0.04, tl = 0.01, s = 0.005)
 a
 # list containing the legend vector and the province vector which correspond
 # to the name of the province in the order of the figure.
