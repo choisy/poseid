@@ -7,10 +7,9 @@
 #' defined by the \code{unit} argument. In absence of cases between two steps, a
 #' zero incidence is explicitly displayed.
 #'
-#' @param \code{x} either a vector or a 1-column data frame of dates of \code{"Date"}
+#' @param x either a vector or a 1-column data frame of dates of \code{"Date"}
 #' or \code{"POSIXct"} class.
-#'
-#' @param \code{unit} a character string (one of \code{"day"}, \code{"week"},
+#' @param unit a character string (one of \code{"day"}, \code{"week"},
 #' \code{"month"}, \code{"quarter"} or \code{"year"}) specifying the temporal
 #' aggregation wished for the incidence calculation. Value set to "day" by default.
 #'
