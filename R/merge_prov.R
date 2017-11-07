@@ -12,7 +12,13 @@
 #' @keywords internal
 #' @noRd
 select_date <- function(df, from, to) {
-  df %<>% mutate(date = as.Date(paste0(year, 01, 01, sep = "-"))) %>%
+  if (any(names(df) %in% "month")){
+    df %<>% mutate(date = as.Date(paste(year, as.numeric(month),
+                                        01, sep = "-")))
+  } else {
+    df %<>% mutate(date = as.Date(paste(year, 01, 01, sep = "-")))
+  }
+   df %<>%
     filter(date >= from, date <= to) %>%
     select(-date)
 }
@@ -116,8 +122,14 @@ gather_sum <- function(df, FUN, df2, args, FUN2){
   # merging event
   df %<>%
     gather(name, value, contains("value")) %>%
-    select(-matches("name")) %>%
-    group_by(year, key)
+    select(-matches("name"))
+
+  if (any(names(df) %in% "month")){
+    df %<>% group_by(year, month, key)
+  } else {
+    df %<>% group_by(year, key)
+  }
+
 
   # if two dfs and the parameter args were provided, apply the merging event on
   # the both of them (with the possibility to apply two different function on
@@ -255,12 +267,12 @@ merge_province <- function(df, FUN, from, to, splits_lst,
 
   # if the time range contains the split and the combine event of
   # Ha Noi & Ha Son Binh, does an additional merging on Hanoi and Ha Son Dinh.
-  if (from < 1992 & to > 2008){
+  if (from < as.Date("1992-01-01") & to > as.Date("2008-01-01")){
     df %<>% hanoi_function(FUN, df2 = df2, args = args, FUN2 = FUN2)
   }
 
   # Problem of Ha Tay, NA value after 2008
-  if(from >= 2008 & is.element("Ha Tay", df$province)) {
+  if(from >= as.Date("2008-01-01") & is.element("Ha Tay", df$province)) {
     df %<>% filter(province != "Ha Tay")
   }
 
@@ -276,7 +288,8 @@ merge_province <- function(df, FUN, from, to, splits_lst,
 #'  time range imputed.
 #'
 #' @param df  A data frame containing at least the variables \code{province},
-#' \code{year}.
+#' \code{year}, accept also the monthly data if the month are in the column
+#' \code{month}.
 #' @param sel A vector of character to select only the variable to merge. Can
 #' be useful if, to merge different variable, you need to use different
 #' mathematical operation. By default, select all the variables.
@@ -289,7 +302,7 @@ merge_province <- function(df, FUN, from, to, splits_lst,
 #' @param from Initial date of the time range selected for the province
 #' definition, of the class \code{Date}.
 #' @param to Final date of the time range selected for the province
-#' definition, of the class \code{Date}, by default  \code{"2015-12-31"}
+#' definition, of the class \code{Date}, by default  \code{"2017-12-31"}
 #' @param df2 A data frame containing at least the variables \code{province},
 #' \code{year}. Can be used to provide additional arguments through the
 #' paramaters args by providing the name of the column(s) containing the data.
@@ -317,8 +330,8 @@ merge_province <- function(df, FUN, from, to, splits_lst,
 #' # if you want to have the data expressed by province, with the province's
 #' # definition of 1992 in Vietnam:
 #' merge_prov(mortality_rate, from = "1992-01-01")
-#' # If you want the province's definition between 1992 and 1997 in Vietnam:
-#' merge_prov(mortality_rate, from = "1992-01-01", to = "1997-12-31")
+#' # If you want the province's definition between 1992 and 2010 in Vietnam:
+#' merge_prov(mortality_rate, from = "1992-01-01", to = "2010-12-31")
 #'
 #' # You can change the function
 #' merge_prov(mortality_rate, from = "1992-01-01", FUN = mean)
@@ -331,13 +344,13 @@ merge_province <- function(df, FUN, from, to, splits_lst,
 #'
 #' # You can define the merge_prov function only on certain columns
 #' pop_info <- get_gso("Area, population and population density by province")
-#' merge_prov(pop_info, sel = "Average_population_Thous_pers",
+#' merge_prov(pop_info, sel = "average_population_thous_pers",
 #'  from = "1992-01-01", FUN = weighted.mean,
 #'  df2 = pop_size, args = "total")
 #'
 #' @export
-merge_prov <- function(df, sel = names(df), FUN = sum, from, to = "2015-12-31",
-                       diseases = NULL, df2 = NULL, args = NULL,FUN2 = sum){
+merge_prov <- function(df, sel = names(df), FUN = sum, from, to = "2017-12-31",
+                       diseases = NULL, df2 = NULL, args = NULL, FUN2 = sum){
 
   # test df2 format, should be a data frame
   if (is.null(df2) == FALSE){
@@ -370,20 +383,32 @@ merge_prov <- function(df, sel = names(df), FUN = sum, from, to = "2015-12-31",
       sel <- c(sel, args)
     }
 
+    # get from and to in the right format
+    from %<>% paste0("-01-01") %>% as.Date
+    to %<>% paste0("-12-31") %>% as.Date
+
     sel <- c("province", "year", sel)
     gather_sel <-  c("province", "year")
+    if(any(names(df) %in% "month")){
+      gather_sel <- c(gather_sel, "month")
+    }
     if(is.null(args) == FALSE){
-      gather_sel <- c("province", "year", args)
+      gather_sel <- c(gather_sel, args)
     }
     df %<>%
+      select_date(from, to) %>%
       select(one_of(sel)) %>%
       gather(key, value, -one_of(gather_sel)) %>%
       mutate(year = as.integer(year)) %>%
       merge_province(FUN, from = from, to = to, splits_lst = spl, df2 = df2,
                      args = args, FUN2 = FUN2) %>%
       ungroup %>%
-      arrange(province, year) %>%
-      select(province, year, key, value)
+      arrange(province, year)
+    if(any(names(df) %in% "month")){
+      df %<>% select(province, year, month, key, value)
+    } else {
+      df %<>% select(province, year, key, value)
+    }
   }
   # If the df doesn't contain the two necessary columns, print a warning message
   else {
