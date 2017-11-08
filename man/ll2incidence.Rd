@@ -7,10 +7,10 @@
 ll2incidence(x, unit = c("day", "week", "month", "quarter", "year"))
 }
 \arguments{
-\item{\code{x}}{either a vector or a 1-column data frame of dates of \code{"Date"}
+\item{x}{either a vector or a 1-column data frame of dates of \code{"Date"}
 or \code{"POSIXct"} class.}
 
-\item{\code{unit}}{a character string (one of \code{"day"}, \code{"week"},
+\item{unit}{a character string (one of \code{"day"}, \code{"week"},
 \code{"month"}, \code{"quarter"} or \code{"year"}) specifying the temporal
 aggregation wished for the incidence calculation. Value set to "day" by default.}
 }
