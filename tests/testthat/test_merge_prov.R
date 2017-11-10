@@ -23,26 +23,26 @@ test_that("`merge_prov` sums correcty", {
 
   # Ha Noi
   expect_equal(df %>%
-    filter(province == "Ha Noi", year == 2007, key == "Total") %>% .$value,
-    test %>% filter(province == "Ha Noi", year == 2007) %>% .$Total +
-    test %>% filter(province == "Ha Tay", year == 2007) %>% .$Total)
+    filter(province == "Ha Noi", year == 2007, key == "total") %>% .$value,
+    test %>% filter(province == "Ha Noi", year == 2007) %>% .$total +
+    test %>% filter(province == "Ha Tay", year == 2007) %>% .$total)
 
   # Can Tho
   expect_equal(df %>%
-    filter(province == "Can Tho", year == 2005, key == "Total") %>% .$value,
-    test %>% filter(province == "Can Tho", year == 2005) %>% .$Total +
-    test %>% filter(province == "Hau Giang", year == 2005) %>% .$Total)
+    filter(province == "Can Tho", year == 2005, key == "total") %>% .$value,
+    test %>% filter(province == "Can Tho", year == 2005) %>% .$total +
+    test %>% filter(province == "Hau Giang", year == 2005) %>% .$total)
 
   # Dack Lak
   expect_equal(df %>%
-    filter(province == "Dack Lak", year == 2006, key == "Total") %>% .$value,
-    test %>% filter(province == "Dak Lak", year == 2006) %>% .$Total +
-    test %>% filter(province == "Dak Nong", year == 2006) %>% .$Total)
+    filter(province == "Dack Lak", year == 2006, key == "total") %>% .$value,
+    test %>% filter(province == "Dak Lak", year == 2006) %>% .$total +
+    test %>% filter(province == "Dak Nong", year == 2006) %>% .$total)
 
   # Yen Bai
   expect_equal(df %>%
-    filter(province == "Yen Bai", year == 2004, key == "Total") %>% .$value,
-    test %>% filter(province == "Yen Bai", year == 2004) %>% .$Total)
+    filter(province == "Yen Bai", year == 2004, key == "total") %>% .$value,
+    test %>% filter(province == "Yen Bai", year == 2004) %>% .$total)
 
 
   # FROM < 1992
@@ -51,29 +51,29 @@ test_that("`merge_prov` sums correcty", {
 
   # Hau Giang
   expect_equal(df %>%
-    filter(province == "Hau Giang", year == 2002, key == "Total") %>% .$value,
-    test %>% filter(province == "Can Tho", year == 2002) %>% .$Total +
-    test %>% filter(province == "Soc Trang", year == 2002) %>% .$Total)
+    filter(province == "Hau Giang", year == 2002, key == "total") %>% .$value,
+    test %>% filter(province == "Can Tho", year == 2002) %>% .$total +
+    test %>% filter(province == "Soc Trang", year == 2002) %>% .$total)
 
 # Hau Giang
   expect_equal(df %>%
-    filter(province == "Hau Giang", year == 2005, key == "Total") %>% .$value,
-    test %>% filter(province == "Can Tho", year == 2005) %>% .$Total +
-    test %>% filter(province == "Soc Trang", year == 2005) %>% .$Total +
-    test %>% filter(province == "Hau Giang", year == 2005) %>% .$Total)
+    filter(province == "Hau Giang", year == 2005, key == "total") %>% .$value,
+    test %>% filter(province == "Can Tho", year == 2005) %>% .$total +
+    test %>% filter(province == "Soc Trang", year == 2005) %>% .$total +
+    test %>% filter(province == "Hau Giang", year == 2005) %>% .$total)
 
 # Ha Noi
   expect_equal(df %>%
-    filter(province == "Ha Noi", year == 2010, key == "Total") %>% .$value,
-    test %>% filter(province == "Ha Noi", year == 2010) %>% .$Total +
-    test %>% filter(province == "Hoa Binh", year == 2010) %>% .$Total)
+    filter(province == "Ha Noi", year == 2010, key == "total") %>% .$value,
+    test %>% filter(province == "Ha Noi", year == 2010) %>% .$total +
+    test %>% filter(province == "Hoa Binh", year == 2010) %>% .$total)
 
 # Ha Noi
   expect_equal(df %>%
-    filter(province == "Ha Noi", year == 2007, key == "Total") %>% .$value,
-    test %>% filter(province == "Ha Noi", year == 2007) %>% .$Total +
-    test %>% filter(province == "Ha Tay", year == 2007) %>% .$Total +
-    test %>% filter(province == "Hoa Binh", year == 2007) %>% .$Total)
+    filter(province == "Ha Noi", year == 2007, key == "total") %>% .$value,
+    test %>% filter(province == "Ha Noi", year == 2007) %>% .$total +
+    test %>% filter(province == "Ha Tay", year == 2007) %>% .$total +
+    test %>% filter(province == "Hoa Binh", year == 2007) %>% .$total)
 
 
 # From <= 1989
@@ -82,11 +82,11 @@ test_that("`merge_prov` sums correcty", {
 
 # Binh Tri Thien
   expect_equal(df %>%
-    filter(province == "Binh Tri Thien", year == 2007, key == "Total") %>%
+    filter(province == "Binh Tri Thien", year == 2007, key == "total") %>%
       .$value,
-    test %>% filter(province == "Quang Binh", year == 2007) %>% .$Total +
-    test %>% filter(province == "Quang Tri", year == 2007) %>% .$Total +
-    test %>% filter(province == "Thua Thien - Hue", year == 2007) %>% .$Total)
+    test %>% filter(province == "Quang Binh", year == 2007) %>% .$total +
+    test %>% filter(province == "Quang Tri", year == 2007) %>% .$total +
+    test %>% filter(province == "Thua Thien - Hue", year == 2007) %>% .$total)
 
 })
 
@@ -317,26 +317,26 @@ test_that("`merge_prov` follow the best list", {
 
   # Ha Noi
   expect_equal(df %>%
-      filter(province == "Ha Noi", year == 2007, key == "Total") %>% .$value,
-      test %>% filter(province == "Ha Noi", year == 2007) %>% .$Total +
-      test %>% filter(province == "Ha Tay", year == 2007) %>% .$Total)
+      filter(province == "Ha Noi", year == 2007, key == "total") %>% .$value,
+      test %>% filter(province == "Ha Noi", year == 2007) %>% .$total +
+      test %>% filter(province == "Ha Tay", year == 2007) %>% .$total)
 
   # Can Tho
   expect_equal(df %>%
-      filter(province == "Can Tho", year == 2005, key == "Total") %>% .$value,
-      test %>% filter(province == "Can Tho", year == 2005) %>% .$Total +
-      test %>% filter(province == "Hau Giang", year == 2005) %>% .$Total)
+      filter(province == "Can Tho", year == 2005, key == "total") %>% .$value,
+      test %>% filter(province == "Can Tho", year == 2005) %>% .$total +
+      test %>% filter(province == "Hau Giang", year == 2005) %>% .$total)
 
   # Dack Lak
   expect_equal(df %>%
-      filter(province == "Dack Lak", year == 2006, key == "Total") %>% .$value,
-      test %>% filter(province == "Dak Lak", year == 2006) %>% .$Total +
-      test %>% filter(province == "Dak Nong", year == 2006) %>% .$Total)
+      filter(province == "Dack Lak", year == 2006, key == "total") %>% .$value,
+      test %>% filter(province == "Dak Lak", year == 2006) %>% .$total +
+      test %>% filter(province == "Dak Nong", year == 2006) %>% .$total)
 
   # Yen Bai
   expect_equal(df %>%
-      filter(province == "Yen Bai", year == 2004, key == "Total") %>% .$value,
-      test %>% filter(province == "Yen Bai", year == 2004) %>% .$Total)
+      filter(province == "Yen Bai", year == 2004, key == "total") %>% .$value,
+      test %>% filter(province == "Yen Bai", year == 2004) %>% .$total)
 
 
   # FROM < 1992
@@ -346,35 +346,35 @@ test_that("`merge_prov` follow the best list", {
 
   # Dack Lak
   expect_equal(df %>%
-      filter(province == "Dack Lak", year == 2006, key == "Total") %>% .$value,
-      test %>% filter(province == "Dak Lak", year == 2006) %>% .$Total +
-      test %>% filter(province == "Dak Nong", year == 2006) %>% .$Total)
+      filter(province == "Dack Lak", year == 2006, key == "total") %>% .$value,
+      test %>% filter(province == "Dak Lak", year == 2006) %>% .$total +
+      test %>% filter(province == "Dak Nong", year == 2006) %>% .$total)
 
   # Hau Giang
   expect_equal(df %>%
-      filter(province == "Hau Giang", year == 2002, key == "Total") %>% .$value,
-      test %>% filter(province == "Can Tho", year == 2002) %>% .$Total +
-      test %>% filter(province == "Soc Trang", year == 2002) %>% .$Total)
+      filter(province == "Hau Giang", year == 2002, key == "total") %>% .$value,
+      test %>% filter(province == "Can Tho", year == 2002) %>% .$total +
+      test %>% filter(province == "Soc Trang", year == 2002) %>% .$total)
 
   # Hau Giang
   expect_equal(df %>%
-      filter(province == "Hau Giang", year == 2005, key == "Total") %>% .$value,
-      test %>% filter(province == "Can Tho", year == 2005) %>% .$Total +
-      test %>% filter(province == "Soc Trang", year == 2005) %>% .$Total +
-      test %>% filter(province == "Hau Giang", year == 2005) %>% .$Total)
+      filter(province == "Hau Giang", year == 2005, key == "total") %>% .$value,
+      test %>% filter(province == "Can Tho", year == 2005) %>% .$total +
+      test %>% filter(province == "Soc Trang", year == 2005) %>% .$total +
+      test %>% filter(province == "Hau Giang", year == 2005) %>% .$total)
 
   # Ha Noi
   expect_equal(df %>%
-      filter(province == "Ha Noi", year == 2010, key == "Total") %>% .$value,
-      test %>% filter(province == "Ha Noi", year == 2010) %>% .$Total +
-      test %>% filter(province == "Hoa Binh", year == 2010) %>% .$Total)
+      filter(province == "Ha Noi", year == 2010, key == "total") %>% .$value,
+      test %>% filter(province == "Ha Noi", year == 2010) %>% .$total +
+      test %>% filter(province == "Hoa Binh", year == 2010) %>% .$total)
 
   # Ha Noi
   expect_equal(df %>%
-      filter(province == "Ha Noi", year == 2007, key == "Total") %>% .$value,
-      test %>% filter(province == "Ha Noi", year == 2007) %>% .$Total +
-      test %>% filter(province == "Ha Tay", year == 2007) %>% .$Total +
-      test %>% filter(province == "Hoa Binh", year == 2007) %>% .$Total)
+      filter(province == "Ha Noi", year == 2007, key == "total") %>% .$value,
+      test %>% filter(province == "Ha Noi", year == 2007) %>% .$total +
+      test %>% filter(province == "Ha Tay", year == 2007) %>% .$total +
+      test %>% filter(province == "Hoa Binh", year == 2007) %>% .$total)
 
 
   # From <= 1990
@@ -384,11 +384,11 @@ test_that("`merge_prov` follow the best list", {
 
   # Binh Tri Thien
   expect_equal(df %>%
-      filter(province == "Binh Tri Thien", year == 2007, key == "Total") %>%
+      filter(province == "Binh Tri Thien", year == 2007, key == "total") %>%
       .$value,
-      test %>% filter(province == "Quang Binh", year == 2007) %>% .$Total +
-      test %>% filter(province == "Quang Tri", year == 2007) %>% .$Total +
-      test %>% filter(province == "Thua Thien - Hue", year == 2007) %>% .$Total)
+      test %>% filter(province == "Quang Binh", year == 2007) %>% .$total +
+      test %>% filter(province == "Quang Tri", year == 2007) %>% .$total +
+      test %>% filter(province == "Thua Thien - Hue", year == 2007) %>% .$total)
 
   # Province
   df <- get_gso(p_list[88]) %>%
