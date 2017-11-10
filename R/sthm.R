@@ -47,7 +47,8 @@ draw_heatmap <- function(df, f = function(x) x, col = heat.colors(12),
     subset(df, df[, sel] == x) %>%
                      select_if(is.numeric)
     })
-  values <- f(as.matrix(as.data.frame(values)))
+  values <- as.matrix(as.data.frame(values))
+  values_transf <- f(values)
 
   # Options and graphical parameters:
   opar <- par()
@@ -96,10 +97,12 @@ draw_heatmap <- function(df, f = function(x) x, col = heat.colors(12),
     par(plt = plt, new = TRUE)
 
     # Heatmap:
-    image(time_vec, seq_len(ncol(values)), values, ann = FALSE, yaxt = "n")
+    image(time_vec, seq_len(ncol(values_transf)), values_transf, ann = FALSE,
+          yaxt = "n")
     usr <- par("usr")
     rect(usr[1], usr[3], usr[2], usr[4], col = col_na)
-    image(time_vec, seq_len(ncol(values)), values, col = col, add = TRUE)
+    image(time_vec, seq_len(ncol(values_transf)), values_transf, col = col,
+          add = TRUE)
     box(bty = "o")
 
 
@@ -108,10 +111,11 @@ draw_heatmap <- function(df, f = function(x) x, col = heat.colors(12),
     # Heatmap:
     plt[2] <- x
     par(plt = plt)
-    image(time_vec, seq_len(ncol(values)), values, ann = FALSE)
+    image(time_vec, seq_len(ncol(values_transf)), values_transf, ann = FALSE)
     usr <- par("usr")
     rect(usr[1], usr[3], usr[2], usr[4], col = col_na)
-    image(time_vec, seq_len(ncol(values)), values, col = col, add = TRUE)
+    image(time_vec, seq_len(ncol(values_transf)), values_transf, col = col,
+          add = TRUE)
     box(bty = "o")
 
   }
