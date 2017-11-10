@@ -122,14 +122,13 @@ gather_sum <- function(df, FUN, df2, args, FUN2){
   # merging event
   df %<>%
     gather(name, value, contains("value")) %>%
-    select(-matches("name"))
+    select(-name)
 
   if (any(names(df) %in% "month")){
     df %<>% group_by(year, month, key)
   } else {
     df %<>% group_by(year, key)
   }
-
 
   # if two dfs and the parameter args were provided, apply the merging event on
   # the both of them (with the possibility to apply two different function on
@@ -211,10 +210,16 @@ merge_province <- function(df, FUN, from, to, splits_lst,
   # select the list of event corresponding at the time range from - to
   lst_events <- select_events(splits_lst, from = from, to = to)
 
+  if (from < as.Date("1992-01-01") & to > as.Date("2008-01-01")){
+    lst_events$`Ha Son Binh`$elements <- c("Hoa Binh", "Ha Noi")
+    lst_events$`Ha Son Binh`$combined <- c("Ha Noi")
+  }
+
   # if the list contains some events, merge or split the province concerned
   if (length(lst_events) > 0) {
 
     for (i in rev(seq_along(lst_events))) {
+         #c(20:2)){
       province_lst <- province_splits(lst_events[i])
       tmp <- split(df, df$province %in% province_lst[[1]])
 
@@ -224,8 +229,7 @@ merge_province <- function(df, FUN, from, to, splits_lst,
         # some dataset have some for some provinces before their year of
         # creation
         if (anyNA(tmp$`TRUE`) == TRUE &
-            sum(!province_lst[[1]] %in% "Ha Tay")
-            /length(province_lst[[1]]) == 1){
+            sum(!province_lst[[1]] %in% "Ha Tay") / length(province_lst[[1]]) == 1){
           # Add the data of the province existing before the split event to the
           # data frame containing the other province none of interest at this
           # point and filter the data  to keep only the split event data and re-
@@ -239,11 +243,11 @@ merge_province <- function(df, FUN, from, to, splits_lst,
         }
 
         # As Ha Tay is a merging event with Hanoi in 2008, another process is
-        # province to take care of the problem of the presence of NA for Ha Tay
+        # to take care of the problem of the presence of NA for Ha Tay
         # after 2008
         if (anyNA(tmp$`TRUE`) == TRUE &
             sum(!province_lst[[1]] %in% "Ha Tay")
-            /length(province_lst[[1]]) != 1){
+              /length(province_lst[[1]]) != 1){
           limit <- lst_events[i][[1]]$date %>% lubridate::year(.)
           add_df <- tmp$`TRUE` %>%
             dplyr::filter(province != "Ha Tay" & year >= limit)
@@ -403,7 +407,9 @@ merge_prov <- function(df, sel = names(df), FUN = sum, from, to = "2017-12-31",
       merge_province(FUN, from = from, to = to, splits_lst = spl, df2 = df2,
                      args = args, FUN2 = FUN2) %>%
       ungroup %>%
+      filter(duplicated(.) == FALSE) %>%
       arrange(province, year)
+
     if(any(names(df) %in% "month")){
       df %<>% select(province, year, month, key, value)
     } else {
