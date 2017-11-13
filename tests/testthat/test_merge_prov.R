@@ -5,6 +5,8 @@ library(gso) # for 'get_gso'
 library(gdpm) # for 'getid'
 library(tidyr) # for 'replace_na'
 
+context("`merge_prov` returns the correct output")
+
 # Prerequisite -----------------------------------------------------------------
 p_list <- gso::data_frame_summary %>%
   dplyr::filter(`priority` == "1") %>%
@@ -15,7 +17,6 @@ p_list <- gso::data_frame_summary %>%
 
 # test merge_prov sum  ---------------------------------------------------------
 
-context("`merge_prov` returns the correct output")
 
 test_that("`merge_prov` sums correcty", {
 
