@@ -5,7 +5,7 @@ library(gso) # for 'get_gso'
 library(gdpm) # for 'getid'
 library(tidyr) # for 'replace_na'
 
-context("`merge_prov` returns the correct output")
+context("Test if `merge_prov` returns the correct output")
 
 # Prerequisite -----------------------------------------------------------------
 p_list <- gso::data_frame_summary %>%
