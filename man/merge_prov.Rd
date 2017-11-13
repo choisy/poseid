@@ -12,18 +12,18 @@ merge_prov(df, sel = names(df), FUN = sum, from, to = "2017-12-31",
 \code{year}, accept also the monthly data if the month are in the column
 \code{month}.}
 
-\item{sel}{A vector of character to select only the variable to merge. Can
-be useful if, to merge different variable, you need to use different
-mathematical operation. By default, select all the variables.}
+\item{sel}{A vector of character to select only the variable to merge.
+By default, select all the variables.}
 
 \item{FUN}{A function to apply on the data when merging the province
 together. By default, \code{sum}.}
 
 \item{from}{Initial date of the time range selected for the province
-definition, of the class \code{Date}.}
+definition, of the class \code{Date} or \code{numeric}.}
 
 \item{to}{Final date of the time range selected for the province
-definition, of the class \code{Date}, by default  \code{"2017-12-31"}}
+definition, of the class \code{Date} or \code{numeric}, by default
+ \code{"2017-12-31"}}
 
 \item{diseases}{A vector of character used to know which history of vietnam
 has to be taken for the merging event as two diseases has different story.
@@ -59,10 +59,10 @@ mortality_rate <- get_gso("Infant mortality rate by province")
 # definition of 1992 in Vietnam:
 merge_prov(mortality_rate, from = "1992-01-01")
 # If you want the province's definition between 1992 and 2010 in Vietnam:
-merge_prov(mortality_rate, from = "1992-01-01", to = "2010-12-31")
+merge_prov(mortality_rate, from = 1992, to = 2010)
 
 # You can change the function
-merge_prov(mortality_rate, from = "1992-01-01", FUN = mean)
+merge_prov(mortality_rate, from = "1992", FUN = mean)
 
 # You can also use weighted mean by providing the weighted in another
 # data frame
@@ -73,7 +73,8 @@ merge_prov(mortality_rate, from = "1992-01-01", FUN = weighted.mean,
 # You can define the merge_prov function only on certain columns
 pop_info <- get_gso("Area, population and population density by province")
 merge_prov(pop_info, sel = "average_population_thous_pers",
- from = "1992-01-01", FUN = weighted.mean,
+ from = 1992, FUN = weighted.mean,
  df2 = pop_size, args = "total")
+
 
 }
