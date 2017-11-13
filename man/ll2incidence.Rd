@@ -34,7 +34,6 @@ zero incidence is explicitly displayed.
 }
 \examples{
 # Four different data sets of infections dates:
-load(system.file("extdata", "infections_dates.rda", package = "poseid"))
 infection_date_v <- infections_dates
 infection_posixct_v <- as.POSIXct(infection_date_v)
 infection_date_df <- as.data.frame(infection_date_v)
