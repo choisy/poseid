@@ -18,6 +18,9 @@
 #' @param distribution if TRUE, print on the map, the distribution of the values
 #' by intervals
 #'
+#' @details For more information on the parameter \code{style}, please, look at
+#' the package \code{classint}.
+#'
 #' @return The data frame inputed with attributes \code{breaks} corresponding to
 #'  the breaks value, returned invisibly.
 #'

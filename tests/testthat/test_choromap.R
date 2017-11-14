@@ -3,7 +3,7 @@ library(gadmVN) # for  'gadm'
 library(dplyr) # for ' %>% '
 library(magrittr) # for 'select', 'filter', 'mutate'
 
-context("`choromap` returns error when the input are not in a correct
+context("Test if `choromap` returns error when the input are not in a correct
         format")
 
 test_that("`choromap` returns the correct error message", {
