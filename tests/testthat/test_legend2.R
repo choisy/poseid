@@ -2,7 +2,7 @@ library(gdpm) # for 'getid'
 library(magrittr) # for ' %>% '
 library(gadmVN) # for 'gadm'
 
-context("`legend2` returns error when the input are not in a correct
+context("Test if `legend2` returns error when the input are not in a correct
         format")
 
 test_that("`legend2` returns the correct error message", {

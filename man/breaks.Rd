@@ -37,6 +37,10 @@ The data frame inputed with attributes \code{breaks} corresponding to
 This function selects the class intervals for a numeric column in a data
 frame.
 }
+\details{
+For more information on the parameter \code{style}, please, look at
+the package \code{classint}.
+}
 \examples{
 
 # Example with data preparation

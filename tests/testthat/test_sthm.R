@@ -3,7 +3,7 @@ library(gadmVN) # for  'gadm'
 library(dplyr) # for ' %>% '
 library(magrittr) # for 'select', 'filter', 'mutate'
 
-context("`sthm` returns error when the input are not in a correct
+context("Test if `sthm` returns error when the input are not in a correct
         format")
 
 test_that("`sthm` returns the correct error message", {
