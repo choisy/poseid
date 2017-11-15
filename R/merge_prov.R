@@ -329,8 +329,10 @@ merge_province <- function(df, FUN, from, to, splits_lst,
 #' @examples
 #'
 #' # For all the following examples, we will use the data from the package gso.
-#' library(gso) # for 'get_gso', 'pop_size'
-#' mortality_rate <- get_gso("Infant mortality rate by province")
+#' library(gso) # for the data table and 'pop_size'
+#' sel <- grep("Infant mortality rate by province", gso::data_frame_summary$`data frame`)
+#' gso::data_frame_summary$data_name[30]
+#' mortality_rate <- demography_12
 #'
 #' # if you want to have the data expressed by province, with the province's
 #' # definition of 1992 in Vietnam:
@@ -348,7 +350,7 @@ merge_province <- function(df, FUN, from, to, splits_lst,
 #'  df2 = pop_size, args = "total")
 #'
 #' # You can define the merge_prov function only on certain columns
-#' pop_info <- get_gso("Area, population and population density by province")
+#' pop_info <- demography_1
 #' merge_prov(pop_info, sel = "average_population_thous_pers",
 #'  from = 1992, FUN = weighted.mean,
 #'  df2 = pop_size, args = "total")
@@ -423,7 +425,7 @@ The time range should overlap the date range of the data frame inputed: ",
 
     # Test and select the column containing the information necessary for the
     # merging and the column selected in the parameter 'sel'.
-    if (!(sel %in% names(df))){
+    if (any(sel %in% names(df)) == FALSE){
       stop(
 "The parameters 'sel' should contain a vector of character containing the names of the column to merge",
 call. = FALSE)

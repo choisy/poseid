@@ -1,29 +1,20 @@
 library(dplyr) #for 'filter'
 library(dictionary) # for 'province_year'
 library(magrittr) # for '%>%'
-library(gso) # for 'get_gso'
+library(gso) # for the data table
 library(gdpm) # for 'getid'
 library(tidyr) # for 'replace_na'
 
 context("Test if `merge_prov` returns the correct output")
 
-# Prerequisite -----------------------------------------------------------------
-p_list <- gso::data_frame_summary %>%
-  dplyr::filter(`priority` == "1") %>%
-  dplyr::filter(`spatial resolution` == "province") %>%
-  dplyr::select(`data frame`) %>%
-  unlist %>%
-  as.vector()
-
 # test merge_prov sum  ---------------------------------------------------------
-
 
 test_that("`merge_prov` sums correcty", {
 
-  test <- get_gso(p_list[88])
+  test <- education_13
 
   # FROM >= 1992
-  df <- get_gso(p_list[88]) %>%
+  df <- education_13 %>%
     merge_prov(FUN = sum, from = "1992-01-01", to = "2015-12-31")
 
   # Ha Noi
@@ -51,7 +42,7 @@ test_that("`merge_prov` sums correcty", {
 
 
   # FROM < 1992
-  df <- get_gso(p_list[88]) %>%
+  df <- education_13 %>%
      merge_prov(FUN = sum, from = "1990-01-01", to = "2015-12-31")
 
   # Hau Giang
@@ -82,7 +73,7 @@ test_that("`merge_prov` sums correcty", {
 
 
 # From <= 1989
-  df <- get_gso(p_list[88]) %>%
+  df <- education_13 %>%
     merge_prov(FUN = sum, from = "1989-01-01", to = "2015-12-31")
 
 # Binh Tri Thien
@@ -99,8 +90,8 @@ test_that("`merge_prov` sums correcty", {
 test_that("`merge_prov` sums correcty and returns NA when one of the province
           merge back together as an NA value", {
 
-  test <- get_gso(p_list[33])
-  df <- get_gso(p_list[33]) %>%
+  test <- agriculture_23
+  df <- agriculture_23 %>%
     merge_prov(FUN = sum, from = "1980-01-01", to = "2015-12-31")
 
   expect_identical(df %>%
@@ -114,7 +105,7 @@ test_that("`merge_prov` sums correcty and returns NA when one of the province
 test_that("`merge_prov` merges back together the good provinces", {
 
   # < 1990
-  df <- get_gso(p_list[88]) %>%
+  df <- education_13 %>%
     merge_prov(FUN = sum,
                           from = "1980-01-01", to = "2015-12-31")
 
@@ -122,42 +113,42 @@ test_that("`merge_prov` merges back together the good provinces", {
                    dictionary::province_year$`1979` %>% unique)
 
   # 1990
-  df <- get_gso(p_list[88]) %>%
+  df <- education_13 %>%
     merge_prov(FUN = sum,
                           from = "1990-01-01", to = "2015-12-31")
 
   expect_identical(c(unique(df$province), "Ha Son Binh") %>% sort,
                    dictionary::province_year$`1990` %>% unique)
 
-  df <- get_gso(p_list[88]) %>%
+  df <- education_13 %>%
     merge_prov(FUN = sum,
                           from = "1991-01-01", to = "2015-12-31")
 
   expect_identical(c(unique(df$province), "Ha Son Binh") %>% sort,
                    dictionary::province_year$`1991` %>% unique)
 
-  df <- get_gso(p_list[88]) %>%
+  df <- education_13 %>%
     merge_prov(FUN = sum,
                           from = "1992-01-01", to = "2015-12-31")
 
   expect_identical(c(unique(df$province), "Ha Tay") %>% sort,
                    dictionary::province_year$`1992` %>% unique)
 
-  df <- get_gso(p_list[88]) %>%
+  df <- education_13 %>%
     merge_prov(FUN = sum,
                           from = "1997-01-01", to = "2015-12-31")
 
   expect_identical(c(unique(df$province), "Ha Tay") %>% sort,
                    dictionary::province_year$`1997` %>% unique)
 
-  df <- get_gso(p_list[88]) %>%
+  df <- education_13 %>%
     merge_prov(FUN = sum,
                           from = "2004-01-01", to = "2015-12-31")
 
   expect_identical(c(unique(df$province), "Ha Tay") %>% sort,
                    dictionary::province_year$`2004` %>% unique)
 
-  df <- get_gso(p_list[88]) %>%
+  df <- education_13 %>%
     merge_prov(FUN = sum,
                           from = "2008-01-01", to = "2015-12-31")
 
@@ -169,12 +160,12 @@ test_that("`merge_prov` merges back together the good provinces", {
 # test merge_prov  -------------------------------------------------------------
 test_that("`merge_prov` applies weighted mean correcty", {
 
-  test <- get_gso(p_list[33])
+  test <- agriculture_23
   pop_size <- gso::pop_size %>% dplyr::select(province,year,total)
 
 
   # FROM >= 1992
-  df <- get_gso(p_list[33]) %>%
+  df <- agriculture_23 %>%
     merge_prov(FUN = weighted.mean,
                from = "1992-01-01", to = "2015-12-31",
                df2 = pop_size, args = "total")
@@ -227,7 +218,7 @@ test_that("`merge_prov` applies weighted mean correcty", {
 
   # FROM < 1992
 
-  df <- get_gso(p_list[33]) %>%
+  df <- agriculture_23 %>%
     merge_prov(FUN = weighted.mean,
                from = "1990-01-01", to = "2015-12-31",
                df2 = pop_size, args = "total")
@@ -288,7 +279,7 @@ test_that("`merge_prov` applies weighted mean correcty", {
 
   # From <= 1990
 
-  df <- get_gso(p_list[33]) %>%
+  df <- agriculture_23 %>%
     merge_prov(FUN = weighted.mean,
                from = "1989-01-01", to = "2015-12-31",
                df2 = pop_size, args = "total")
@@ -314,10 +305,10 @@ test_that("`merge_prov` applies weighted mean correcty", {
 # test splits list in merge_prov -----------------------------------------------
 test_that("`merge_prov` follow the best list", {
 
-  test <- get_gso(p_list[88])
+  test <- education_13
 
   # FROM >= 1992
-  df <- get_gso(p_list[88]) %>%
+  df <- education_13 %>%
    merge_prov(FUN = sum, diseases = c("hepatitis", "cholera", "ili"),
                           from = "1992-01-01", to = "2015-12-31")
 
@@ -346,7 +337,7 @@ test_that("`merge_prov` follow the best list", {
 
 
   # FROM < 1992
-  df <- get_gso(p_list[88]) %>%
+  df <- education_13 %>%
    merge_prov(FUN = sum, diseases = c("hepatitis", "cholera", "ili"),
                           from = "1990-01-01", to = "2015-12-31")
 
@@ -384,7 +375,7 @@ test_that("`merge_prov` follow the best list", {
 
 
   # From <= 1990
-  df <- get_gso(p_list[88]) %>%
+  df <- education_13 %>%
    merge_prov(FUN = sum, diseases = c("hepatitis", "cholera", "ili"),
                           from = "1990-01-01", to = "2015-12-31")
 
@@ -397,7 +388,7 @@ test_that("`merge_prov` follow the best list", {
       test %>% filter(province == "Thua Thien - Hue", year == 2007) %>% .$total)
 
   # Province
-  df <- get_gso(p_list[88]) %>%
+  df <- education_13 %>%
    merge_prov(FUN = sum, diseases = c("hepatitis", "cholera", "ili"),
                           from = "1990-01-01", to = "2015-12-31")
   expect_equal(
@@ -405,7 +396,7 @@ test_that("`merge_prov` follow the best list", {
            dictionary::province_year$`1979`), 1)
 
 
-  df <- get_gso(p_list[88]) %>%
+  df <- education_13 %>%
    merge_prov(FUN = sum, diseases = c("hepatitis", "cholera", "ili"),
                           from = "1991-01-01", to = "2015-12-31")
   expect_equal(
