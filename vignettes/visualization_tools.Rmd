@@ -307,9 +307,9 @@ The choice of the map is important because one specificity of Vietnam is the spl
 
 <center>![](splits.png)</center>
 
-We can see that most of the events are splits event of one province into two or three provinces. There is only one merging event of provinces: Ha Noi and Ha Tay in 2008, which merged together to create a new spatial definition of Ha Noi. The spatial definition of the provinces is changing over time. 
+We can see that most of the events are splits event of one province into two or three provinces. There is only one merging event of provinces: Ha Noi and Ha Tay in 2008, which merged together to create a new spatial definition of Ha Noi.  If the time range starts before 1992 and ends after 2008, the provinces: "Ha Son Binh", "Ha Noi", "Ha Tay" and "Hoa Binh" are all merged together and named "Ha Noi". 
 
-In order to represent the data correctly, it is useful to choose the map of the Vietnam corresponding in number and name of the province to our epidemiologic data.
+The spatial definition of the provinces is changing over time. In order to represent the data correctly, it is useful to choose the map of the Vietnam corresponding in number and name of the province to our epidemiologic data.
 
 Here, we want to represent the incidence value of dengue in September 1993, so we select a map of Vietnam of 1992. 
 
