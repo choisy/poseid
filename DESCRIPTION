@@ -25,5 +25,8 @@ Suggests:
     RColorBrewer,
     gadmVN,
     testthat,
-    gso
+    gso,
+    knitr,
+    rmarkdown
 RoxygenNote: 6.0.1
+VignetteBuilder: knitr

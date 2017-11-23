@@ -13,7 +13,7 @@
 #' (by default \code{style = "quantile"})
 #' @param pal the color for the distribution legend, by default \code{NULL}
 #' @param fixedBreaks By default \code{NULL} but if a vector of value is
-#' inputed, it will be used to specifen the breaks, need to used with the
+#' inputted, it will be used to specifen the breaks, need to used with the
 #' parameter \code{style = "fixed"}
 #' @param distribution if TRUE, print on the map, the distribution of the values
 #' by intervals

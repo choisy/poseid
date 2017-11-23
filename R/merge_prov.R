@@ -299,10 +299,10 @@ merge_province <- function(df, FUN, from, to, splits_lst,
 #'  By default, select all the variables.
 #' @param FUN A function to apply on the data when merging the province
 #' together. By default, \code{sum}.
-#' @param diseases A vector of character used to know which history of vietnam
+#' @param diseases A vector of character used to know which history of Vietnam
 #' has to be taken for the merging event as two diseases has different story.
 #' Used if you want the same merging event as your infectious disease dataframe,
-#'  for more details look at the /code{gdpm package}. By default, \code{NULL}
+#'  for more details look at the \code{gdpm package}. By default, \code{NULL}
 #' @param from Initial date of the time range selected for the province
 #' definition, of the class \code{Date} or \code{numeric}.
 #' @param to Final date of the time range selected for the province
@@ -419,7 +419,7 @@ The time range should overlap the date range of the data frame inputed: ",
     # Join df2
     if (is.data.frame(df2) == TRUE){
       sel2 <- grep(names(df) %>% paste(collapse = "|"), names(df2), value = T)
-      df <- suppressWarnings(left_join(df,df2, by = sel2))
+      df <- suppressWarnings(left_join(df, df2[, c(args, sel2)], by = sel2))
       sel <- c(sel, args)
     }
 

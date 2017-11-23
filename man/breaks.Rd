@@ -23,7 +23,7 @@ used to select a method for the different way of calculating the intervals
 \item{pal}{the color for the distribution legend, by default \code{NULL}}
 
 \item{fixedBreaks}{By default \code{NULL} but if a vector of value is
-inputed, it will be used to specifen the breaks, need to used with the
+inputted, it will be used to specifen the breaks, need to used with the
 parameter \code{style = "fixed"}}
 
 \item{distribution}{if TRUE, print on the map, the distribution of the values

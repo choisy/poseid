@@ -25,10 +25,10 @@ definition, of the class \code{Date} or \code{numeric}.}
 definition, of the class \code{Date} or \code{numeric}, by default
  \code{"2017-12-31"}}
 
-\item{diseases}{A vector of character used to know which history of vietnam
+\item{diseases}{A vector of character used to know which history of Vietnam
 has to be taken for the merging event as two diseases has different story.
 Used if you want the same merging event as your infectious disease dataframe,
- for more details look at the /code{gdpm package}. By default, \code{NULL}}
+ for more details look at the \code{gdpm package}. By default, \code{NULL}}
 
 \item{df2}{A data frame containing at least the variables \code{province},
 \code{year}. Can be used to provide additional arguments through the
