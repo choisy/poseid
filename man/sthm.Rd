@@ -42,8 +42,9 @@ name of the province in the order of the figure. \cr
 \cr
 A map of the province can be print on the left of the heatmap with
 the parameters \code{map} and \code{xm}. The map need to have the same
-spatial definitions as the data frame (\code{df}), so that each line of the
-heatmap can be link with the map.
+spatial definitions as the data frame (\code{df}) contains in the first
+column of the slots \code{data}, so that each line of the heatmap can be
+ link with the map.
 }
 \description{
 Makes a spatio-temporal heatmap of a disease
@@ -111,7 +112,7 @@ legend2(0.925, 1, legend =  a, col = col, postext = "right", n_round = 2,
 library(gadmVN)
 map <- gadmVN::gadm("1980-01-01", merge_hanoi = TRUE)
 coord <- sp::coordinates(map) \%>\% as.data.frame()
-coord$province <- unique(map@data$province)
+coord$province <- unique(map@data[, 1])
 coord <- coord[order(coord$V2),]
 coord$order <- seq(1, dim(coord)[1], 1)
 dengue_order <- left_join(dengue, coord, by = "province") \%>\%
