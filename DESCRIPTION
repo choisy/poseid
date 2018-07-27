@@ -2,8 +2,14 @@ Package: poseid
 Type: Package
 Title: Population-based Observational Studies of the Epidemiology of Infectious Diseases
 Version: 0.1.0
-Author: Lucie Contamin, Marc Choisy
-Maintainer: Marc Choisy <marc.choisy@ird.fr>
+Authors@R:c(person("Marc", "Choisy", 
+                    email = "marc.choisy@ird.fr", 
+                    role = c("aut", "cre", "cph"),
+                    comment = c(ORCID = "https://orcid.org/0000-0002-5187-6390")),
+             person("Lucie", "Contamin", 
+                    email = "contamin.lucie@gmail.com", 
+                    role = "aut",
+                    comment = c(ORCID = "https://orcid.org/0000-0001-5797-1279")))
 Description: Functions of visualizing and analysing population-based observational
   data in epidemiology.
 License: MIT + file LICENSE
