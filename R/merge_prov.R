@@ -329,31 +329,33 @@ merge_province <- function(df, FUN, from, to, splits_lst,
 #' @examples
 #'
 #' # For all the following examples, we will use the data from the package gso.
-#' library(gso) # for the data table and 'pop_size'
-#' sel <- grep("Infant mortality rate by province", gso::data_frame_summary$`data frame`)
-#' gso::data_frame_summary$data_name[30]
-#' mortality_rate <- demography_12
+#' library(gso) # for the "content"
+#' migration_rate <- gso::content %>% filter(data_name == "demography_12") %>%
+#'   .$data %>% .[[1]]
 #'
 #' # if you want to have the data expressed by province, with the province's
 #' # definition of 1992 in Vietnam:
-#' merge_prov(mortality_rate, from = "1992-01-01")
+#' merge_prov(migration_rate, from = "1992-01-01")
 #' # If you want the province's definition between 1992 and 2010 in Vietnam:
-#' merge_prov(mortality_rate, from = 1992, to = 2010)
+#' merge_prov(migration_rate, from = 1992, to = 2010)
 #'
 #' # You can change the function
-#' merge_prov(mortality_rate, from = "1992", FUN = mean)
+#' merge_prov(migration_rate, from = "1992", FUN = mean)
 #'
 #'# You can also use weighted mean by providing the weighted in another
 #'# data frame
-#' pop_size <- gso::pop_size
-#' merge_prov(mortality_rate, from = "1992-01-01", FUN = weighted.mean,
-#'  df2 = pop_size, args = "total")
+#' pop_size <-  gso::content %>% filter(data_name == "demography_5") %>%
+#'   .$data %>% .[[1]] %>% dplyr::select(province, year, total) %>%
+#'   mutate(year = as.numeric(year))
+#' merge_prov(migration_rate, from = "1992-01-01", FUN = weighted.mean,
+#'   df2 = pop_size, args = "total")
 #'
 #' # You can define the merge_prov function only on certain columns
-#' pop_info <- demography_1
+#' pop_info <- gso::content %>% filter(data_name == "demography_1") %>%
+#'   .$data %>% .[[1]]
 #' merge_prov(pop_info, sel = "average_population_thous_pers",
-#'  from = 1992, FUN = weighted.mean,
-#'  df2 = pop_size, args = "total")
+#'   from = 1992, FUN = weighted.mean,
+#'   df2 = pop_size, args = "total")
 #'
 #'
 #' @export

@@ -110,7 +110,7 @@ legend2(0.925, 1, legend =  a, col = col, postext = "right", n_round = 2,
 
 # to order the provinces by latitude:
 library(gadmVN)
-map <- gadmVN::gadm("1980-01-01", merge_hanoi = TRUE)
+map <- gadmVN::gadm("1980-01-01", merge_hanoi = TRUE) \%>\% sf::as_Spatial()
 coord <- sp::coordinates(map) \%>\% as.data.frame()
 coord$province <- unique(map@data[, 1])
 coord <- coord[order(coord$V2),]

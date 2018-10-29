@@ -4,7 +4,8 @@
 \alias{choromap}
 \title{Draws a choropleth map}
 \usage{
-choromap(df, map, fixedBreaks, col = heat.colors(6), col_na = "grey", ...)
+choromap(df, map, fixedBreaks, col = heat.colors(6), col_na = "grey",
+  ...)
 }
 \arguments{
 \item{df}{a data frame containing at two colums, one of class "character" and
@@ -44,7 +45,7 @@ library(gadmVN)
 # dengue data
 dengue <- getid(dengue, from = 1990, to = 2010)
 # geographic data
-map <- gadmVN::gadm(date = 1990, merge_hanoi = TRUE)
+map <- gadmVN::gadm(date = 1990, merge_hanoi = TRUE) \%>\% sf::as_Spatial()
 
 # A choroplet map of the dengue data:
 # The first step is to select only the month and the year that we want to
