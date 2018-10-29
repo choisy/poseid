@@ -330,8 +330,11 @@ merge_province <- function(df, FUN, from, to, splits_lst,
 #'
 #' # For all the following examples, we will use the data from the package gso.
 #' library(gso) # for the "content"
+#' library(magrittr) # for "%>%"
+#' library(dplyr)   # for "filter"
 #' migration_rate <- gso::content %>% filter(data_name == "demography_12") %>%
-#'   .$data %>% .[[1]]
+#'   .$data %>% .[[1]] %>%
+#'   mutate(year = as.numeric(year))
 #'
 #' # if you want to have the data expressed by province, with the province's
 #' # definition of 1992 in Vietnam:
@@ -352,7 +355,8 @@ merge_province <- function(df, FUN, from, to, splits_lst,
 #'
 #' # You can define the merge_prov function only on certain columns
 #' pop_info <- gso::content %>% filter(data_name == "demography_1") %>%
-#'   .$data %>% .[[1]]
+#'   .$data %>% .[[1]] %>%
+#'   mutate(year = as.numeric(year))
 #' merge_prov(pop_info, sel = "average_population_thous_pers",
 #'   from = 1992, FUN = weighted.mean,
 #'   df2 = pop_size, args = "total")
