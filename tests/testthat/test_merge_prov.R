@@ -11,10 +11,12 @@ context("Test if `merge_prov` returns the correct output")
 
 test_that("`merge_prov` sums correcty", {
 
-  test <- education_13
+  test <- gso::content %>% filter(data_name == "education_3") %>%
+    .$data %>% .[[1]]
 
   # FROM >= 1992
-  df <- education_13 %>%
+  df <- gso::content %>% filter(data_name == "education_3") %>%
+    .$data %>% .[[1]] %>%
     merge_prov(FUN = sum, from = "1992-01-01", to = "2015-12-31")
 
   # Ha Noi
@@ -42,7 +44,8 @@ test_that("`merge_prov` sums correcty", {
 
 
   # FROM < 1992
-  df <- education_13 %>%
+  df <- gso::content %>% filter(data_name == "education_3") %>%
+    .$data %>% .[[1]] %>%
      merge_prov(FUN = sum, from = "1990-01-01", to = "2015-12-31")
 
   # Hau Giang
@@ -73,7 +76,8 @@ test_that("`merge_prov` sums correcty", {
 
 
 # From <= 1989
-  df <- education_13 %>%
+  df <- gso::content %>% filter(data_name == "education_3") %>%
+    .$data %>% .[[1]] %>%
     merge_prov(FUN = sum, from = "1989-01-01", to = "2015-12-31")
 
 # Binh Tri Thien
@@ -82,7 +86,7 @@ test_that("`merge_prov` sums correcty", {
       .$value,
     test %>% filter(province == "Quang Binh", year == 2007) %>% .$total +
     test %>% filter(province == "Quang Tri", year == 2007) %>% .$total +
-    test %>% filter(province == "Thua Thien - Hue", year == 2007) %>% .$total)
+    test %>% filter(province == "Thua Thien Hue", year == 2007) %>% .$total)
 
 })
 
@@ -90,14 +94,16 @@ test_that("`merge_prov` sums correcty", {
 test_that("`merge_prov` sums correcty and returns NA when one of the province
           merge back together as an NA value", {
 
-  test <- agriculture_23
-  df <- agriculture_23 %>%
+  test <- gso::content %>% filter(data_name == "agriculture_22") %>%
+    .$data %>% .[[1]]
+  df <- gso::content %>% filter(data_name == "agriculture_22") %>%
+    .$data %>% .[[1]] %>%
     merge_prov(FUN = sum, from = "1980-01-01", to = "2015-12-31")
 
-  expect_identical(df %>%
+  expect_equal(df %>%
     filter(province == "Hau Giang", year > 1994) %>%
     select(value) %>% unlist %>% as.vector,
-    c(66.6, 62.6, 58.1, 55.3,rep(NA, 17)))
+    c(138.8, 118.4, 129.3, 82.1, rep(NA, 17)))
 
 })
 
@@ -105,67 +111,71 @@ test_that("`merge_prov` sums correcty and returns NA when one of the province
 test_that("`merge_prov` merges back together the good provinces", {
 
   # < 1990
-  df <- education_13 %>%
-    merge_prov(FUN = sum,
-                          from = "1980-01-01", to = "2015-12-31")
+  df <- gso::content %>% filter(data_name == "education_3") %>%
+    .$data %>% .[[1]] %>%
+    merge_prov(FUN = sum, from = "1980-01-01", to = "2015-12-31")
 
   expect_identical(c(unique(df$province), "Ha Son Binh") %>% sort,
-                   dictionary::province_year$`1979` %>% unique)
+                   dictionary::vn_province_year$`1979-1990` %>% unique)
 
   # 1990
-  df <- education_13 %>%
-    merge_prov(FUN = sum,
-                          from = "1990-01-01", to = "2015-12-31")
+  df <- gso::content %>% filter(data_name == "education_3") %>%
+    .$data %>% .[[1]] %>%
+    merge_prov(FUN = sum, from = "1990-01-01", to = "2015-12-31")
 
   expect_identical(c(unique(df$province), "Ha Son Binh") %>% sort,
-                   dictionary::province_year$`1990` %>% unique)
+                   dictionary::vn_province_year$`1990-1991` %>% unique)
 
-  df <- education_13 %>%
-    merge_prov(FUN = sum,
-                          from = "1991-01-01", to = "2015-12-31")
+  df <- gso::content %>% filter(data_name == "education_3") %>%
+    .$data %>% .[[1]] %>%
+    merge_prov(FUN = sum, from = "1991-01-01", to = "2015-12-31")
 
   expect_identical(c(unique(df$province), "Ha Son Binh") %>% sort,
-                   dictionary::province_year$`1991` %>% unique)
+                   dictionary::vn_province_year$`1991-1992` %>% unique)
 
-  df <- education_13 %>%
-    merge_prov(FUN = sum,
-                          from = "1992-01-01", to = "2015-12-31")
-
-  expect_identical(c(unique(df$province), "Ha Tay") %>% sort,
-                   dictionary::province_year$`1992` %>% unique)
-
-  df <- education_13 %>%
-    merge_prov(FUN = sum,
-                          from = "1997-01-01", to = "2015-12-31")
+  df <- gso::content %>% filter(data_name == "education_3") %>%
+    .$data %>% .[[1]] %>%
+    merge_prov(FUN = sum, from = "1992-01-01", to = "2015-12-31")
 
   expect_identical(c(unique(df$province), "Ha Tay") %>% sort,
-                   dictionary::province_year$`1997` %>% unique)
+                   dictionary::vn_province_year$`1992-1997` %>% unique)
 
-  df <- education_13 %>%
-    merge_prov(FUN = sum,
-                          from = "2004-01-01", to = "2015-12-31")
+  df <- gso::content %>% filter(data_name == "education_3") %>%
+    .$data %>% .[[1]] %>%
+    merge_prov(FUN = sum, from = "1997-01-01", to = "2015-12-31")
 
   expect_identical(c(unique(df$province), "Ha Tay") %>% sort,
-                   dictionary::province_year$`2004` %>% unique)
+                   dictionary::vn_province_year$`1997-2004` %>% unique)
 
-  df <- education_13 %>%
-    merge_prov(FUN = sum,
-                          from = "2008-01-01", to = "2015-12-31")
+  df <- gso::content %>% filter(data_name == "education_3") %>%
+    .$data %>% .[[1]] %>%
+    merge_prov(FUN = sum, from = "2004-01-01", to = "2015-12-31")
+
+  expect_identical(c(unique(df$province), "Ha Tay") %>% sort,
+                   dictionary::vn_province_year$`2004-2008` %>% unique)
+
+  df <- gso::content %>% filter(data_name == "education_3") %>%
+    .$data %>% .[[1]] %>%
+    merge_prov(FUN = sum, from = "2008-01-01", to = "2015-12-31")
 
   expect_identical(c(unique(df$province)) %>% sort,
-                   dictionary::province_year$`2008` %>% unique)
+                   dictionary::vn_province_year$`2008-2020` %>% unique)
 
 })
 
 # test merge_prov  -------------------------------------------------------------
 test_that("`merge_prov` applies weighted mean correcty", {
 
-  test <- agriculture_23
-  pop_size <- gso::pop_size %>% dplyr::select(province,year,total)
+  test <- gso::content %>% filter(data_name == "agriculture_22") %>%
+    .$data %>% .[[1]]
+  pop_size <- gso::content %>% filter(data_name == "demography_5") %>%
+    .$data %>% .[[1]]%>% dplyr::select(province, year, total) %>%
+    mutate(year = as.numeric(year))
 
 
   # FROM >= 1992
-  df <- agriculture_23 %>%
+  df <- gso::content %>% filter(data_name == "agriculture_22") %>%
+    .$data %>% .[[1]] %>%
     merge_prov(FUN = weighted.mean,
                from = "1992-01-01", to = "2015-12-31",
                df2 = pop_size, args = "total")
@@ -218,7 +228,8 @@ test_that("`merge_prov` applies weighted mean correcty", {
 
   # FROM < 1992
 
-  df <- agriculture_23 %>%
+  df <- gso::content %>% filter(data_name == "agriculture_22") %>%
+    .$data %>% .[[1]] %>%
     merge_prov(FUN = weighted.mean,
                from = "1990-01-01", to = "2015-12-31",
                df2 = pop_size, args = "total")
@@ -279,7 +290,8 @@ test_that("`merge_prov` applies weighted mean correcty", {
 
   # From <= 1990
 
-  df <- agriculture_23 %>%
+  df <- gso::content %>% filter(data_name == "agriculture_22") %>%
+    .$data %>% .[[1]] %>%
     merge_prov(FUN = weighted.mean,
                from = "1989-01-01", to = "2015-12-31",
                df2 = pop_size, args = "total")
@@ -290,13 +302,13 @@ test_that("`merge_prov` applies weighted mean correcty", {
                          weighted.mean(c(
           test %>% filter(province == "Quang Binh", year == 2007) %>% .[,3],
           test %>% filter(province == "Quang Tri", year == 2007) %>% .[,3],
-          test %>% filter(province == "Thua Thien - Hue", year == 2007) %>%
+          test %>% filter(province == "Thua Thien Hue", year == 2007) %>%
             .[,3]),
           c(pop_size %>% filter(province == "Quang Binh", year == 2007) %>%
               .["total"],
             pop_size %>% filter(province == "Quang Tri", year == 2007) %>%
               .["total"],
-            pop_size %>% filter(province == "Thua Thien - Hue",
+            pop_size %>% filter(province == "Thua Thien Hue",
            year == 2007) %>% .["total"])
                          ))
 })
@@ -305,10 +317,12 @@ test_that("`merge_prov` applies weighted mean correcty", {
 # test splits list in merge_prov -----------------------------------------------
 test_that("`merge_prov` follow the best list", {
 
-  test <- education_13
+  test <- gso::content %>% filter(data_name == "education_3") %>%
+    .$data %>% .[[1]]
 
   # FROM >= 1992
-  df <- education_13 %>%
+  df <- gso::content %>% filter(data_name == "education_3") %>%
+    .$data %>% .[[1]] %>%
    merge_prov(FUN = sum, diseases = c("hepatitis", "cholera", "ili"),
                           from = "1992-01-01", to = "2015-12-31")
 
@@ -337,7 +351,8 @@ test_that("`merge_prov` follow the best list", {
 
 
   # FROM < 1992
-  df <- education_13 %>%
+  df <- gso::content %>% filter(data_name == "education_3") %>%
+    .$data %>% .[[1]] %>%
    merge_prov(FUN = sum, diseases = c("hepatitis", "cholera", "ili"),
                           from = "1990-01-01", to = "2015-12-31")
 
@@ -375,7 +390,8 @@ test_that("`merge_prov` follow the best list", {
 
 
   # From <= 1990
-  df <- education_13 %>%
+  df <- gso::content %>% filter(data_name == "education_3") %>%
+    .$data %>% .[[1]] %>%
    merge_prov(FUN = sum, diseases = c("hepatitis", "cholera", "ili"),
                           from = "1990-01-01", to = "2015-12-31")
 
@@ -385,23 +401,25 @@ test_that("`merge_prov` follow the best list", {
       .$value,
       test %>% filter(province == "Quang Binh", year == 2007) %>% .$total +
       test %>% filter(province == "Quang Tri", year == 2007) %>% .$total +
-      test %>% filter(province == "Thua Thien - Hue", year == 2007) %>% .$total)
+      test %>% filter(province == "Thua Thien Hue", year == 2007) %>% .$total)
 
   # Province
-  df <- education_13 %>%
+  df <- gso::content %>% filter(data_name == "education_3") %>%
+    .$data %>% .[[1]] %>%
    merge_prov(FUN = sum, diseases = c("hepatitis", "cholera", "ili"),
                           from = "1990-01-01", to = "2015-12-31")
   expect_equal(
     mean(df$province %in%
-           dictionary::province_year$`1979`), 1)
+           dictionary::vn_province_year$`1979-1990`), 1)
 
 
-  df <- education_13 %>%
+  df <- gso::content %>% filter(data_name == "education_3") %>%
+    .$data %>% .[[1]] %>%
    merge_prov(FUN = sum, diseases = c("hepatitis", "cholera", "ili"),
                           from = "1991-01-01", to = "2015-12-31")
   expect_equal(
     mean(df$province %in%
-           dictionary::province_year$`1991`), 1)
+           dictionary::vn_province_year$`1991-1992`), 1)
 
 })
 
