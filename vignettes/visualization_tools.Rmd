@@ -122,7 +122,7 @@ a <- sthm(dengue, f = sqrt, col = col)
 legend2(.9, 1, legend =  a, col = col, postext = "right", h = 1/(length(a) -1), w = 0.04, tl = 0.01, s = 0.005)
 ```
 
-```{r, }
+```{r}
 a <- sthm(dengue, f = function(x) x^.3, col = col)
 legend2(.9, 1, legend =  a, col = col, postext = "right", h = 1/(length(a) -1), w = 0.04, tl = 0.01, s = 0.005)
 ```
@@ -162,6 +162,7 @@ By default, the provinces are in an alphabetical order, but, by using the coordi
 ```{r , message = FALSE}
 library(gadmVN)
 library(sp)
+library(sf)
 ```
 
 First, you can extract the coordinates information by provinces and ordered them by latitudes (by creating an index).
@@ -169,6 +170,7 @@ First, you can extract the coordinates information by provinces and ordered them
 ```{r}
 # extract the coordinates of each province
 provinces <- gadmVN::gadm(date = "1980-01-01", merge_hanoi = TRUE)
+provinces <- sf::as_Spatial(provinces)
 coord <- sp::coordinates(provinces)
 row.names(coord) <- unique(provinces@data$province)
 head(coord)
@@ -220,6 +222,7 @@ library(magrittr)
 ```{r}
 # Geographic data
 provinces <- gadmVN::gadm(date = "1980-01-01", merge_hanoi = TRUE)
+provinces <- sf::as_Spatial(provinces)
 coord <- sp::coordinates(provinces)
 row.names(coord) <- unique(provinces@data$province)
 # Order the provinces by latitude and create an index called "order"
@@ -318,6 +321,7 @@ Here, we want to represent the incidence value of dengue in September 1993, so w
 ```{r}
 # geographic data
 map <- gadmVN::gadm(date = 1992)
+map <- sf::as_Spatial(map)
 ```
 
 ### Draw a choropleth map
@@ -340,6 +344,7 @@ The entire process can be made in a pipe by using the `magrittr` package
 ```{r}
 # Geographical information
 map <- gadmVN::gadm(date = 1992)
+map <- sf::as_Spatial(map)
 
 # Pipe
 getid(dengue, from = 1992, to = 1993) %>%
