@@ -4,9 +4,9 @@
 \alias{legend2}
 \title{Draws a legend}
 \usage{
-legend2(x, y, legend, col, locate = FALSE, pos = "top-left", n_round = 0,
-  col_na = NULL, size_na = 0.075, postext = "left", h = 0.75,
-  w = 0.75, tl = 0.2, s = 0.2, ...)
+legend2(x, y, legend, col, locate = FALSE, pos = "top-left",
+  n_round = 0, col_na = NULL, size_na = 0.075, postext = "left",
+  h = 0.75, w = 0.75, tl = 0.2, s = 0.2, ...)
 }
 \arguments{
 \item{x}{A numeric value for the x coordinate of the top-left part of the
@@ -79,7 +79,7 @@ library(gadmVN)
 # dengue data
 dengue <- getid(dengue, from = 1992, to = 2010)
 # geographic data
-map <- gadmVN::gadm(date = 1992, merge_hanoi = TRUE)
+map <- gadmVN::gadm(date = 1992, merge_hanoi = TRUE) \%>\% sf::as_Spatial()
 # preparation of the data
 library(dplyr)
 dengue_0993  <- filter(dengue, year == 1993, month == "September")

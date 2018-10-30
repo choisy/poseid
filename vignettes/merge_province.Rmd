@@ -29,7 +29,7 @@ To demonstrate this function, we will use the data from the `gso` package.
 Installing the `poseid` and `gso` packages:
 
 ```{r eval=F}
-devtolls::install_github("choisy/poseid")
+devtools::install_github("choisy/poseid")
 devtools::install_github("choisy/gso")
 ```
 
@@ -38,6 +38,8 @@ Loading and attaching the `poseid` and `gso` packages:
 ```{r}
 library(poseid)
 library(gso)
+library(magrittr)
+library(dplyr)
 ```
 
 ## Loading data
@@ -47,9 +49,9 @@ For example, we use the data frame containing the information on the `birth and 
 
 ```{r}
 sel <- grep("Crude birth rate, crude death rate and natural increase rate by province", 
-            gso::data_frame_summary$`data frame`)
-data_frame_summary$data_name[sel]
-demo <- demography_8
+            gso::content$`data_frame`)
+gso::content$data_name[sel]
+demo <- gso::content %>% filter(data_name == "demography_10") %>% .$data %>% .[[1]]
 head(demo)
 ```
 
@@ -125,7 +127,7 @@ We can also use the weighted mean by providing the weighted in another data fram
 For that, we can use the data frame `pop_size` provides in the `gso` package. The data are expressed in thousand people so need a small change.
 
 ```{r}
-pop_size <- gso::pop_size
+pop_size <- gso::content %>% filter(data_name == "demography_5") %>% .$data %>% .[[1]]
 pop_size <- mutate_if(pop_size, !is.element(names(pop_size), c("province", "year")), funs(1000 * .))
 head(pop_size)
 ```
@@ -168,7 +170,7 @@ hepatitis <- getid(hepatitis, from = 1990, to = 2017)
 So, if we want the data frames to be express with the same province as the `hepatitis` or `amoebiasis` data frame, we can use the parameter `diseases`, it will automatically merge back together the province together accordingly to the `hepatitis` or `amoebiasis` history.
 
 ```{r}
-demo <- demography_8
+demo <- gso::content %>% filter(data_name == "demography_10") %>% .$data %>% .[[1]]
 mdemo <- merge_prov(demo, sel = "crude_birth_rate", from = 1990, FUN = weighted.mean,
                     df2 = pop_size, args = "total") 
 unique(mdemo$province)

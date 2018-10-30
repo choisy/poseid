@@ -67,7 +67,7 @@ test_that("`sthm` returns the province in the good order", {
                   contains("incidence")) %>%
     dplyr::arrange(time)
 
-  provinces <- gadm(date = 1980)
+  provinces <- gadm(date = 1980) %>% sf::as_Spatial()
   coord <- sp::coordinates(provinces)
   row.names(coord) <- unique(provinces@data$province)
   order <- rownames(coord[order(coord[, 2]), ])

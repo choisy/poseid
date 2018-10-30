@@ -179,7 +179,7 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
 #' # dengue data
 #' dengue <- getid(dengue, from = 1992, to = 2010)
 #' # geographic data
-#' map <- gadmVN::gadm(date = 1992, merge_hanoi = TRUE)
+#' map <- gadmVN::gadm(date = 1992, merge_hanoi = TRUE) %>% sf::as_Spatial()
 #' # preparation of the data
 #' library(dplyr)
 #' dengue_0993  <- filter(dengue, year == 1993, month == "September")

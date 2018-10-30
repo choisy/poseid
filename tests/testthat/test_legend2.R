@@ -8,7 +8,7 @@ context("Test if `legend2` returns error when the input are not in a correct
 test_that("`legend2` returns the correct error message", {
 
 dengue <- getid(dengue, from = 1992, to = 2010)
-map <- gadmVN::gadm(date = 1992, merge_hanoi = TRUE)
+map <- gadmVN::gadm(date = 1992, merge_hanoi = TRUE) %>% sf::as_Spatial()
 
 dengue_0993  <- dplyr::filter(dengue, year == 1993, month == "September") %>%
   dplyr::select(province, contains("incidence"))
