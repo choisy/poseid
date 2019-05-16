@@ -116,7 +116,7 @@ test_that("`merge_prov` merges back together the good provinces", {
     merge_prov(FUN = sum, from = "1980-01-01", to = "2015-12-31")
 
   expect_identical(c(unique(df$province), "Ha Son Binh") %>% sort,
-                   dictionary::vn_province_year$`1979-1990` %>% unique)
+                   dictionary::vn_admin1_year$`1979-1990` %>% unique)
 
   # 1990
   df <- gso::content %>% filter(data_name == "education_3") %>%
@@ -124,42 +124,42 @@ test_that("`merge_prov` merges back together the good provinces", {
     merge_prov(FUN = sum, from = "1990-01-01", to = "2015-12-31")
 
   expect_identical(c(unique(df$province), "Ha Son Binh") %>% sort,
-                   dictionary::vn_province_year$`1990-1991` %>% unique)
+                   dictionary::vn_admin1_year$`1990-1991` %>% unique)
 
   df <- gso::content %>% filter(data_name == "education_3") %>%
     .$data %>% .[[1]] %>%
     merge_prov(FUN = sum, from = "1991-01-01", to = "2015-12-31")
 
   expect_identical(c(unique(df$province), "Ha Son Binh") %>% sort,
-                   dictionary::vn_province_year$`1991-1992` %>% unique)
+                   dictionary::vn_admin1_year$`1991-1992` %>% unique)
 
   df <- gso::content %>% filter(data_name == "education_3") %>%
     .$data %>% .[[1]] %>%
     merge_prov(FUN = sum, from = "1992-01-01", to = "2015-12-31")
 
   expect_identical(c(unique(df$province), "Ha Tay") %>% sort,
-                   dictionary::vn_province_year$`1992-1997` %>% unique)
+                   dictionary::vn_admin1_year$`1992-1997` %>% unique)
 
   df <- gso::content %>% filter(data_name == "education_3") %>%
     .$data %>% .[[1]] %>%
     merge_prov(FUN = sum, from = "1997-01-01", to = "2015-12-31")
 
   expect_identical(c(unique(df$province), "Ha Tay") %>% sort,
-                   dictionary::vn_province_year$`1997-2004` %>% unique)
+                   dictionary::vn_admin1_year$`1997-2004` %>% unique)
 
   df <- gso::content %>% filter(data_name == "education_3") %>%
     .$data %>% .[[1]] %>%
     merge_prov(FUN = sum, from = "2004-01-01", to = "2015-12-31")
 
   expect_identical(c(unique(df$province), "Ha Tay") %>% sort,
-                   dictionary::vn_province_year$`2004-2008` %>% unique)
+                   dictionary::vn_admin1_year$`2004-2008` %>% unique)
 
   df <- gso::content %>% filter(data_name == "education_3") %>%
     .$data %>% .[[1]] %>%
     merge_prov(FUN = sum, from = "2008-01-01", to = "2015-12-31")
 
   expect_identical(c(unique(df$province)) %>% sort,
-                   dictionary::vn_province_year$`2008-2020` %>% unique)
+                   dictionary::vn_admin1_year$`2008-2020` %>% unique)
 
 })
 
@@ -410,7 +410,7 @@ test_that("`merge_prov` follow the best list", {
                           from = "1990-01-01", to = "2015-12-31")
   expect_equal(
     mean(df$province %in%
-           dictionary::vn_province_year$`1979-1990`), 1)
+           dictionary::vn_admin1_year$`1979-1990`), 1)
 
 
   df <- gso::content %>% filter(data_name == "education_3") %>%
@@ -419,7 +419,7 @@ test_that("`merge_prov` follow the best list", {
                           from = "1991-01-01", to = "2015-12-31")
   expect_equal(
     mean(df$province %in%
-           dictionary::vn_province_year$`1991-1992`), 1)
+           dictionary::vn_admin1_year$`1991-1992`), 1)
 
 })
 

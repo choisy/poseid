@@ -203,7 +203,7 @@ choromap <- function(df, map, fixedBreaks, col = heat.colors(6),
   }
 
   # implement the data in the shape file data
-  provinces <- sp::merge(map, df)
+  admin1 <- sp::merge(map, df)
 
   # value
   val_name <- df %>%
@@ -213,11 +213,11 @@ choromap <- function(df, map, fixedBreaks, col = heat.colors(6),
   # draw a choropleth map
   if(length(unique(fixedBreaks)) == 1)
   {
-    choropleth_v1(provinces, val_name, col = col, col_na = col_na, ...)
+    choropleth_v1(admin1, val_name, col = col, col_na = col_na, ...)
 
   } else
   {
-    choropleth_fix(provinces, val_name, col = col, col_na = col_na,
+    choropleth_fix(admin1, val_name, col = col, col_na = col_na,
                    fixedBreaks = fixedBreaks, ...)
   }
 }
