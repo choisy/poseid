@@ -60,15 +60,7 @@
 #'           function(y) sum(incidences[[c(y, x)]]$incidence)))) ==
 #'            length(infections_dates))
 #'
-#' @importFrom magrittr %>%
-#' @importFrom magrittr %<>%
-#' @importFrom lubridate as_datetime
-#' @importFrom lubridate floor_date
-#' @importFrom lubridate ceiling_date
-#' @importFrom dplyr select
-#' @importFrom dplyr mutate
-#' @importFrom dplyr mutate_all
-#' @importFrom dplyr right_join
+#' @importFrom lubridate as_datetime floor_date ceiling_date
 #' @export
 #'
 ll2incidence <- function(x, unit =
@@ -91,24 +83,26 @@ ll2incidence <- function(x, unit =
     } else {        # vectorize the data:
       cl <- as.vector(sapply(x, class))[1]
       # checking the class of the dates
-      if(!(cl %in% clnames)) stop(mess_class)
+      if (!(cl %in% clnames)) stop(mess_class)
       fct <- setNames(c(as.Date, as.POSIXct), clnames)[[cl]]
-      x %<>% mutate_all(as.character) %>% unlist %>% fct
+      x <- fct(as.character(x[, 1]))
+      #x %<>% mutate_all(as.character) %>% unlist %>% fct
     }
   }
 
 # doing the transformations:
-  x %>%
-    floor_date(unit) %>%
-    table %>%
-    data.frame %>%
-    setNames(c("start", "incidence")) %>%
-    mutate(start = as_datetime(start)) %>%
-    right_join(data.frame(start = seq(min(.$start), max(.$start), unit)),
-               by = "start") %>%
-    mutate(incidence = as.integer(ifelse(is.na(incidence), 0, incidence)),
-           end = ceiling_date(start + 1, unit),
-           middle = start + (end - start) / 2) %>%
-    select(start, middle, end, incidence)
+  res <- table(lubridate::floor_date(x, unit))
+  res <- data.frame(res, stringsAsFactors = FALSE)
+  res <- setNames(res, c("start", "incidence"))
+  res <- transform(res, start = lubridate::as_datetime(res$start))
+  res <- merge(data.frame(start = seq(min(res$start), max(res$start), unit)),
+               res, by = "start", all = "TRUE")
+  res <- transform(res,
+                   incidence =
+                     as.integer(ifelse(is.na(res$incidence), 0, res$incidence)),
+                   end = ceiling_date(res$start + 1, unit))
+  res <- transform(res,
+                   middle = ceiling_date(res$start + (res$end - res$start) / 2))
+  res <- res[, c("start", "middle", "end", "incidence")]
 }
 

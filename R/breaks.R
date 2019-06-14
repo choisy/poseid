@@ -76,11 +76,7 @@ breaks <- function(df, col_name, n = 6, style = "quantile", pal = NULL,
          'pal' + 1 ")
   }
 
-  value <- df %>%
-    select_if(is.numeric) %>%
-    select_(col_name) %>%
-    unlist %>%  as.vector
-
+  value <- as.numeric(df[, col_name, drop = TRUE])
   # for selection of breaks of data containing one unique value
   if(length(na.omit(unique(value))) <= 1){
     breaks <- c(0, max(value))
