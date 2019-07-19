@@ -184,14 +184,13 @@ test_that("`merge_prov` applies weighted mean correcty", {
   # Ha Noi
   expect_equal(df %>%
           filter(province == "Ha Noi", year == 2007) %>% .$value,
-                         weighted.mean(c(
-          test %>% filter(province == "Ha Noi", year == 2007) %>% .[,3],
-          test %>% filter(province == "Ha Tay", year == 2007) %>% .[,3]),
-          c(pop_size %>% filter(province == "Ha Noi", year == 2007) %>%
-              .["total"],
-            pop_size %>% filter(province == "Ha Tay", year == 2007) %>%
-              .["total"])
-                         ))
+          weighted.mean(c(
+            test %>% filter(province == "Ha Noi", year == 2007) %>% .[,3],
+            test %>% filter(province == "Ha Tay", year == 2007) %>% .[,3]),
+            c(pop_size %>% filter(province == "Ha Noi", year == 2007) %>%
+                .["total"],
+              pop_size %>% filter(province == "Ha Tay", year == 2007) %>%
+                .["total"]) %>% unlist()))
 
   # Can Tho NA
   expect_equal(df %>%
@@ -202,7 +201,7 @@ test_that("`merge_prov` applies weighted mean correcty", {
             c(pop_size %>% filter(province == "Can Tho", year == 2005) %>%
                 .["total"],
               pop_size %>% filter(province == "Hau Giang", year == 2005) %>%
-                .["total"])
+                .["total"]) %>% unlist()
             ))
 
   # Dack Lak
@@ -214,7 +213,7 @@ test_that("`merge_prov` applies weighted mean correcty", {
           c(pop_size %>% filter(province == "Dak Lak", year == 2006) %>%
               .["total"],
             pop_size %>% filter(province == "Dak Nong", year == 2006) %>%
-              .["total"])
+              .["total"]) %>% unlist()
                          ))
 
   # Yen Bai
@@ -243,7 +242,7 @@ test_that("`merge_prov` applies weighted mean correcty", {
           c(pop_size %>% filter(province == "Can Tho", year == 2002) %>%
               .["total"],
             pop_size %>% filter(province == "Soc Trang", year == 2002) %>%
-              .["total"])
+              .["total"]) %>% unlist()
                          ))
 
   # Hau Giang NA
@@ -258,7 +257,7 @@ test_that("`merge_prov` applies weighted mean correcty", {
             pop_size %>% filter(province == "Hau Giang", year == 2005) %>%
               .["total"],
             pop_size %>% filter(province == "Soc Trang", year == 2005) %>%
-              .["total"])
+              .["total"]) %>% unlist()
                          ))
 
   # Ha Noi
@@ -270,7 +269,7 @@ test_that("`merge_prov` applies weighted mean correcty", {
           c(pop_size %>% filter(province == "Ha Noi", year == 2010) %>%
               .["total"],
             pop_size %>% filter(province == "Hoa Binh", year == 2010) %>%
-              .["total"])
+              .["total"]) %>% unlist()
                          ))
 
   # Ha Noi
@@ -285,7 +284,7 @@ test_that("`merge_prov` applies weighted mean correcty", {
             pop_size %>% filter(province == "Ha Tay", year == 2007) %>%
               .["total"],
             pop_size %>% filter(province == "Hoa Binh", year == 2007) %>%
-              .["total"]))
+              .["total"]) %>% unlist())
   )
 
   # From <= 1990
@@ -309,7 +308,7 @@ test_that("`merge_prov` applies weighted mean correcty", {
             pop_size %>% filter(province == "Quang Tri", year == 2007) %>%
               .["total"],
             pop_size %>% filter(province == "Thua Thien Hue",
-           year == 2007) %>% .["total"])
+           year == 2007) %>% .["total"]) %>% unlist()
                          ))
 })
 
