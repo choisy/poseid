@@ -3,9 +3,7 @@
 #' The poseid package provide functions of visualizing and analysing
 #' population-based observational data in epidemiology.
 #'
-#' @importFrom dplyr select_if filter select_ inner_join
 #' @importFrom sp merge bbox plot coordinates
-#' @importFrom magrittr %>% %<>%
 #' @importFrom classInt classIntervals findColours
 #' @importFrom grDevices colorRampPalette heat.colors
 #' @importFrom graphics box image layout locator par rect segments strwidth text

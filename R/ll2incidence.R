@@ -86,7 +86,6 @@ ll2incidence <- function(x, unit =
       if (!(cl %in% clnames)) stop(mess_class)
       fct <- setNames(c(as.Date, as.POSIXct), clnames)[[cl]]
       x <- fct(as.character(x[, 1]))
-      #x %<>% mutate_all(as.character) %>% unlist %>% fct
     }
   }
 

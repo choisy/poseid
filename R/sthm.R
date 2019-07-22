@@ -36,14 +36,8 @@ draw_heatmap <- function(df, f = function(x) x, col = heat.colors(12),
 
   # Data preparation:
   time_vec <- unique(df[, sapply(df, class) == "Date"])
-    #select_if(df, function(col) class(col) == "Date") %>%
-   # unlist %>% as.vector %>%
-  #  as.Date(origin = "1970-01-01") %>%
-  #  unique
   provinces_names <- Filter(is.character, df)
-  provinces_names <- unique(as.vector(unlist(provinces_names)))  #select_if(df,is.character) %>%
-    #unlist %>% as.vector %>%
-    #unique
+  provinces_names <- unique(as.vector(unlist(provinces_names)))
   values <- sapply(provinces_names, function(x){
     sel <-  names(Filter(is.character, df))
     Filter(is.numeric, subset(df, df[, sel] == x))

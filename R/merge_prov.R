@@ -290,7 +290,7 @@ merge_province <- function(df, FUN, from, to, splits_lst,
         }
 
         # Merge back together the province
-        if (tmp$`TRUE` %>% dim %>% .[1] > 0) {
+        if (dim(tmp$`TRUE`)[1] > 0) {
           df <- apply_merge(tmp, names(province_lst[1]), FUN = FUN, df2 = df2,
                             args = args, FUN2 = FUN2, ... = ...)
         } else {df <- tmp$`FALSE`}
@@ -301,12 +301,13 @@ merge_province <- function(df, FUN, from, to, splits_lst,
   # if the time range contains the split and the combine event of
   # Ha Noi & Ha Son Binh, does an additional merging on Hanoi and Ha Son Dinh.
   if (from < as.Date("1992-01-01") & to > as.Date("2008-01-01")){
-    df %<>% hanoi_function(FUN, df2 = df2, args = args, FUN2 = FUN2, ... = ...)
+    df <- hanoi_function(df, FUN, df2 = df2, args = args,
+                           FUN2 = FUN2, ... = ...)
   }
 
   # Problem of Ha Tay, NA value after 2008
   if(from >= as.Date("2008-01-01") & is.element("Ha Tay", df$province)) {
-    df %<>% filter(province != "Ha Tay")
+    df <-  df[df$province != "Ha Tay", ]
   }
 
   return(df)
