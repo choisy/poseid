@@ -13,6 +13,8 @@ Authors@R: c(person("Marc", "Choisy",
 Description: Functions of visualizing and analysing population-based observational
   data in epidemiology.
 License: MIT + file LICENSE
+URL: https://github.com/choisy/poseid
+BugReports: https://github.com/choisy/poseid/issues
 Encoding: UTF-8
 LazyData: true
 Depends:
