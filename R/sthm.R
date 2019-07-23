@@ -34,13 +34,14 @@ draw_heatmap <- function(df, f = function(x) x, col = heat.colors(12),
   on.exit(options(warn = warn_old))
 
   # Data preparation:
-  time_vec <- unique(df[, sapply(df, class) == "Date"])
+  time_vec <- unique(df[, vapply(df, class, rep("a", length(class(df[[1]])))) ==
+                          "Date"])
   provinces_names <- Filter(is.character, df)
   provinces_names <- unique(as.vector(unlist(provinces_names)))
-  values <- sapply(provinces_names, function(x) {
+  values <- vapply(provinces_names, function(x) {
     sel <-  names(Filter(is.character, df))
     Filter(is.numeric, subset(df, df[, sel] == x))
-    })
+  }, list(0))
   values <- as.matrix(as.data.frame(values))
   values_transf <- f(values)
 
@@ -48,7 +49,7 @@ draw_heatmap <- function(df, f = function(x) x, col = heat.colors(12),
   opar <- par()
   owar <- getOption("warn")
   on.exit({
-    par(opar);
+    par(opar)
     options(warn = owar)
     })
   plt <- par("plt")

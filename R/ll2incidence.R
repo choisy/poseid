@@ -81,9 +81,10 @@ ll2incidence <- function(x, unit =
     if (d[2] > 1 | !any(class(x) %in% "data.frame")) {
       stop("x should be a vector or a 1-column data frame")
     } else {
-      cl <- as.vector(sapply(x, class))[1] # vectorize the data
+      cl <- vapply(x, class, rep("a", length(class(x[[1]])))) # vectorize
+      cl <- as.vector(cl)[1]
       # checking the class of the dates
-      if (!(cl %in% clnames)) stop(mess_class)
+      if (!(any(cl %in% clnames))) stop(mess_class)
       fct <- setNames(c(as.Date, as.POSIXct), clnames)[[cl]]
       x <- fct(as.character(x[, 1]))
     }

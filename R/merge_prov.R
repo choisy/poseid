@@ -40,8 +40,8 @@ select_date <- function(df, from, to) {
 #' @keywords internal
 #' @noRd
 select_events <- function(splits_lst, from, to) {
-  sel0 <- sapply(splits_lst, "[[", 3)
-  sel0 <- names(sort(sel0, decreasing = F))
+  sel0 <- vapply(splits_lst, "[[", 0, 3)
+  sel0 <- names(sort(sel0, decreasing = FALSE))
   splits_lst <- splits_lst[sel0]
   sel <- lapply(splits_lst, "[[", 3) > as.Date(from) &
     lapply(splits_lst, "[[", 3) <= as.Date(to)
@@ -444,7 +444,7 @@ The time range should overlap the date range of the data frame inputed: ",
     # Join df2
     if (is.data.frame(df2)) {
       if (length(args) == 1) {
-        sel2 <- grep(paste(names(df), collapse = "|"), names(df2), value = T)
+        sel2 <- grep(paste(names(df), collapse = "|"), names(df2), value = TRUE)
         df <- merge(df, df2[, c(args, sel2)], by = sel2, all.x = TRUE)
         sel <- c(sel, args)
       } else {
