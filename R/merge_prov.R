@@ -116,7 +116,8 @@ gather_sum <- function(df, FUN, df2, args, FUN2){
 
   # prepare the arguments in a good format
   args2 <- c("value", unlist(args))
-  targs_quoted <-  do.call(call, c("list", lapply(args2, as.name)), quote=TRUE)
+  targs_quoted <-  do.call(call, c("list", lapply(args2, as.name)),
+                           quote = TRUE)
 
   # Prepare the df in a good format and group the data by year and key for the
   # merging event
@@ -135,7 +136,7 @@ gather_sum <- function(df, FUN, df2, args, FUN2){
   #  them), if it's not the case, the merging event will be apply only
   # on the first df.
   if(is.data.frame(df2) & is.null(args) == FALSE){
-    args_quoted <- do.call(call, c("list", lapply(args, as.name)), quote=TRUE)
+    args_quoted <- do.call(call, c("list", lapply(args, as.name)), quote = TRUE)
     df %<>%
       summarise_(
         value = lazyeval::interp(~do.call(FUN, xs),
@@ -265,8 +266,8 @@ merge_province <- function(df, FUN, from, to, splits_lst,
             mutate(province = names(province_lst[1]))
           df <- bind_rows(tmp$`TRUE`, tmp$`FALSE`)
 
-        } else {df <- tmp$`FALSE`}
-      } else {df <- tmp$`FALSE`}
+        } else {df <- tmp$`FALSE`} #nocov
+      } else {df <- tmp$`FALSE`}  #nocov
     }
   } else {df}
 
@@ -424,7 +425,8 @@ The time range should overlap the date range of the data frame inputed: ",
 
     # Join df2
     if (is.data.frame(df2) == TRUE){
-      sel2 <- grep(names(df) %>% paste(collapse = "|"), names(df2), value = T)
+      sel2 <- grep(names(df) %>% paste(collapse = "|"), names(df2),
+                   value = TRUE)
       df <- suppressWarnings(left_join(df, df2[, c(args, sel2)], by = sel2))
       sel <- c(sel, args)
     }

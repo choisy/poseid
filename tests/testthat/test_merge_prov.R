@@ -505,5 +505,35 @@ test_that("`merge_prov` returns the correct values for monthly data", {
       100, 81, 56, 109, 287, 1317, 1615, 758, 472, 393, 272, 242, 63, 63, 155,
       267, 773, 668, 1304, 1152, 545, 505, 307, 102, 725, 111, 99, 105))
 
+  expect_error(merge_prov(chickenpox, from = "2117-01-01", to = "2119-01-01"))
+
 })
 
+test_that("`merge_prov` returns the correct error", {
+
+  df <- gso::content %>% filter(data_name == "education_3") %>%
+    .$data %>% .[[1]]
+
+  expect_error(merge_prov(df, from = "1990-01-01", df2 = "fail"), regexp = NULL)
+
+  expect_error(merge_prov(df, from = "2119-01-01"), regexp = NULL)
+
+  expect_error(merge_prov(df, from = "2017-01-01"), regexp = NULL)
+
+  expect_error(merge_prov(df, sel = "patate", from = "2007-01-01"))
+
+  df2 <- gso::content %>% filter(data_name == "demography_5") %>%
+    .$data %>% .[[1]]%>% dplyr::select(province, year, total) %>%
+    mutate(year = as.numeric(year))
+
+  expect_error(merge_prov(df, from = "1990", df2 = df2,
+                          args = c("total", "fail")), regexp = NULL)
+
+  expect_error(merge_prov(df, from = "1990", df2 = df2, args = "Fail"),
+               regexp = NULL)
+
+  names(df) <- c("oups", "its", "not", "going", "to", "work")
+
+  expect_warning(merge_prov(df, from = "1990-01-01"))
+
+})
