@@ -481,6 +481,7 @@ The time range should overlap the date range of the data frame inputed: ",
                          df2 = df2, args = args, FUN2 = FUN2, ... = ...)
     df <- df[which(duplicated(df) == FALSE), ]
     df <- df[order(df$province, df$year), ]
+    row.names(df) <- NULL
 
     # return the data frame containing only the column selected ordered
     if(any(names(df) %in% "month")){
@@ -497,5 +498,4 @@ Vietnam history and time, the data frame should contain at least the columns
 'province' and 'year'")
   }
   df
-  return(df)
 }
