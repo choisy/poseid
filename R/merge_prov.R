@@ -12,7 +12,7 @@
 #' @keywords internal
 #' @noRd
 select_date <- function(df, from, to) {
-  if (any(names(df) %in% "month")){
+  if (any(names(df) %in% "month")) {
     df <- transform(df, date = as.Date(paste(df$year, as.numeric(df$month),
                                                 01, sep = "-")))
   } else {
@@ -45,7 +45,7 @@ select_events <- function(splits_lst, from, to) {
   splits_lst <- splits_lst[sel0]
   sel <- lapply(splits_lst, "[[", 3) > as.Date(from) &
     lapply(splits_lst, "[[", 3) <= as.Date(to)
-  lst <- splits_lst[sel]
+  splits_lst[sel]
 }
 
 ################################################################################
@@ -67,7 +67,7 @@ province_splits <- function(lst_split) {
   provinces <- lapply(names(lst_split), function(x) {
     combined <- unlist(lapply(lst_split[x], "[[", 1))
     elements <- unlist(lapply(lst_split[x], "[[", 2))
-    province <- c(combined, elements)
+    c(combined, elements)
   })
   setNames(provinces, names(lst_split))
 }
@@ -111,7 +111,7 @@ prepare_data <- function(df) {
 #' @return A data frame with the same variables as \code{df}
 #' @keywords internal
 #' @noRd
-gather_sum <- function(df, FUN, df2, args, FUN2, ...){
+gather_sum <- function(df, FUN, df2, args, FUN2, ...) {
 
   # prepare the arguments in a good format
   args2 <- c("value", unlist(args))
@@ -124,7 +124,7 @@ gather_sum <- function(df, FUN, df2, args, FUN2, ...){
                 new.row.names = seq(1, dim(df)[1]))
   df <- df[, which(colnames(df) != "time")]
 
-  if (any(names(df) %in% "month")){
+  if (any(names(df) %in% "month")) {
     df <- split(df, list(df$year, df$month, df$key))
   } else {
     df <- split(df, list(df$year, df$key))
@@ -240,8 +240,7 @@ hanoi_function <- function(df, FUN, df2, args, FUN2, ...) {
 #' @keywords internal
 #' @noRd
 merge_province <- function(df, FUN, from, to, splits_lst,
-                           df2, args, FUN2, ...)
-{
+                           df2, args, FUN2, ...) {
   # select the list of event corresponding at the time range from - to
   lst_events <- select_events(splits_lst, from = from, to = to)
 
@@ -281,7 +280,7 @@ merge_province <- function(df, FUN, from, to, splits_lst,
         # after 2008
         if (anyNA(tmp$`TRUE`) == TRUE &
             sum(!province_lst[[1]] %in% "Ha Tay")
-              /length(province_lst[[1]]) != 1) {
+              / length(province_lst[[1]]) != 1) {
           limit <- format(lst_events[i][[1]]$date, "%Y")
           add_df <- tmp$`TRUE`[tmp$`TRUE`$province != "Ha Tay" &
                                  tmp$`TRUE`$year >= limit, ]
@@ -293,20 +292,20 @@ merge_province <- function(df, FUN, from, to, splits_lst,
         if (dim(tmp$`TRUE`)[1] > 0) {
           df <- apply_merge(tmp, names(province_lst[1]), FUN = FUN, df2 = df2,
                             args = args, FUN2 = FUN2, ... = ...)
-        } else {df <- tmp$`FALSE`}
-      } else {df <- tmp$`FALSE`}
+        } else df <- tmp$`FALSE`
+      } else df <- tmp$`FALSE`
     }
-  } else {df}
+  } else df
 
   # if the time range contains the split and the combine event of
   # Ha Noi & Ha Son Binh, does an additional merging on Hanoi and Ha Son Dinh.
-  if (from < as.Date("1992-01-01") & to > as.Date("2008-01-01")){
+  if (from < as.Date("1992-01-01") & to > as.Date("2008-01-01")) {
     df <- hanoi_function(df, FUN, df2 = df2, args = args,
                            FUN2 = FUN2, ... = ...)
   }
 
   # Problem of Ha Tay, NA value after 2008
-  if(from >= as.Date("2008-01-01") & is.element("Ha Tay", df$province)) {
+  if (from >= as.Date("2008-01-01") & is.element("Ha Tay", df$province)) {
     df <-  df[df$province != "Ha Tay", ]
   }
 
@@ -393,7 +392,7 @@ merge_prov <- function(df, sel = names(df), FUN = sum, from, to = "2017-12-31",
 
   # test df2 format, should be a data frame
   if (!is.null(df2) & !is.data.frame(df2)) {
-    stop(paste0("the parameter df2 is not in a good format: ",class(df2),
+    stop(paste0("the parameter df2 is not in a good format: ", class(df2),
                 ", df2 should be a data frame."))
     }
 
@@ -416,7 +415,8 @@ merge_prov <- function(df, sel = names(df), FUN = sum, from, to = "2017-12-31",
     if (any(names(df) %in% "month")) {
       df_date <-  transform(df, date = as.Date(
         paste(df$year, as.numeric(df$month), 01, sep = "-")))
-      if (!(min(df_date$date) <= to | max(df_date$date) <= to)) {
+      if (!(min(df_date$date) <= to | max(df_date$date) <= to) |
+          max(df_date$date) < from | min(df_date$date) > to) {
         stop("The time range selected is out of bound ", from, " / ", to, ".
 The time range should overlap the date range of the data frame inputed: ",
              min(df_date$date), " / ", max(df_date$date), call. = FALSE)
@@ -424,7 +424,7 @@ The time range should overlap the date range of the data frame inputed: ",
     } else {
       min_df <- as.Date(paste0(min(df$year), "-01-01"))
       max_df <- as.Date(paste0(max(df$year), "-12-31"))
-      if (!(min_df <= to | max_df <= to)) {
+      if (!(min_df <= to | max_df <= to) | max_df < from | min_df > to) {
         stop("The time range selected is out of bound ", from, " / ", to, ".
 The time range should overlap the date range of the data frame inputed: ",
              min_df, " / ", max_df, call. = FALSE)
@@ -484,7 +484,7 @@ The time range should overlap the date range of the data frame inputed: ",
     row.names(df) <- NULL
 
     # return the data frame containing only the column selected ordered
-    if(any(names(df) %in% "month")){
+    if (any(names(df) %in% "month")) {
       df <- df[, c("province", "year", "month", "key", "value")]
     } else {
       df <- df[, c("province", "year", "key", "value")]

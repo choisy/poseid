@@ -15,9 +15,3 @@
 #' @docType package
 #' @name poseid
 NULL
-
-## quiets concerns of R CMD check for the values that appear in pipelines
-if(getRversion() >= "2.15.1")  utils::globalVariables(c(".", "incidence", "key",
-                                                        "middle", "month",
-                                                        "name", "province",
-                                                        "value"))
