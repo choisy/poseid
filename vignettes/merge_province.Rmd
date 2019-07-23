@@ -128,7 +128,7 @@ For that, we can use the data frame `pop_size` provides in the `gso` package. Th
 
 ```{r}
 pop_size <- gso::content %>% filter(data_name == "demography_5") %>% .$data %>% .[[1]]
-pop_size <- mutate_if(pop_size, !is.element(names(pop_size), c("province", "year")), funs(1000 * .))
+pop_size <- mutate_if(pop_size, !is.element(names(pop_size), c("province", "year")), list(~ 1000 * .))
 head(pop_size)
 ```
 
