@@ -169,7 +169,7 @@ test_that("`merge_prov` applies weighted mean correcty", {
   test <- gso::content %>% filter(data_name == "agriculture_22") %>%
     .$data %>% .[[1]]
   pop_size <- gso::content %>% filter(data_name == "demography_5") %>%
-    .$data %>% .[[1]]%>% dplyr::select(province, year, total) %>%
+    .$data %>% .[[1]] %>% dplyr::select(province, year, total) %>%
     mutate(year = as.numeric(year))
 
 
@@ -185,8 +185,8 @@ test_that("`merge_prov` applies weighted mean correcty", {
   expect_equal(df %>%
           filter(province == "Ha Noi", year == 2007) %>% .$value,
           weighted.mean(c(
-            test %>% filter(province == "Ha Noi", year == 2007) %>% .[,3],
-            test %>% filter(province == "Ha Tay", year == 2007) %>% .[,3]),
+            test %>% filter(province == "Ha Noi", year == 2007) %>% .[, 3],
+            test %>% filter(province == "Ha Tay", year == 2007) %>% .[, 3]),
             c(pop_size %>% filter(province == "Ha Noi", year == 2007) %>%
                 .["total"],
               pop_size %>% filter(province == "Ha Tay", year == 2007) %>%
@@ -196,8 +196,8 @@ test_that("`merge_prov` applies weighted mean correcty", {
   expect_equal(df %>%
           filter(province == "Can Tho", year == 2005) %>% .$value,
           weighted.mean(c(
-            test %>% filter(province == "Can Tho", year == 2005) %>% .[,3],
-            test %>% filter(province == "Hau Giang", year == 2005) %>% .[,3]),
+            test %>% filter(province == "Can Tho", year == 2005) %>% .[, 3],
+            test %>% filter(province == "Hau Giang", year == 2005) %>% .[, 3]),
             c(pop_size %>% filter(province == "Can Tho", year == 2005) %>%
                 .["total"],
               pop_size %>% filter(province == "Hau Giang", year == 2005) %>%
@@ -208,8 +208,8 @@ test_that("`merge_prov` applies weighted mean correcty", {
   expect_equal(df %>%
           filter(province == "Dack Lak", year == 2006) %>% .$value,
                          weighted.mean(c(
-          test %>% filter(province == "Dak Lak", year == 2006) %>% .[,3],
-          test %>% filter(province == "Dak Nong", year == 2006) %>% .[,3]),
+          test %>% filter(province == "Dak Lak", year == 2006) %>% .[, 3],
+          test %>% filter(province == "Dak Nong", year == 2006) %>% .[, 3]),
           c(pop_size %>% filter(province == "Dak Lak", year == 2006) %>%
               .["total"],
             pop_size %>% filter(province == "Dak Nong", year == 2006) %>%
@@ -220,7 +220,7 @@ test_that("`merge_prov` applies weighted mean correcty", {
   expect_equal(df %>%
           filter(province == "Yen Bai", year == 2004) %>% .$value,
                          weighted.mean(
-          test %>% filter(province == "Yen Bai", year == 2004) %>% .[,3],
+          test %>% filter(province == "Yen Bai", year == 2004) %>% .[, 3],
           pop_size %>% filter(province == "Yen Bai", year == 2004) %>%
             .["total"]))
 
@@ -237,8 +237,8 @@ test_that("`merge_prov` applies weighted mean correcty", {
   expect_equal(df %>%
           filter(province == "Hau Giang", year == 2002) %>% .$value,
                          weighted.mean(c(
-          test %>% filter(province == "Can Tho", year == 2002) %>% .[,3],
-          test %>% filter(province == "Soc Trang", year == 2002) %>% .[,3]),
+          test %>% filter(province == "Can Tho", year == 2002) %>% .[, 3],
+          test %>% filter(province == "Soc Trang", year == 2002) %>% .[, 3]),
           c(pop_size %>% filter(province == "Can Tho", year == 2002) %>%
               .["total"],
             pop_size %>% filter(province == "Soc Trang", year == 2002) %>%
@@ -249,9 +249,9 @@ test_that("`merge_prov` applies weighted mean correcty", {
   expect_equal(df %>%
           filter(province == "Hau Giang", year == 2005) %>% .$value,
                          weighted.mean(c(
-          test %>% filter(province == "Can Tho", year == 2005) %>% .[,3],
-          test %>% filter(province == "Hau Giang", year == 2005) %>% .[,3],
-          test %>% filter(province == "Soc Trang", year == 2005) %>% .[,3]),
+          test %>% filter(province == "Can Tho", year == 2005) %>% .[, 3],
+          test %>% filter(province == "Hau Giang", year == 2005) %>% .[, 3],
+          test %>% filter(province == "Soc Trang", year == 2005) %>% .[, 3]),
           c(pop_size %>% filter(province == "Can Tho", year == 2005) %>%
               .["total"],
             pop_size %>% filter(province == "Hau Giang", year == 2005) %>%
@@ -264,8 +264,8 @@ test_that("`merge_prov` applies weighted mean correcty", {
   expect_equal(df %>%
           filter(province == "Ha Noi", year == 2010) %>% .$value,
                          weighted.mean(c(
-          test %>% filter(province == "Ha Noi", year == 2010) %>% .[,3],
-          test %>% filter(province == "Hoa Binh", year == 2010) %>% .[,3]),
+          test %>% filter(province == "Ha Noi", year == 2010) %>% .[, 3],
+          test %>% filter(province == "Hoa Binh", year == 2010) %>% .[, 3]),
           c(pop_size %>% filter(province == "Ha Noi", year == 2010) %>%
               .["total"],
             pop_size %>% filter(province == "Hoa Binh", year == 2010) %>%
@@ -276,9 +276,9 @@ test_that("`merge_prov` applies weighted mean correcty", {
   expect_equal(df %>%
           filter(province == "Ha Noi", year == 2007) %>% .$value,
                          weighted.mean(c(
-          test %>% filter(province == "Ha Noi", year == 2007) %>% .[,3],
-          test %>% filter(province == "Ha Tay", year == 2007) %>% .[,3],
-          test %>% filter(province == "Hoa Binh", year == 2007) %>% .[,3]),
+          test %>% filter(province == "Ha Noi", year == 2007) %>% .[, 3],
+          test %>% filter(province == "Ha Tay", year == 2007) %>% .[, 3],
+          test %>% filter(province == "Hoa Binh", year == 2007) %>% .[, 3]),
           c(pop_size %>% filter(province == "Ha Noi", year == 2007) %>%
               .["total"],
             pop_size %>% filter(province == "Ha Tay", year == 2007) %>%
@@ -299,10 +299,10 @@ test_that("`merge_prov` applies weighted mean correcty", {
   expect_equal(df %>%
           filter(province == "Binh Tri Thien", year == 2007) %>% .$value,
                          weighted.mean(c(
-          test %>% filter(province == "Quang Binh", year == 2007) %>% .[,3],
-          test %>% filter(province == "Quang Tri", year == 2007) %>% .[,3],
+          test %>% filter(province == "Quang Binh", year == 2007) %>% .[, 3],
+          test %>% filter(province == "Quang Tri", year == 2007) %>% .[, 3],
           test %>% filter(province == "Thua Thien Hue", year == 2007) %>%
-            .[,3]),
+            .[, 3]),
           c(pop_size %>% filter(province == "Quang Binh", year == 2007) %>%
               .["total"],
             pop_size %>% filter(province == "Quang Tri", year == 2007) %>%
@@ -441,7 +441,7 @@ test_that("`merge_prov` returns the correct values for monthly data", {
     merge_prov(chickenpox, from = "2000-01-01", to = "2000-12-01") %>%
       dplyr::filter(province == "Cao Bang", key == "incidence_chickenpox") %>%
       .$value,
-    c(0, 21, 0, 0, 0 ,7 , 0, 0, 1, 0, 0, 0))
+    c(0, 21, 0, 0, 0, 7, 0, 0, 1, 0, 0, 0))
 
   expect_equal(
     merge_prov(chickenpox, from = "1991-01-01", to = "1992-12-01") %>%
@@ -523,7 +523,7 @@ test_that("`merge_prov` returns the correct error", {
   expect_error(merge_prov(df, sel = "patate", from = "2007-01-01"))
 
   df2 <- gso::content %>% filter(data_name == "demography_5") %>%
-    .$data %>% .[[1]]%>% dplyr::select(province, year, total) %>%
+    .$data %>% .[[1]] %>% dplyr::select(province, year, total) %>%
     mutate(year = as.numeric(year))
 
   expect_error(merge_prov(df, from = "1990", df2 = df2,

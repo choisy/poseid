@@ -26,8 +26,7 @@
 #' @noRd
 draw_heatmap <- function(df, f = function(x) x, col = heat.colors(12),
                          col_na = "grey", x = .85, show_legend = FALSE,
-                         map = NULL, xm = .2)
-{
+                         map = NULL, xm = .2) {
 
   # Graphic parameters
   warn_old <- unlist(options("warn"))
@@ -39,10 +38,10 @@ draw_heatmap <- function(df, f = function(x) x, col = heat.colors(12),
     unlist %>% as.vector %>%
     as.Date(origin = "1970-01-01") %>%
     unique
-  provinces_names <- select_if(df,is.character) %>%
+  provinces_names <- select_if(df, is.character) %>%
     unlist %>% as.vector %>%
     unique
-  values <- sapply(provinces_names, function(x){
+  values <- sapply(provinces_names, function(x) {
     sel <-  names(select_if(df, is.character))
     subset(df, df[, sel] == x) %>%
                      select_if(is.numeric)
@@ -53,8 +52,10 @@ draw_heatmap <- function(df, f = function(x) x, col = heat.colors(12),
   # Options and graphical parameters:
   opar <- par()
   owar <- getOption("warn")
-  on.exit({par(opar);
-    options(warn = owar)})
+  on.exit({
+    par(opar)
+    options(warn = owar)
+    })
   plt <- par("plt")
   options(warn = -1)
 
@@ -65,7 +66,7 @@ draw_heatmap <- function(df, f = function(x) x, col = heat.colors(12),
   legend <- c(0, as.numeric(sub("[^,]*,([^]]*)\\]", "\\1", labels)))
 
   # to print the heatmap with the map of vietnam
-  if(is.null(map) == FALSE){
+  if (is.null(map) == FALSE) {
 
     # graphic parameters
     plt[1:2] <- c(0, xm)
@@ -81,14 +82,14 @@ draw_heatmap <- function(df, f = function(x) x, col = heat.colors(12),
     centroids <- sp::coordinates(map) %>% data.frame()
     centroids$province <- map@data[, 1]
     ordered <- data.frame(province = provinces_names,
-                          order = seq(1,length(provinces_names))) %>%
+                          order = seq(1, length(provinces_names))) %>%
       inner_join(centroids, by = "province") %>%
       arrange(order)
     X1 <- ordered$X1
     Y1 <- ordered$X2
     X2 <- usr[2]
     step <-  (usr[4] - usr[3]) / length(provinces_names)
-    Y2 <- seq(from = usr[3] + step/2, to = usr[4] - step/2, by = step)
+    Y2 <- seq(from = usr[3] + step / 2, to = usr[4] - step / 2, by = step)
     segments(X1, Y1, X2, Y2, col = "grey")
 
 
@@ -250,26 +251,25 @@ draw_heatmap <- function(df, f = function(x) x, col = heat.colors(12),
 sthm <- function(df,
                  f = function(x) x, col = heat.colors(12),
                  col_na = "grey",  x = .85, show_legend = FALSE,
-                 map = NULL, xm = .2)
-{
+                 map = NULL, xm = .2) {
   # Tests input
   # number of colums
-  if (ncol(df) != 3){
+  if (ncol(df) != 3) {
     stop ("Invalid number of column, 'df' should only have three columns")
   }
   # class
-  if (is.character(df[,1]) == FALSE & is.character(df[,2]) == FALSE &
-      is.character(df[,3]) == FALSE){
+  if (is.character(df[, 1]) == FALSE & is.character(df[, 2]) == FALSE &
+      is.character(df[, 3]) == FALSE) {
     stop("Invalid 'df', one of the column needs to be of class 'character', one
          of class 'Date' and the last of class 'numeric'")
   }
-  if (class(df[,1]) != "Date" & class(df[,2]) != "Date" &
-      class(df[,3])!= "Date"){
+  if (class(df[, 1]) != "Date" & class(df[, 2]) != "Date" &
+      class(df[, 3]) != "Date") {
     stop("Invalid 'df', one of the column needs to be of class 'character', one
          of class 'Date' and the last of class 'numeric'")
   }
-  if (is.numeric(df[,1]) == FALSE & is.numeric(df[,2]) == FALSE &
-      is.numeric(df[,3]) == FALSE){
+  if (is.numeric(df[, 1]) == FALSE & is.numeric(df[, 2]) == FALSE &
+      is.numeric(df[, 3]) == FALSE) {
     stop("Invalid 'df', one of the column needs to be of class 'character', one
          of class 'Date' and the last of class 'numeric'")
   }
@@ -277,4 +277,3 @@ sthm <- function(df,
   draw_heatmap(df, f = f, col = col, col_na = col_na, x = x,
                show_legend = show_legend, map = map, xm = xm)
 }
-

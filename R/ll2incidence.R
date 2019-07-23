@@ -81,17 +81,17 @@ ll2incidence <- function(x, unit =
 
 # checking the format and class of data x:
   d <- dim(x)
-  if(is.null(d)) {  # if x is a vector:
-    # checking the class of the dates
-    if(!(class(x)[1] %in% clnames)) stop(mess_class)
-  } else {          # if x is not a vector:
-    # make sure it is a 1-column data frame
-    if(d[2] > 1 | !any(class(x) %in% "data.frame")) {
+  if (is.null(d)) {
+    # if x is a vector: checking the class of the dates
+    if (!(class(x)[1] %in% clnames)) stop(mess_class)
+  } else {
+    # if x is not a vector:make sure it is a 1-column data frame
+    if (d[2] > 1 | !any(class(x) %in% "data.frame")) {
       stop("x should be a vector or a 1-column data frame")
-    } else {        # vectorize the data:
-      cl <- as.vector(sapply(x, class))[1]
+    } else {
+      cl <- as.vector(sapply(x, class))[1]  # vectorize the data:
       # checking the class of the dates
-      if(!(cl %in% clnames)) stop(mess_class)
+      if (!(cl %in% clnames)) stop(mess_class)
       fct <- setNames(c(as.Date, as.POSIXct), clnames)[[cl]]
       x %<>% mutate_all(as.character) %>% unlist %>% fct
     }
@@ -111,4 +111,3 @@ ll2incidence <- function(x, unit =
            middle = start + (end - start) / 2) %>%
     select(start, middle, end, incidence)
 }
-

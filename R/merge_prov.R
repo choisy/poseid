@@ -12,7 +12,7 @@
 #' @keywords internal
 #' @noRd
 select_date <- function(df, from, to) {
-  if (any(names(df) %in% "month")){
+  if (any(names(df) %in% "month")) {
     df %<>% mutate(date = as.Date(paste(year, as.numeric(month),
                                         01, sep = "-")))
   } else {
@@ -42,11 +42,11 @@ select_date <- function(df, from, to) {
 #' @noRd
 select_events <- function(splits_lst, from, to) {
   sel0 <- purrr::map(splits_lst, 3) %>% unlist %>%
-    sort(decreasing = F) %>% names()
+    sort(decreasing = FALSE) %>% names()
   splits_lst <- splits_lst[sel0]
   sel <- purrr::map(splits_lst, 3) > as.Date(from) &
     purrr::map(splits_lst, 3) <= as.Date(to)
-  lst <- splits_lst[sel]
+  splits_lst[sel]
 }
 
 ################################################################################
@@ -68,8 +68,9 @@ province_splits <- function(lst_split) {
   provinces <- lapply(names(lst_split), function(x) {
     combined <- purrr::map(lst_split[x], 1) %>% unlist() %>% as.vector()
     elements <- purrr::map(lst_split[x], 2) %>% unlist() %>% as.vector()
-    province <- c(combined, elements)
-  }) %>% setNames(names(lst_split))
+    c(combined, elements)
+  }) %>%
+    setNames(names(lst_split))
   provinces
 }
 
@@ -112,7 +113,7 @@ prepare_data <- function(df) {
 #' @return A data frame with the same variables as \code{df}
 #' @keywords internal
 #' @noRd
-gather_sum <- function(df, FUN, df2, args, FUN2){
+gather_sum <- function(df, FUN, df2, args, FUN2) {
 
   # prepare the arguments in a good format
   args2 <- c("value", unlist(args))
@@ -125,7 +126,7 @@ gather_sum <- function(df, FUN, df2, args, FUN2){
     gather(name, value, contains("value")) %>%
     select(-name)
 
-  if (any(names(df) %in% "month")){
+  if (any(names(df) %in% "month")) {
     df %<>% group_by(year, month, key)
   } else {
     df %<>% group_by(year, key)
@@ -135,7 +136,7 @@ gather_sum <- function(df, FUN, df2, args, FUN2){
   # the both of them (with the possibility to apply two different function on
   #  them), if it's not the case, the merging event will be apply only
   # on the first df.
-  if(is.data.frame(df2) & is.null(args) == FALSE){
+  if (is.data.frame(df2) & is.null(args) == FALSE) {
     args_quoted <- do.call(call, c("list", lapply(args, as.name)), quote = TRUE)
     df %<>%
       summarise_(
@@ -207,12 +208,11 @@ hanoi_function <- function(df, FUN, df2, args, FUN2) {
 #' @keywords internal
 #' @noRd
 merge_province <- function(df, FUN, from, to, splits_lst,
-                           df2, args, FUN2)
-{
+                           df2, args, FUN2) {
   # select the list of event corresponding at the time range from - to
   lst_events <- select_events(splits_lst, from = from, to = to)
 
-  if (from < as.Date("1992-01-01") & to > as.Date("2008-01-01")){
+  if (from < as.Date("1992-01-01") & to > as.Date("2008-01-01")) {
     lst_events$`Ha Son Binh`$elements <- c("Hoa Binh", "Ha Noi")
     lst_events$`Ha Son Binh`$combined <- c("Ha Noi")
   }
@@ -221,17 +221,17 @@ merge_province <- function(df, FUN, from, to, splits_lst,
   if (length(lst_events) > 0) {
 
     for (i in rev(seq_along(lst_events))) {
-         #c(20:2)){
       province_lst <- province_splits(lst_events[i])
       tmp <- split(df, df$province %in% province_lst[[1]])
 
-      if (tmp$`TRUE` %>% length > 0){
+      if (tmp$`TRUE` %>% length > 0) {
 
         # Take care of the problem of NA for province before year of creation,
         # some dataset have some for some provinces before their year of
         # creation
         if (anyNA(tmp$`TRUE`) == TRUE &
-            sum(!province_lst[[1]] %in% "Ha Tay") / length(province_lst[[1]]) == 1){
+            sum(!province_lst[[1]] %in% "Ha Tay") /
+            length(province_lst[[1]]) == 1) {
           # Add the data of the province existing before the split event to the
           # data frame containing the other province none of interest at this
           # point and filter the data  to keep only the split event data and re-
@@ -249,7 +249,7 @@ merge_province <- function(df, FUN, from, to, splits_lst,
         # after 2008
         if (anyNA(tmp$`TRUE`) == TRUE &
             sum(!province_lst[[1]] %in% "Ha Tay")
-              /length(province_lst[[1]]) != 1){
+              / length(province_lst[[1]]) != 1) {
           limit <- lst_events[i][[1]]$date %>% lubridate::year(.)
           add_df <- tmp$`TRUE` %>%
             dplyr::filter(province != "Ha Tay" & year >= limit)
@@ -259,26 +259,26 @@ merge_province <- function(df, FUN, from, to, splits_lst,
         }
 
         # Merge back together the province
-        if (tmp$`TRUE` %>% dim %>% .[1] > 0){
+        if (tmp$`TRUE` %>% dim %>% .[1] > 0) {
           tmp$`TRUE` %<>%
             prepare_data %>%
             gather_sum(FUN, df2 = df2, args = args, FUN2 = FUN2) %>%
             mutate(province = names(province_lst[1]))
           df <- bind_rows(tmp$`TRUE`, tmp$`FALSE`)
 
-        } else {df <- tmp$`FALSE`} #nocov
-      } else {df <- tmp$`FALSE`}  #nocov
+        } else df <- tmp$`FALSE` #nocov
+      } else df <- tmp$`FALSE` #nocov
     }
-  } else {df}
+  } else df
 
   # if the time range contains the split and the combine event of
   # Ha Noi & Ha Son Binh, does an additional merging on Hanoi and Ha Son Dinh.
-  if (from < as.Date("1992-01-01") & to > as.Date("2008-01-01")){
+  if (from < as.Date("1992-01-01") & to > as.Date("2008-01-01")) {
     df %<>% hanoi_function(FUN, df2 = df2, args = args, FUN2 = FUN2)
   }
 
   # Problem of Ha Tay, NA value after 2008
-  if(from >= as.Date("2008-01-01") & is.element("Ha Tay", df$province)) {
+  if (from >= as.Date("2008-01-01") & is.element("Ha Tay", df$province)) {
     df %<>% filter(province != "Ha Tay")
   }
 
@@ -365,12 +365,12 @@ merge_province <- function(df, FUN, from, to, splits_lst,
 #'
 #' @export
 merge_prov <- function(df, sel = names(df), FUN = sum, from, to = "2017-12-31",
-                       diseases = NULL, df2 = NULL, args = NULL, FUN2 = sum){
+                       diseases = NULL, df2 = NULL, args = NULL, FUN2 = sum) {
 
   # test df2 format, should be a data frame
-  if (is.null(df2) == FALSE){
-    if(is.data.frame(df2) == FALSE){
-      stop(paste0("the parameter df2 is not in a good format: ",class(df2),
+  if (is.null(df2) == FALSE) {
+    if (is.data.frame(df2) == FALSE) {
+      stop(paste0("the parameter df2 is not in a good format: ", class(df2),
                   ", df2 should be a data frame."))
     }
   }
@@ -378,25 +378,25 @@ merge_prov <- function(df, sel = names(df), FUN = sum, from, to = "2017-12-31",
   # If the df contain at least a column "province" and a column "year",
   # gather and merge the data accordingly with the time serie implemented and
   # the history of Vietnam selected.
-  if (grep("province|year", names(df)) %>% length >= 2){
+  if (grep("province|year", names(df)) %>% length >= 2) {
 
     # get from and to in the right format
     from %<>% paste0("-01-01") %>% as.Date
     to %<>% paste0("-12-31") %>% as.Date
 
     # test year range
-    if(from > to ){
+    if (from > to ) {
       stop("The time range selected is incorrect (from > to): ",
            from, " > ", to, ".", call. = FALSE)
     }
 
     # Test Intervals overlaps
     int <-  lubridate::interval(ymd(from), ymd(to))
-    if(any(names(df) %in% "month")){
+    if (any(names(df) %in% "month")) {
       df_date <-  mutate(df, date = as.Date(paste(year, as.numeric(month),
                                           01, sep = "-")))
       int2 <-  lubridate::interval(min(df_date$date), max(df_date$date))
-      if(int_overlaps(int, int2) == FALSE){
+      if (int_overlaps(int, int2) == FALSE) {
         stop("The time range selected is out of bound ", from, " / ", to, ".
 The time range should overlap the date range of the data frame inputed: ",
              min(df_date$date), " / ", max(df_date$date), call. = FALSE)
@@ -405,7 +405,7 @@ The time range should overlap the date range of the data frame inputed: ",
       min_df <- paste0(min(df$year), "-01-01") %>% as.Date
       max_df <- paste0(max(df$year), "-12-31") %>% as.Date
       int2 <-  lubridate::interval(min_df, max_df)
-      if(int_overlaps(int, int2) == FALSE){
+      if (int_overlaps(int, int2) == FALSE) {
         stop("The time range selected is out of bound ", from, " / ", to, ".
 The time range should overlap the date range of the data frame inputed: ",
              min_df, " / ", max_df, call. = FALSE)
@@ -417,14 +417,14 @@ The time range should overlap the date range of the data frame inputed: ",
     # diseases
     if (is.null(diseases) == FALSE &
         grep(paste(diseases, collapse = "|"), "hepatitis|amoebiasis") %>%
-        length() != 0){
+        length() != 0) {
       spl <- ah_splits
     } else {
       spl <- splits
     }
 
     # Join df2
-    if (is.data.frame(df2) == TRUE){
+    if (is.data.frame(df2) == TRUE) {
       sel2 <- grep(names(df) %>% paste(collapse = "|"), names(df2),
                    value = TRUE)
       df <- suppressWarnings(left_join(df, df2[, c(args, sel2)], by = sel2))
@@ -433,17 +433,16 @@ The time range should overlap the date range of the data frame inputed: ",
 
     # Test and select the column containing the information necessary for the
     # merging and the column selected in the parameter 'sel'.
-    if (any(sel %in% names(df)) == FALSE){
-      stop(
-"The parameters 'sel' should contain a vector of character containing the names of the column to merge",
-call. = FALSE)
+    if (any(sel %in% names(df)) == FALSE) {
+      stop( "The parameters 'sel' should contain a vector of character ",
+            "containing the names of the column to merge", call. = FALSE)
     }
     sel <- c("province", "year", sel) %>% unique
     gather_sel <-  c("province", "year") %>% unique
-    if(any(names(df) %in% "month")){
+    if (any(names(df) %in% "month")) {
       gather_sel <- c(gather_sel, "month") %>% unique
     }
-    if(is.null(args) == FALSE){
+    if (is.null(args) == FALSE) {
       gather_sel <- c(gather_sel, args) %>% unique
     }
 
@@ -460,7 +459,7 @@ call. = FALSE)
       arrange(province, year)
 
     # return the data frame containing only the column selected ordered
-    if(any(names(df) %in% "month")){
+    if (any(names(df) %in% "month")) {
       df %<>% select(province, year, month, key, value)
     } else {
       df %<>% select(province, year, key, value)

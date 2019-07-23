@@ -57,16 +57,16 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
   y1 <- y - (0:(length(legend) - 1)) * h
 
   # built the legend rectangles
-  if(length(legend) > 12){
+  if (length(legend) > 12) {
     y1 <- seq(y, tail(y1, 1), length.out = length(col))
   }
 
-  for(i in seq_len(length(legend) - 1))
+  for (i in seq_len(length(legend) - 1))
     rect(xleft, y1[i + 1], xright, y1[i], col = col[i], border = NA)
     rect(xleft, tail(y1, 1), xright, y1[1])
 
   # legend text and tick
-  if(length(col) > 12){
+  if (length(col) > 12) {
     legend %<>% pretty()
     y1 <- seq(y, tail(y1, 1), length.out = length(legend))
   }
@@ -83,13 +83,13 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
   y2 <- seq(y, tail(y1, 1), length.out = length(legend))
 
   # If want NA, add a rectangle of the color NA
-  if(length(col_na) != 0) {
-    if(length(col) > 12){
+  if (length(col_na) != 0) {
+    if (length(col) > 12) {
       h <- (max(y1) - min(y1)) * size_na
     } else {
       h <- y1[1] - y1[2]
     }
-    rect(xleft, tail(y1, 1) - h , xright, tail(y1, 1) - 2 * h, col = col_na)
+    rect(xleft, tail(y1, 1) - h, xright, tail(y1, 1) - 2 * h, col = col_na)
   }
 
   if (length(col_na) > 0){
@@ -99,24 +99,24 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
     # legend with NA on the left or right side
     if (postext == "left") {
       text(x + size_legend, y2,
-           c(format(round(rev(legend),n_round), nsmall = n_round), "", "NA"),
+           c(format(round(rev(legend), n_round), nsmall = n_round), "", "NA"),
            adj = 1, ...)
     }
     if (postext == "right") {
-      text(xright + tl + s , y2,
-           c(format(round(rev(legend),n_round), nsmall = n_round), "", "NA"),
+      text(xright + tl + s, y2,
+           c(format(round(rev(legend), n_round), nsmall = n_round), "", "NA"),
            adj = 0, ...)
     }
 
   } else {
     if (postext == "left") {
       text(x + size_legend, y2,
-           format(round(rev(legend),n_round), nsmall = n_round),
+           format(round(rev(legend), n_round), nsmall = n_round),
            adj = 1, ...)
     }
     if (postext == "right") {
-      text(xright + tl + s , y2,
-           format(round(rev(legend),n_round), nsmall = n_round),
+      text(xright + tl + s, y2,
+           format(round(rev(legend), n_round), nsmall = n_round),
            adj = 0, ...)
     }
   }
@@ -245,16 +245,16 @@ legend2 <- function(x, y, legend, col, locate = FALSE, pos = "top-left",
 
   # Tests
   pos_text <- c("left", "right")
-  if(!is.element(postext, pos_text)){
+  if (!is.element(postext, pos_text)) {
     stop("The parameters 'postext' can only contain: 'left' or 'right'")
   }
-  if(!is.logical(locate)){
+  if (!is.logical(locate)) {
     stop("The parameters 'locate' can only be a logical: 'TRUE' or 'FALSE'")
   }
 
   # Graphic paramaters
   omar <- par("mar")
-  par(mar = c(2,2,2,1))
+  par(mar = c(2, 2, 2, 1))
   on.exit(par(mar = omar))
 
   # size of the top character (width height)
@@ -265,15 +265,15 @@ legend2 <- function(x, y, legend, col, locate = FALSE, pos = "top-left",
 
     # Test
     pos_legend <- c("top-left", "top-right", "bottom-left", "bottom-right")
-    if(!is.element(pos, pos_legend)){
+    if (!is.element(pos, pos_legend)) {
       stop("The parameters 'pos' can only contain: 'top-left', 'top-right',
            'bottom-left' or 'bottom-right'")
     }
 
     # Graphical parameters
     usr <- par("usr")
-    xr <- (usr[2] - usr[1])/27
-    yr <- (usr[4] - usr[3])/27
+    xr <- (usr[2] - usr[1]) / 27
+    yr <- (usr[4] - usr[3]) / 27
     xlim <- c(usr[1] + xr, usr[2] - xr)
     ylim <- c(usr[3] + yr, usr[4] - yr)
 
@@ -282,24 +282,24 @@ legend2 <- function(x, y, legend, col, locate = FALSE, pos = "top-left",
       y <- ylim[2]
     }
     if (pos == "top-right"){
-      x <- xlim[2] - w - size_legend - tl -s
+      x <- xlim[2] - w - size_legend - tl - s
       y <- ylim[2]
     }
     if (pos == "bottom-left"){
       x <- xlim[1]
-      y <- ylim[1] + ((length(legend)-1)* h + 2 * h)
+      y <- ylim[1] + ( (length(legend) - 1) * h + 2 * h)
     }
     if (pos == "bottom-right"){
-      x <- xlim[2] - w - size_legend -tl - s
-      y <- ylim[1] + ((length(legend)-1)* h + 2 * h)
+      x <- xlim[2] - w - size_legend - tl - s
+      y <- ylim[1] + ( (length(legend) - 1) * h + 2 * h)
     }
 
     }
-
-  if (locate == TRUE){ #nocov start
+  #nocov start
+  if (locate == TRUE) {
     coordinates <- locator(1)
-    x = coordinates$x
-    y = coordinates$y
+    x <- coordinates$x
+    y <- coordinates$y
   } #nocov end
 
   square_legend(x, y, legend = legend, col = col, n_round = n_round,

@@ -39,7 +39,7 @@ choropleth_v1 <- function (df, col_name, col = heat.colors(1), col_na = "grey",
   sp::plot(df, col = pal2, ...)
 
   # print a legend
-  legend <- rep(classint,2)
+  legend <- rep(classint, 2)
   attr(legend, "colors") <- pal
   invisible(legend)
 }
@@ -173,7 +173,7 @@ choromap <- function(df, map, fixedBreaks, col = heat.colors(6),
   # graph parameters
   ofig <- par("fig")
   omar <- par("mar")
-  par <- par(mar = c(2,2,2,2))
+  par <- par(mar = c(2, 2, 2, 2))
   on.exit(par(fig = ofig, mar = omar))
 
   # test entry
@@ -182,11 +182,11 @@ choromap <- function(df, map, fixedBreaks, col = heat.colors(6),
     stop ("Invalid number of column, 'df' should only have two columns")
   }
   # class
-  if (is.character(df[,1]) == FALSE & is.character(df[,2]) == FALSE){
+  if (is.character(df[, 1]) == FALSE & is.character(df[, 2]) == FALSE){
     stop("Invalid 'df', one of the column needs to be of class 'character' and
          the other of class 'numeric'")
   }
-  if (is.numeric(df[,1]) == FALSE & is.numeric(df[,2]) == FALSE){
+  if (is.numeric(df[, 1]) == FALSE & is.numeric(df[, 2]) == FALSE){
     stop("Invalid 'df', one of the column needs to be of class 'character' and
          the other of class 'numeric'")
   }
@@ -211,12 +211,10 @@ choromap <- function(df, map, fixedBreaks, col = heat.colors(6),
     names()
 
   # draw a choropleth map
-  if(length(unique(fixedBreaks)) == 1)
-  {
+  if (length(unique(fixedBreaks)) == 1) {
     choropleth_v1(admin1, val_name, col = col, col_na = col_na, ...)
 
-  } else
-  {
+  } else {
     choropleth_fix(admin1, val_name, col = col, col_na = col_na,
                    fixedBreaks = fixedBreaks, ...)
   }
