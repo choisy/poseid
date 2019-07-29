@@ -55,34 +55,30 @@
 #'
 #' @export
 breaks <- function(df, col_name, n = 6, style = "quantile", pal = NULL,
-                   fixedBreaks = NULL, distribution = FALSE){
+                   fixedBreaks = NULL, distribution = FALSE) {
 
   # style input test
   style_entry <- c("fixed", "sd", "equal", "pretty", "quantile", "kmeans",
                    "hclust", "bclust", "fisher", "jenks")
-  if(!is.element(style, style_entry)){
+  if (!is.element(style, style_entry)) {
     stop("The parameter 'style' can only contain: one of 'fixed', 'sd',
          'equal', 'pretty', 'quantile', 'kmeans', 'hclust', 'blust', 'fisher' or
          'jenks'. For more information, please look at the package 'classInt'.")
   }
 
-  if(is.null(fixedBreaks) == FALSE & length(fixedBreaks) != n + 1){
+  if (is.null(fixedBreaks) == FALSE & length(fixedBreaks) != n + 1) {
     stop("The parameter 'fixedBreaks' should be of length 'n' + 1 ")
   }
 
-  if(is.null(fixedBreaks) == FALSE & is.null(pal) == FALSE &
-     length(fixedBreaks) != length(pal) + 1){
+  if (is.null(fixedBreaks) == FALSE & is.null(pal) == FALSE &
+     length(fixedBreaks) != length(pal) + 1) {
     stop("The parameter 'fixedBreaks' should be equal to the length of
          'pal' + 1 ")
   }
 
-  value <- df %>%
-    select_if(is.numeric) %>%
-    select_(col_name) %>%
-    unlist %>%  as.vector
-
+  value <- as.numeric(df[, col_name, drop = TRUE])
   # for selection of breaks of data containing one unique value
-  if(length(na.omit(unique(value))) <= 1){
+  if (length(na.omit(unique(value))) <= 1) {
     breaks <- c(0, max(value))
   } else {
     # select breaks
@@ -90,9 +86,9 @@ breaks <- function(df, col_name, n = 6, style = "quantile", pal = NULL,
                                               fixedBreaks = fixedBreaks))
 
     # distribution (if parameters TRUE)
-    if (distribution == TRUE){
+    if (distribution == TRUE) {
       # plots
-      br_plot <- plot(breaks, pal = pal, main = "distribution", ann = FALSE)
+      plot(breaks, pal = pal, main = "distribution", ann = FALSE)
     }
     breaks <- breaks$brks
   }

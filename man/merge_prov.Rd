@@ -5,7 +5,7 @@
 \title{Merges provinces}
 \usage{
 merge_prov(df, sel = names(df), FUN = sum, from, to = "2017-12-31",
-  diseases = NULL, df2 = NULL, args = NULL, FUN2 = sum)
+  diseases = NULL, df2 = NULL, args = NULL, FUN2 = sum, ...)
 }
 \arguments{
 \item{df}{A data frame containing at least the variables \code{province},
@@ -34,11 +34,13 @@ Used if you want the same merging event as your infectious disease dataframe,
 \code{year}. Can be used to provide additional arguments through the
 paramaters args by providing the name of the column(s) containing the data.}
 
-\item{args}{A vector or list of additional arguments to pass to FUN}
+\item{args}{string vector, column name of the additional arguments}
 
 \item{FUN2}{A function to apply on df2 when merging the province together,
 to keep the same information at every step of the merging process. By
 default \code{sum}}
+
+\item{...}{additional arguments to pass to FUN and FUN2.}
 }
 \value{
 A object of the same class as \code{df} in which all the provinces
@@ -83,6 +85,5 @@ pop_info <- gso::content \%>\% filter(data_name == "demography_1") \%>\%
 merge_prov(pop_info, sel = "average_population_thous_pers",
   from = 1992, FUN = weighted.mean,
   df2 = pop_size, args = "total")
-
 
 }

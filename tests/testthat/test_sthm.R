@@ -16,22 +16,20 @@ test_that("`sthm` returns the correct error message", {
    dplyr::arrange(time)
   col <- heat.colors(9)
 
-
 expect_error(
   cholera %>%
     cbind(cholera$time) %>%
-    sthm(f = function(x) x^.1, col = col) %>%
+    sthm(f = function(x) x ^ .1, col = col) %>%
     legend2(.925, 1, legend =  ., col = col, postext = "right", n_round = 2,
-            h = 1/length(col), w = 0.04, tl = 0.01, s = 0.005),
+            h = 1 / length(col), w = 0.04, tl = 0.01, s = 0.005),
     "Invalid number of column, 'df' should only have three columns")
-
 
 expect_error(
   cholera %>%
     dplyr::mutate(time = as.character(time)) %>%
-    sthm(f = function(x) x^.1, col = col) %>%
+    sthm(f = function(x) x ^ .1, col = col) %>%
     legend2(.925, 1, legend =  ., col = col, postext = "right", n_round = 2,
-            h = 1/length(col), w = 0.04, tl = 0.01, s = 0.005),
+            h = 1 / length(col), w = 0.04, tl = 0.01, s = 0.005),
     "Invalid 'df', one of the column needs to be of class 'character', one
          of class 'Date' and the last of class 'numeric'")
 
@@ -39,24 +37,22 @@ expect_error(
 expect_error(
   cholera %>%
     dplyr::mutate(incidence_cholera = as.character(incidence_cholera)) %>%
-    sthm(f = function(x) x^.1, col = col) %>%
+    sthm(f = function(x) x ^ .1, col = col) %>%
     legend2(.925, 1, legend =  ., col = col, postext = "right", n_round = 2,
-            h = 1/length(col), w = 0.04, tl = 0.01, s = 0.005),
+            h = 1 / length(col), w = 0.04, tl = 0.01, s = 0.005),
     "Invalid 'df', one of the column needs to be of class 'character', one
          of class 'Date' and the last of class 'numeric'")
-
 
 expect_error(
   cholera %>%
     dplyr::mutate(province = 1) %>%
-    sthm(f = function(x) x^.1, col = col) %>%
+    sthm(f = function(x) x ^ .1, col = col) %>%
     legend2(.925, 1, legend =  ., col = col, postext = "right", n_round = 2,
-            h = 1/length(col), w = 0.04, tl = 0.01, s = 0.005),
+            h = 1 / length(col), w = 0.04, tl = 0.01, s = 0.005),
     "Invalid 'df', one of the column needs to be of class 'character', one
          of class 'Date' and the last of class 'numeric'")
 
 })
-
 
 test_that("`sthm` returns the province in the good order", {
 
@@ -78,11 +74,10 @@ test_that("`sthm` returns the province in the good order", {
 
 expect_identical(
   dengue %>%
-    sthm(f = function(x) x^.1, col = heat.colors(9), show_legend = TRUE) %>%
+    sthm(f = function(x) x ^ .1, col = heat.colors(9), show_legend = TRUE) %>%
       .[[2]],
   order$province %>%
     as.character() %>%
-    grep("Ha Son Binh", .,value = T, invert = T))
+    grep("Ha Son Binh", ., value = T, invert = T))
 
 })
-
