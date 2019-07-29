@@ -156,6 +156,8 @@ test_that("ll2incidence` returns the correct error", {
                               rep("2013-01-01 UTC", 4)), tz = "UTC")
   date_year_df <- data.frame(date_year = date_year, date_year_p = date_year_p)
 
+  df <- as.data.frame(infections_dates)
+  df$infections_dates <- as.character(df$infections_dates)
 
   expect_error(ll2incidence(date_year_df, "day"), regexp = NULL)
 
@@ -166,5 +168,7 @@ test_that("ll2incidence` returns the correct error", {
   expect_error(ll2incidence(date_year, "dqy"), regexp = NULL)
 
   expect_error(ll2incidence(date_year_p, c("day", "month")), regexp = NULL)
+
+  expect_error(ll2incidence(df, "day"), regexp = NULL)
 
 })
