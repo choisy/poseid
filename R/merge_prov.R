@@ -434,8 +434,8 @@ The time range should overlap the date range of the data frame inputed: ",
     # select the history of merging/spliting event depending on the parameters
     # diseases
     if (is.null(diseases) == FALSE &
-        length(grep(paste(diseases, collapse = "|"), "
-                    hepatitis|amoebiasis")) != 0) {
+        length(grep(paste(diseases, collapse = "|"),
+                    "hepatitis|amoebiasis")) != 0) {
       spl <- ah_splits
     } else {
       spl <- splits

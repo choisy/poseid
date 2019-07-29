@@ -295,12 +295,12 @@ legend2 <- function(x, y, legend, col, locate = FALSE, pos = "top-left",
     }
 
     }
-
+  #nocov start
   if (locate == TRUE) {
     coordinates <- locator(1)
     x <- coordinates$x
     y <- coordinates$y
-  }
+  } #nocov end
 
   square_legend(x, y, legend = legend, col = col, n_round = n_round,
                 col_na = col_na, size_na = size_na, postext = postext,
