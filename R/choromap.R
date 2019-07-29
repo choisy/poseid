@@ -23,9 +23,7 @@ choropleth_v1 <- function (df, col_name, col = heat.colors(1), col_na = "grey",
                            ...){
 
   # value
-  value <- df@data %>%
-    select_(col_name) %>%
-    unlist %>%  as.vector
+  value <- df@data[, col_name, drop = TRUE]
 
   # define the color and the class interval
   pal <-  col
@@ -68,10 +66,7 @@ choropleth_fix <- function (df, col_name, fixedBreaks, col = heat.colors(6),
                             col_na = "grey", ...){
 
   # value
-  value <- df@data %>%
-    select_(col_name) %>%
-    unlist %>%  as.vector
-
+  value <- df@data[, col_name, drop = TRUE]
 
   # choose class interval and colors
   pal <-  col[1:(length(fixedBreaks) - 1)]
@@ -206,9 +201,8 @@ choromap <- function(df, map, fixedBreaks, col = heat.colors(6),
   admin1 <- sp::merge(map, df)
 
   # value
-  val_name <- df %>%
-    select_if(is.numeric) %>%
-    names()
+  val_name <- Filter(is.numeric, df)
+  val_name <- names(val_name)
 
   # draw a choropleth map
   if (length(unique(fixedBreaks)) == 1) {

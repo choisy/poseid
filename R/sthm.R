@@ -34,18 +34,14 @@ draw_heatmap <- function(df, f = function(x) x, col = heat.colors(12),
   on.exit(options(warn = warn_old))
 
   # Data preparation:
-  time_vec <- select_if(df, function(col) class(col) == "Date") %>%
-    unlist %>% as.vector %>%
-    as.Date(origin = "1970-01-01") %>%
-    unique
-  provinces_names <- select_if(df, is.character) %>%
-    unlist %>% as.vector %>%
-    unique
-  values <- sapply(provinces_names, function(x) {
-    sel <-  names(select_if(df, is.character))
-    subset(df, df[, sel] == x) %>%
-                     select_if(is.numeric)
-    })
+  time_vec <- unique(df[, vapply(df, class, rep("a", length(class(df[[1]])))) ==
+                          "Date"])
+  provinces_names <- Filter(is.character, df)
+  provinces_names <- unique(as.vector(unlist(provinces_names)))
+  values <- vapply(provinces_names, function(x) {
+    sel <-  names(Filter(is.character, df))
+    Filter(is.numeric, subset(df, df[, sel] == x))
+  }, list(0))
   values <- as.matrix(as.data.frame(values))
   values_transf <- f(values)
 
@@ -79,19 +75,19 @@ draw_heatmap <- function(df, f = function(x) x, col = heat.colors(12),
     usr <- par("usr")
 
     # add the line
-    centroids <- sp::coordinates(map) %>% data.frame()
+    centroids <- data.frame(sp::coordinates(map))
     centroids$province <- map@data[, 1]
     ordered <- data.frame(province = provinces_names,
-                          order = seq(1, length(provinces_names))) %>%
-      inner_join(centroids, by = "province") %>%
-      arrange(order)
+                          order = seq(1, length(provinces_names)))
+    ordered <- merge(ordered, centroids, by = "province", all.x = TRUE)
+    ordered <- ordered[order(ordered$order), ]
+
     X1 <- ordered$X1
     Y1 <- ordered$X2
     X2 <- usr[2]
     step <-  (usr[4] - usr[3]) / length(provinces_names)
     Y2 <- seq(from = usr[3] + step / 2, to = usr[4] - step / 2, by = step)
     segments(X1, Y1, X2, Y2, col = "grey")
-
 
     # graph parameter
     plt[1:2] <- c(xm, x)
@@ -106,9 +102,7 @@ draw_heatmap <- function(df, f = function(x) x, col = heat.colors(12),
           add = TRUE)
     box(bty = "o")
 
-
   } else {
-
     # Heatmap:
     plt[2] <- x
     par(plt = plt)
@@ -118,7 +112,6 @@ draw_heatmap <- function(df, f = function(x) x, col = heat.colors(12),
     image(time_vec, seq_len(ncol(values_transf)), values_transf, col = col,
           add = TRUE)
     box(bty = "o")
-
   }
 
   # Print the legend if needed :

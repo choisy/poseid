@@ -39,8 +39,8 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
                           h = 0.75, w = 0.75, tl = .2, s = .2, ...) {
 
   # size of the top character (width height)
-  size_legend <- legend %>% as.character %>% tail(1) %>%
-    strwidth()
+  size_legend <- tail(as.character(legend), 1)
+  size_legend <- strwidth(size_legend)
 
   # define point of the legend
   if (postext == "left") {
@@ -51,9 +51,8 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
   }
   xright <- xleft + w
 
-
   # define the y for rectangle legend
-  col %<>% rev
+  col <- rev(col)
   y1 <- y - (0:(length(legend) - 1)) * h
 
   # built the legend rectangles
@@ -67,7 +66,7 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
 
   # legend text and tick
   if (length(col) > 12) {
-    legend %<>% pretty()
+    legend <- pretty(legend)
     y1 <- seq(y, tail(y1, 1), length.out = length(legend))
   }
 
@@ -75,7 +74,7 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
   if (postext == "left") {
     segments(xleft, y1, xleft - tl, y1)
   }
-  if (postext == "right"){
+  if (postext == "right") {
     segments(xright, y1, xright + tl, y1)
   }
 
@@ -92,7 +91,7 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
     rect(xleft, tail(y1, 1) - h, xright, tail(y1, 1) - 2 * h, col = col_na)
   }
 
-  if (length(col_na) > 0){
+  if (length(col_na) > 0) {
     # define the y  with NA for the text
     y2 <- c(y2, y2[length(y2)] - h, y2[length(y2)] - 1.5 * h)
 
@@ -241,7 +240,8 @@ square_legend <- function(x, y, legend, col, n_round = 0, col_na = NULL,
 #' @export
 legend2 <- function(x, y, legend, col, locate = FALSE, pos = "top-left",
                     n_round = 0, col_na = NULL, size_na = 0.075,
-                    postext = "left", h = 0.75, w = 0.75, tl = .2, s = .2, ...){
+                    postext = "left", h = 0.75, w = 0.75, tl = .2, s = .2,
+                    ...) {
 
   # Tests
   pos_text <- c("left", "right")
@@ -258,10 +258,10 @@ legend2 <- function(x, y, legend, col, locate = FALSE, pos = "top-left",
   on.exit(par(mar = omar))
 
   # size of the top character (width height)
-  size_legend <- legend %>% as.character %>% tail(1) %>%
-    strwidth()
+  size_legend <- tail(as.character(legend), 1)
+  size_legend <- strwidth(size_legend)
 
-  if (missing(x) & missing(y) & locate == FALSE){
+  if (missing(x) & missing(y) & locate == FALSE) {
 
     # Test
     pos_legend <- c("top-left", "top-right", "bottom-left", "bottom-right")
@@ -277,19 +277,19 @@ legend2 <- function(x, y, legend, col, locate = FALSE, pos = "top-left",
     xlim <- c(usr[1] + xr, usr[2] - xr)
     ylim <- c(usr[3] + yr, usr[4] - yr)
 
-    if (pos == "top-left"){
+    if (pos == "top-left") {
       x <- xlim[1]
       y <- ylim[2]
     }
-    if (pos == "top-right"){
+    if (pos == "top-right") {
       x <- xlim[2] - w - size_legend - tl - s
       y <- ylim[2]
     }
-    if (pos == "bottom-left"){
+    if (pos == "bottom-left") {
       x <- xlim[1]
       y <- ylim[1] + ( (length(legend) - 1) * h + 2 * h)
     }
-    if (pos == "bottom-right"){
+    if (pos == "bottom-right") {
       x <- xlim[2] - w - size_legend - tl - s
       y <- ylim[1] + ( (length(legend) - 1) * h + 2 * h)
     }

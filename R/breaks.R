@@ -55,7 +55,7 @@
 #'
 #' @export
 breaks <- function(df, col_name, n = 6, style = "quantile", pal = NULL,
-                   fixedBreaks = NULL, distribution = FALSE){
+                   fixedBreaks = NULL, distribution = FALSE) {
 
   # style input test
   style_entry <- c("fixed", "sd", "equal", "pretty", "quantile", "kmeans",
@@ -76,11 +76,7 @@ breaks <- function(df, col_name, n = 6, style = "quantile", pal = NULL,
          'pal' + 1 ")
   }
 
-  value <- df %>%
-    select_if(is.numeric) %>%
-    select_(col_name) %>%
-    unlist %>%  as.vector
-
+  value <- as.numeric(df[, col_name, drop = TRUE])
   # for selection of breaks of data containing one unique value
   if (length(na.omit(unique(value))) <= 1) {
     breaks <- c(0, max(value))
@@ -90,7 +86,7 @@ breaks <- function(df, col_name, n = 6, style = "quantile", pal = NULL,
                                               fixedBreaks = fixedBreaks))
 
     # distribution (if parameters TRUE)
-    if (distribution == TRUE){
+    if (distribution == TRUE) {
       # plots
       plot(breaks, pal = pal, main = "distribution", ann = FALSE)
     }

@@ -105,6 +105,17 @@ test_that("`merge_prov` sums correcty and returns NA when one of the province
     select(value) %>% unlist %>% as.vector,
     c(138.8, 118.4, 129.3, 82.1, rep(NA, 17)))
 
+  df <- gso::content %>% filter(data_name == "agriculture_22") %>%
+    .$data %>% .[[1]] %>%
+    merge_prov(FUN = sum, from = "1980-01-01", to = "2016-12-31", na.rm = TRUE)
+
+  expect_equal(df %>% filter(province == "Hau Giang", year > 1994) %>%
+                 select(value) %>% unlist %>% as.vector,
+               test %>% filter(province == "Can Tho", year  > 1994) %>%
+                 .$planted_area_of_winter_paddy %>% replace_na(0) +
+               test %>% filter(province == "Soc Trang", year > 1994) %>%
+                 .$planted_area_of_winter_paddy %>% replace_na(0))
+
 })
 
 # test provinces names ---------------------------------------------------------
