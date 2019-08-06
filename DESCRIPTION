@@ -37,7 +37,8 @@ Suggests:
     knitr,
     rmarkdown,
     sf,
-    dictionary
+    dictionary,
+    covr
 Remotes:
     epix-project/gdpm,
     epix-project/gadmVN,
