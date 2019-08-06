@@ -39,7 +39,7 @@ Suggests:
     sf
 Remotes:
     epix-project/gdpm,
-    epix-project/gadmVN
+    epix-project/gadmVN,
     epix-project/gso
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
