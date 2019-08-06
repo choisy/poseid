@@ -3,3 +3,4 @@
 ^data-raw$
 Icon
 ^README\.Rmd$
+^appveyor\.yml$
