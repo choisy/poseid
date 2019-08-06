@@ -36,10 +36,12 @@ Suggests:
     gso,
     knitr,
     rmarkdown,
-    sf
+    sf,
+    dictionary
 Remotes:
     epix-project/gdpm,
     epix-project/gadmVN,
-    epix-project/gso
+    epix-project/gso,
+    epix-project/dictionary
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
