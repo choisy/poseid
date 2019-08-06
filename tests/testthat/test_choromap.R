@@ -22,7 +22,7 @@ test_that("`choromap` returns the correct error message", {
       choromap(map = map, fixedBreaks = c(0, 10, 50, 100, 500, 1000, 2000)) %>%
       legend2(legend = ., col = attr(., "colors")),
     "Invalid 'df', one of the column needs to be of class 'character' and
-           the other of class 'numeric'")
+         the other of class 'numeric'")
 
   expect_error(
     dengue  %>%
@@ -32,7 +32,7 @@ test_that("`choromap` returns the correct error message", {
       choromap(map = map, fixedBreaks = c(0, 10, 50, 100, 500, 1000, 2000)) %>%
       legend2(legend = ., col = attr(., "colors")),
     "Invalid 'df', one of the column needs to be of class 'character' and
-           the other of class 'numeric'")
+         the other of class 'numeric'")
 
   expect_error(
     dengue  %>%
