@@ -27,8 +27,8 @@ test_that("`choromap` returns the correct error message", {
   expect_error(
     dengue  %>%
       dplyr::filter(year == 2004, month == "April") %>%
-      dplyr::select(year) %>%
-      mutate(province = year) %>%
+      dplyr::select(province, contains("incidence")) %>%
+      mutate(incidence_dengue = province) %>%
       choromap(map = map, fixedBreaks = c(0, 10, 50, 100, 500, 1000, 2000)) %>%
       legend2(legend = ., col = attr(., "colors")),
     "Invalid 'df', one of the column needs to be of class 'character' and
