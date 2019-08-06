@@ -144,19 +144,19 @@ choropleth_fix <- function (df, col_name, fixedBreaks, col = heat.colors(6),
 #' # to see the available color palettes:
 #' display.brewer.all()
 #' dengue_0993 %>%
-#'  choromap(map, fixedBreaks = c(0,10,50,100,500,1000,2000),
+#'  choromap(map, fixedBreaks = c(0, 10, 50, 100, 500, 1000, 2000),
 #'            col = brewer.pal(6, "YlOrRd")) %>%
 #'  legend2(legend = ., col = attr(., "colors"), col_na = "grey")
 #'
 #' # changing the color of the missing values:
 #' dengue_0993 %>%
-#'  choromap(map, fixedBreaks = c(0,10,50,100,500,1000,2000),
+#'  choromap(map, fixedBreaks = c(0, 10, 50, 100, 500, 1000, 2000),
 #'            col = brewer.pal(6, "YlOrRd"), col_na = "blue") %>%
 #'  legend2(legend = ., col = attr(., "colors"), col_na = "blue")
 #'
 #' # drawing a map without border:
 #' dengue_0993 %>%
-#'  choromap(map, fixedBreaks = c(0,10,50,100,500,1000,2000),
+#'  choromap(map, fixedBreaks = c(0, 10, 50, 100, 500, 1000, 2000),
 #'            col = brewer.pal(6, "YlOrRd"), col_na = "blue",
 #'            border = NA) %>%
 #'  legend2(legend = ., col = attr(., "colors"), col_na = "blue")

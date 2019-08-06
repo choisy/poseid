@@ -292,8 +292,8 @@ merge_province <- function(df, FUN, from, to, splits_lst,
         if (dim(tmp$`TRUE`)[1] > 0) {
           df <- apply_merge(tmp, names(province_lst[1]), FUN = FUN, df2 = df2,
                             args = args, FUN2 = FUN2, ... = ...)
-        } else df <- tmp$`FALSE`
-      } else df <- tmp$`FALSE`
+        }
+      }
     }
   } else df
 
