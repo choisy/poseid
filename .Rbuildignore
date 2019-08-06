@@ -4,3 +4,4 @@
 Icon
 ^README\.Rmd$
 ^appveyor\.yml$
+^\.travis\.yml$
