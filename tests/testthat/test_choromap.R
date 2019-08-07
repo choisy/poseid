@@ -13,6 +13,7 @@ test_that("`choromap` returns the correct error message", {
   col <- rev(heat.colors(9))
   map <- gadmVN::gadm(date = 1992, merge_hanoi = TRUE)
   map[which(map$province == "Ha Son Binh"), ] <- "Ha Noi"
+  map <- as_Spatial(map)
 
   expect_error(
     dengue  %>%
