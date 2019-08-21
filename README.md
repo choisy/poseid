@@ -11,6 +11,8 @@ status](https://ci.appveyor.com/api/projects/status/github/epix-project/poseid?b
 status](https://travis-ci.org/epix-project/poseid.svg?branch=master)](https://travis-ci.org/epix-project/poseid)
 [![Codecov test
 coverage](https://codecov.io/gh/epix-project/poseid/branch/master/graph/badge.svg)](https://codecov.io/gh/epix-project/poseid?branch=master)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/poseid)](https://cran.r-project.org/package=poseid)
+[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
 ## Installation
